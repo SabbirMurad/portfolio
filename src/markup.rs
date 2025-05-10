@@ -5,7 +5,7 @@ use crate::utils::response::Response;
 
 pub async fn home(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
   let res_data = template.render(
-    "public/home.html",
+    "home.html",
     &Context::new()
   )
   .map_err(|e|error::ErrorInternalServerError(e))?;

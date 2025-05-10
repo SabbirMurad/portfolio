@@ -379,44 +379,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "actix_template"
-version = "0.1.0"
-dependencies = [
- "actix",
- "actix-cors",
- "actix-files",
- "actix-multipart",
- "actix-session",
- "actix-web",
- "actix-web-actors",
- "chrono",
- "dotenv",
- "flexi_logger",
- "futures",
- "futures-util",
- "google-api-auth",
- "image",
- "imagesize",
- "imghdr",
- "jsonwebtoken 8.3.0",
- "lettre",
- "listenfd",
- "log",
- "mongodb",
- "rand 0.9.0",
- "regex",
- "reqwest",
- "rusqlite",
- "rustls 0.20.9",
- "rustls-pemfile 1.0.4",
- "serde",
- "serde_json",
- "tera",
- "tokio",
- "uuid 1.16.0",
-]
-
-[[package]]
 name = "addr2line"
 version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2772,6 +2734,44 @@ dependencies = [
  "cpufeatures",
  "opaque-debug",
  "universal-hash",
+]
+
+[[package]]
+name = "portfolio"
+version = "0.1.0"
+dependencies = [
+ "actix",
+ "actix-cors",
+ "actix-files",
+ "actix-multipart",
+ "actix-session",
+ "actix-web",
+ "actix-web-actors",
+ "chrono",
+ "dotenv",
+ "flexi_logger",
+ "futures",
+ "futures-util",
+ "google-api-auth",
+ "image",
+ "imagesize",
+ "imghdr",
+ "jsonwebtoken 8.3.0",
+ "lettre",
+ "listenfd",
+ "log",
+ "mongodb",
+ "rand 0.9.0",
+ "regex",
+ "reqwest",
+ "rusqlite",
+ "rustls 0.20.9",
+ "rustls-pemfile 1.0.4",
+ "serde",
+ "serde_json",
+ "tera",
+ "tokio",
+ "uuid 1.16.0",
 ]
 
 [[package]]

@@ -8,6 +8,11 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+body::selection {
+  background-color: #F4B72D; /* your desired color */
+  color: white; /* optional: change selected text color */
+}
+
 html, body, div, span, h1, h2, h3, h4, h5, h6, p, ul, li, blockquote, a, address, cite, code, em, img, small, form, label, article, aside, canvas, header, nav, main, footer, audio, video {
   margin: 0;
   border: 0;
