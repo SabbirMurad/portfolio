@@ -1,4 +1,3 @@
-@import "_font.scss";
 @import "_reset.scss";
 @import "_variable.scss";
 
@@ -8,7 +7,7 @@
 /* CROSS BROWSER SCROLL BAR */
 /* The emerging W3C standard that is currently Firefox-only */
 
-$thumb: var(--generic-black);
+$thumb: var(--primary-container-color);
 $background: var(--generic-white);
 
 *.no-scrollbar {
@@ -22,7 +21,7 @@ $background: var(--generic-white);
     scrollbar-width: thin;
     scrollbar-color: $thumb $background;
 	// Works on Chrome/Edge/Safari
-    &::-webkit-scrollbar { width: 8px; }
+    &::-webkit-scrollbar { width: 4px; }
     &::-webkit-scrollbar-track { background: $background; }
     &::-webkit-scrollbar-thumb {
         border-radius: 4px;
@@ -32,7 +31,7 @@ $background: var(--generic-white);
 }
 
 // Works on Chrome/Edge/Safari
-::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: $background; }
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;

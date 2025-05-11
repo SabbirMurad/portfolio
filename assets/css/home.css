@@ -1,162 +1,3 @@
-/* CUSTOM CSS RESET */
-html {
-  height: 100%;
-  line-height: 1.15;
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: transparent;
-}
-
-body::-moz-selection {
-  background-color: #F4B72D; /* your desired color */
-  color: white; /* optional: change selected text color */
-}
-
-body::selection {
-  background-color: #F4B72D; /* your desired color */
-  color: white; /* optional: change selected text color */
-}
-
-html, body, div, span, h1, h2, h3, h4, h5, h6, p, ul, li, blockquote, a, address, cite, code, em, img, small, form, label, article, aside, canvas, header, nav, main, footer, audio, video {
-  margin: 0;
-  border: 0;
-  padding: 0;
-  font-size: 100%;
-  vertical-align: baseline;
-}
-
-img {
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  -webkit-user-drag: none;
-}
-
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, footer, header, main, nav, section {
-  display: block;
-}
-
-ol, ul, li {
-  list-style: none;
-}
-
-blockquote, q {
-  quotes: none;
-}
-blockquote:before, blockquote:after, q:before, q:after {
-  content: "";
-  content: none;
-}
-
-/* ADD CUSTOM STYLES HERE */
-a {
-  cursor: pointer;
-}
-a:focus {
-  border: 0;
-  outline: none;
-}
-a:link, a:visited, a:active {
-  text-decoration: none;
-}
-
-button {
-  cursor: pointer;
-}
-
-button, input, label, select, textarea {
-  border: 0;
-  margin: 0;
-  padding: 0;
-  outline: none;
-}
-button:focus, input:focus, label:focus, select:focus, textarea:focus {
-  border: none;
-  outline: none;
-}
-
-input::-ms-reveal, input::-ms-clear {
-  display: none;
-}
-
-input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active, textarea:-webkit-autofill, textarea:-webkit-autofill:hover, textarea:-webkit-autofill:focus, textarea:-webkit-autofill:active {
-  caret-color: var(--generic-black);
-  -webkit-text-fill-color: var(--generic-black);
-  -webkit-box-shadow: 0 0 0 40px var(--generic-white) inset !important;
-}
-
-:root {
-  --generic-white: #FFFFFF;
-  --generic-black: #000000;
-  --primary-color: #F4B72D;
-  --surface-color: #FDFDFD;
-  --primary-container-color: #EFEFEF;
-  --primary-text-color: #062B31;
-  --secondary-text-color: #FFFFFF;
-  --primary-font: "Archivo", sans-serif;
-  --generic-font: "Archivo", sans-serif;
-}
-
-/* Add generic styles here! */
-/* CROSS BROWSER SCROLL BAR */
-/* The emerging W3C standard that is currently Firefox-only */
-*.no-scrollbar {
-  scrollbar-width: none;
-}
-*.no-scrollbar::-webkit-scrollbar {
-  width: 0px;
-}
-*.no-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-*.no-scrollbar::-webkit-scrollbar-thumb {
-  background-color: transparent;
-  border: 1px solid transparent;
-}
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--generic-black) var(--generic-white);
-}
-*::-webkit-scrollbar {
-  width: 8px;
-}
-*::-webkit-scrollbar-track {
-  background: var(--generic-white);
-}
-*::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: var(--generic-black);
-  border: 1px solid var(--generic-white);
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--generic-white);
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: var(--generic-black);
-  border: 1px solid var(--generic-white);
-}
-
-/* Generic body style */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  color: var(--generic-black);
-  font-family: var(--generic-font);
-  background-color: var(--surface-color);
-}
-
 body {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -180,7 +21,7 @@ body #hero #hero-container {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
 }
 body #hero #hero-container h1 {
@@ -242,4 +83,71 @@ body #hero #social-container .social-item {
 body #hero #social-container .social-item img {
   width: 28px;
   height: 28px;
+}
+body #about #about-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  max-width: 1248px;
+  height: 800px;
+  margin: auto;
+  gap: 68px;
+}
+body #about #about-container #image-container {
+  width: 588px;
+  min-width: 588px;
+  height: 588px;
+  background-color: var(--primary-container-color);
+  border-radius: 8px;
+}
+body #about #about-container #about-text-container {
+  width: 588px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 178px;
+  color: var(--primary-text-color);
+}
+body #about #about-container #about-text-container h1 {
+  font-size: 30px;
+  font-weight: 600;
+}
+body #about #about-container #about-text-container h1 span {
+  color: var(--primary-color);
+}
+body #about #about-container #about-text-container h2 {
+  margin-top: 8px;
+  font-size: 54px;
+  font-weight: 600;
+}
+body #about #about-container #about-text-container h2 span {
+  color: var(--primary-color);
+}
+body #about #about-container #about-text-container h3 {
+  margin-top: 36px;
+  font-size: 46px;
+  font-weight: 600;
+  max-width: 80%;
+}
+body #about #about-container #about-text-container p {
+  font-size: 18px;
+  font-weight: 300;
+  margin-top: 12px;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+body #about #about-container #about-text-container button {
+  margin-top: 24px;
+  width: 148px;
+  height: 40px;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  border: none;
+  color: var(--generic-white);
+  font-size: 14px;
 }
