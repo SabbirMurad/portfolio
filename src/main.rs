@@ -1,4 +1,4 @@
-use std::{ env, io };
+use std::{ fs, env, io };
 use listenfd::ListenFd;
 use tera::{ Tera, Context };
 use dotenv::dotenv as App_env;
@@ -7,6 +7,7 @@ use futures_util::future::{self, Either, FutureExt};
 use actix_session::{ SessionMiddleware, storage::RedisActorSessionStore };
 use actix_session::config::{ PersistentSession, TtlExtensionPolicy, CookieContentSecurity };
 use actix_web::{ web, dev, http, error, middleware as ActixMiddleware, App, dev::Service, cookie::SameSite, cookie::Key, cookie::time::Duration, HttpResponse, HttpServer };
+const DOCS_ROOT: &str = "\\documentation";
 
 mod builtins;
 use builtins as BuiltIns;
@@ -34,6 +35,8 @@ use markup as Markup;
 
 #[actix_web::main]
 async fn main() -> io::Result<()> {
+    fs::create_dir_all(DOCS_ROOT)?;
+
     /*
     Loads environment variables from `.env` file to `std::env`
     */ 
@@ -253,7 +256,8 @@ async fn main() -> io::Result<()> {
                 res
             })
         })
-        .configure(Routes::Auth::router)
+        .configure(Routes::Documentation::router)
+        // .configure(Routes::Auth::router)
         .configure(Routes::Pages::router)
     });
 

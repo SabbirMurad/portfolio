@@ -31,6 +31,9 @@ reqwest = "0.12.15"
 # MongoDB driver
 mongodb = "3.2.3"
 
+# Compression
+zip = "0.6"
+
 # Date and time
 chrono = "0.4.40"
 
