@@ -81,8 +81,10 @@ pub async fn task(form_data: web::Json<RequestBody>) -> Result<HttpResponse, Err
     }
 
     // Writing the file to the machine
+    let temp_path = "/tmp/doc.zip";
+
     let result = fs::write(
-        format!("./documentation/{}.zip", doc_name),
+        temp_path,
         form_data.file.clone()
     );
     
@@ -91,6 +93,44 @@ pub async fn task(form_data: web::Json<RequestBody>) -> Result<HttpResponse, Err
         session.abort_transaction().await.ok().unwrap();
         return Ok(Response::internal_server_error(&error.to_string()));
     }
+
+    let target_dir = format!("{}/{}", DOCS_ROOT, project_name);
+    fs::create_dir_all(&target_dir)?;
+
+    let zipfile = std::fs::File::open(&temp_path.clone())?;
+    let mut archive = match  ZipArchive::new(zipfile) {
+        Ok(archive) => archive,
+        Err(error) => {
+            fs::remove_file(&temp_path)?; // Clean up
+            session.abort_transaction().await.ok().unwrap();
+            return Ok(Response::internal_server_error(&error.to_string()));
+        }
+    };
+
+    for i in 0..archive.len() {
+        let mut file = match archive.by_index(i) {
+            Ok(file) => file,
+            Err(error) => {
+                fs::remove_file(&temp_path)?; // Clean up
+                session.abort_transaction().await.ok().unwrap();
+                return Ok(Response::internal_server_error(&error.to_string()));
+            }
+        };
+
+        let out_path = Path::new(&target_dir).join(file.sanitized_name());
+        
+        if file.name().ends_with('/') {
+            fs::create_dir_all(&out_path)?;
+        } else {
+            if let Some(p) = out_path.parent() {
+                fs::create_dir_all(p)?;
+            }
+            let mut outfile = std::fs::File::create(&out_path)?;
+            std::io::copy(&mut file, &mut outfile)?;
+        }
+    }
+
+    fs::remove_file(&temp_path)?; // Clean up
 
     let res = ResponseBody {
         uuid: doc_id.clone(),
@@ -118,7 +158,7 @@ pub async fn task(form_data: web::Json<RequestBody>) -> Result<HttpResponse, Err
 
 //         let save_path = format!("/tmp/{}", filename.clone());
 //         let save_path_2 = format!("/tmp/{}", filename.clone());
-//         let mut f = web::block(move || std::fs::File::create(&save_path_2)).await??;
+//         let mut f = fs::File::create(&save_path_2)?;
 
 //         while let Some(chunk) = field?.next().await {
 //             let data = chunk?;
