@@ -7,7 +7,7 @@ use futures_util::future::{self, Either, FutureExt};
 use actix_session::{ SessionMiddleware, storage::RedisActorSessionStore };
 use actix_session::config::{ PersistentSession, TtlExtensionPolicy, CookieContentSecurity };
 use actix_web::{ web, dev, http, error, middleware as ActixMiddleware, App, dev::Service, cookie::SameSite, cookie::Key, cookie::time::Duration, HttpResponse, HttpServer };
-const DOCS_ROOT: &str = "\\documentation";
+const DOCS_ROOT: &str = "./documentation";
 
 mod builtins;
 use builtins as BuiltIns;

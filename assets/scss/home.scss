@@ -1,3 +1,5 @@
+@import "_footer.scss";
+
 body {
     display: flex;
     flex-direction: column;
@@ -138,6 +140,29 @@ body {
                     font-size: 14px;
                 }
             }
+        }
+    }
+
+    #contact-me {
+        width: 100%;
+        position: relative;
+
+        img {
+            width: 100%;
+            z-index: 1;
+        }
+
+        #contact-me-container {
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 50%;
+            width: 100%;
+            height: 200px;
+            max-width: 1248px;
+            background: pink;
+            margin: auto;
+            transform: translateX(-50%);
         }
     }
 }
