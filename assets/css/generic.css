@@ -25,6 +25,27 @@ html, body, div, span, h1, h2, h3, h4, h5, h6, p, ul, li, blockquote, a, address
   vertical-align: baseline;
 }
 
+textarea::-webkit-input-placeholder, input::-webkit-input-placeholder {
+  font-family: var(--generic-font);
+}
+
+textarea::-moz-placeholder, input::-moz-placeholder {
+  font-family: var(--generic-font);
+}
+
+textarea:-ms-input-placeholder, input:-ms-input-placeholder {
+  font-family: var(--generic-font);
+}
+
+textarea::-ms-input-placeholder, input::-ms-input-placeholder {
+  font-family: var(--generic-font);
+}
+
+textarea::placeholder,
+input::placeholder {
+  font-family: var(--generic-font);
+}
+
 img {
   -webkit-user-select: none;
      -moz-user-select: none;

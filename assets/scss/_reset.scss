@@ -21,6 +21,11 @@ html, body, div, span, h1, h2, h3, h4, h5, h6, p, ul, li, blockquote, a, address
   vertical-align: baseline;
 }
 
+textarea::placeholder ,
+input::placeholder {
+    font-family: var(--generic-font);
+}
+
 img {
   user-select: none;
   -webkit-user-drag: none;
