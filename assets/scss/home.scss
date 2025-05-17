@@ -1,4 +1,5 @@
 @import "_footer.scss";
+@import "_contact_me.scss";
 
 body {
     display: flex;
@@ -143,26 +144,142 @@ body {
         }
     }
 
-    #contact-me {
+    #documentations {
         width: 100%;
-        position: relative;
-
-        img {
+        #documentations-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
-            z-index: 1;
-        }
-
-        #contact-me-container {
-            position: absolute;
-            z-index: 2;
-            top: 0;
-            left: 50%;
-            width: 100%;
-            height: 200px;
             max-width: 1248px;
-            background: pink;
             margin: auto;
-            transform: translateX(-50%);
+            margin-bottom: 84px;
+
+            h2 {
+                font-size: 42px;
+                font-weight: 600;
+                color: var(--primary-text-color);
+                text-align: center;
+                margin-bottom: 92px;
+            }
+
+            .doc-item-container {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                row-gap: 36px;
+                column-gap: 24px;
+
+                .doc-item {
+                    width: calc((100% - 48px) / 3 - 48px);
+                    overflow: hidden;
+                    box-shadow: rgba($color: #030303, $alpha: 0.15) 0px 3px 8px;
+                    cursor: pointer;
+                    border-radius: 6px;
+                    padding: 36px 24px 24px 24px;
+
+                    .title {
+                        font-size: 24px;
+                        font-weight: 600;
+                        color: var(--primary-text-color);
+                    }
+
+                    .tags-container {
+                        display: flex;
+                        gap: 12px;
+                        margin-top: 24px;
+                        margin-bottom: 18px;
+
+                        .tag {
+                            font-size: 18px;
+                            font-weight: 500;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border: 1px solid rgb(16, 171, 16);
+                            border-radius: 4px;
+                            color: rgb(16, 171, 16);
+                            padding: 4px 12px;
+                        }
+                    }
+
+                    .description {
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: var(--primary-text-color);
+                        line-height: 1.5;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        display: -webkit-box;
+                        line-clamp: 3;
+                        -webkit-line-clamp: 3;
+                        -webkit-box-orient: vertical;
+                        margin-bottom: 24px;
+                    }
+
+                    .actions {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        img {
+                            width: 20px;
+                            height: 20px;
+                        }
+
+                        .info {
+                            display: flex;
+                            align-items: center;
+                            color: var(--primary-text-color);
+                            font-size: 16px;
+                            font-weight: 400;
+
+                            .like-count {
+                                margin-left: 8px;
+                                margin-right: 24px;
+                            }
+
+                            .view-count {
+                                margin-left: 8px;
+                            }
+                        }
+
+                        .action-btn {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 8px;
+                            cursor: pointer;
+                            p {
+                                color: var(--primary-color);
+                                font-weight: 600;
+                            }
+                            img {
+                                width: 16px;
+                                height: 16px;
+                            }
+                        }
+                    } 
+                }
+            }
+
+            .browse-all-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--primary-color);
+                height: 40px;
+                width: 164px;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 60px;
+
+                p {
+                    font-size: 19px;
+                    font-weight: 400;
+                    color: var(--generic-white)
+                }
+            }
         }
     }
 }

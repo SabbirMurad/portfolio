@@ -1,0 +1,114 @@
+#contact-me {
+    width: 100%;
+    height: 964px;
+    position: relative;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        z-index: 1;
+    }
+
+    #contact-me-container {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 50%;
+        width: 100%;
+        max-width: 1248px;
+        margin: auto;
+        transform: translateX(-50%);
+
+        .header {
+            display: flex;
+            margin-top: 36px;
+            align-items: flex-end;
+            gap: 8px;
+
+            span {
+                height: 2px;
+                width: 164px;
+                background-color: var(--primary-color);
+                margin-bottom: 5px;
+            }
+
+            h1 {
+                color: var(--primary-color);
+                font-size: 22px;
+                font-weight: 500;
+            }
+        }
+
+        h2 {
+            font-size: 49px;
+            font-weight: 600;
+            margin-top: 96px;
+            margin-bottom: 24px;
+            color: var(--primary-text-color);
+        }
+
+        > p {
+            margin-top: 24px;
+            font-size: 16px;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 594px;
+
+            label {
+                font-size: 16px;
+                font-weight: 500;
+                color: var(--primary-text-color);
+                margin-top: 36px;
+                margin-bottom: 4px;
+            }
+
+            input {
+                height: 40px;
+                border-bottom: 1px solid var(--secondary-bg-color);
+                background-color: transparent;
+            }
+
+            textarea {
+                height: 200px;
+                margin-top: 36px;
+                resize: none;
+                background-color: transparent;
+                border-bottom: 1px solid var(--secondary-bg-color);
+            }
+
+            textarea::placeholder {
+                font-size: 14px;
+                color: var(--primary-text-color);
+                font-family: var(--primary-font);
+            }
+        }
+
+        .send-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            height: 40px;
+            width: 164px;
+            gap: 12px;
+            border-radius: 4px;
+            margin-top: 60px;
+            cursor: pointer;
+
+            p {
+                font-size: 19px;
+                font-weight: 400;
+                color: var(--generic-white)
+            }
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
+}
