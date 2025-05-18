@@ -257,7 +257,7 @@ async fn main() -> io::Result<()> {
             })
         })
         .configure(Routes::Documentation::router)
-        // .configure(Routes::Auth::router)
+        .configure(Routes::Auth::router)
         .configure(Routes::Pages::router)
     });
 

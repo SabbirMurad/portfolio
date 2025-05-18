@@ -21,13 +21,15 @@
             <div id="container">
                 <h1>Sign In</h1>
                 <p>This is only for admin portal, to create an account contact an admin</p>
-                <input type="text" placeholder="Email Address ...">
-                <input type="text" placeholder="Password ...">
-                <button>Sign In</button>
+                <input id="email-address" type="text" placeholder="Email Address ...">
+                <input id="password" type="text" placeholder="Password ...">
+                <button id="sign-in-btn">Sign In</button>
             </div>
         </div>
     </section>
     {% include "footer.html" %}
+    <script src="/components/toast-notification/module.js"></script>
+    <script src="/assets/js/fetcher.js"></script>
     <script src="/assets/js/sign_in.js"></script>
 </body>
 
