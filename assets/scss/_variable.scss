@@ -2,13 +2,43 @@
     // GENERIC COLOR PALETTE!
     --generic-white: #FFFFFF;
     --generic-black: #000000;
-    --primary-color: #F4B72D;
-    --surface-color: #FDFDFD;
+    --primary-color: #53BB90;
+    --surface-color: #212428;
     --secondary-bg-color: #2E3034;
     --primary-container-color: #EFEFEF;
-    --primary-text-color: #062B31;
+    --primary-text-color: #ffffff;
     --secondary-text-color: #FFFFFF;
   
     --primary-font: 'Archivo', sans-serif;
     --generic-font: 'Archivo', sans-serif;
+}
+
+.primary-btn-1{
+    width: 160px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    color: var(--surface-color);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.primary-btn-2{
+    width: 160px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background-color: var(--surface-color);
+    border: 2px solid var(--primary-color);
+    outline: none;
+    color: var(--generic-white);
+    font-weight: 600;
+    font-size: 14px;
 }

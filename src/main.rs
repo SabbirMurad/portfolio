@@ -38,7 +38,7 @@ async fn main() -> io::Result<()> {
     fs::create_dir_all(DOCS_ROOT)?;
 
     /*
-    Loads environment variables from `.env` file to `std::env`
+    Loads environment variables from `.env` file to `std::env` 
     */ 
     App_env().ok();
 
