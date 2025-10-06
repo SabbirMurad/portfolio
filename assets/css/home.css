@@ -307,7 +307,7 @@ body #hero #hero-container p {
   font-weight: 300;
   font-size: 14px;
   margin-top: 18px;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
   line-height: 1.6;
   max-width: 572px;
   margin-bottom: 24px;
@@ -472,7 +472,7 @@ body #documentations #documentations-container .doc-item-container .doc-item .ta
 }
 body #documentations #documentations-container .doc-item-container .doc-item .description {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--primary-text-color);
   line-height: 1.5;
   text-overflow: ellipsis;
