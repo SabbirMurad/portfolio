@@ -432,13 +432,17 @@ body #documentations #documentations-container .doc-item-container {
           column-gap: 24px;
 }
 body #documentations #documentations-container .doc-item-container .doc-item {
-  width: calc((100% - 48px) / 3 - 48px);
+  width: calc((100% - 48px - 6px) / 3 - 48px);
   overflow: hidden;
-  -webkit-box-shadow: rgba(3, 3, 3, 0.15) 0px 3px 8px;
-          box-shadow: rgba(3, 3, 3, 0.15) 0px 3px 8px;
+  -webkit-box-shadow: rgba(3, 3, 3, 0.05) 0px 3px 8px;
+          box-shadow: rgba(3, 3, 3, 0.05) 0px 3px 8px;
   cursor: pointer;
+  -webkit-transition: all ease-in-out 0.3s;
+  transition: all ease-in-out 0.3s;
   border-radius: 6px;
   padding: 36px 24px 24px 24px;
+  background-color: var(--container-bg);
+  border: 1px solid var(--container-border);
 }
 body #documentations #documentations-container .doc-item-container .doc-item .title {
   font-size: 24px;
@@ -478,8 +482,8 @@ body #documentations #documentations-container .doc-item-container .doc-item .de
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   margin-bottom: 24px;
 }
@@ -536,6 +540,10 @@ body #documentations #documentations-container .doc-item-container .doc-item .ac
 body #documentations #documentations-container .doc-item-container .doc-item .actions .action-btn img {
   width: 16px;
   height: 16px;
+}
+body #documentations #documentations-container .doc-item-container .doc-item:hover {
+  -webkit-box-shadow: rgba(3, 3, 3, 0.25) 0px 3px 8px;
+          box-shadow: rgba(3, 3, 3, 0.25) 0px 3px 8px;
 }
 body #documentations #documentations-container .browse-all-btn {
   display: -webkit-box;

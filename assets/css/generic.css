@@ -118,6 +118,8 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
   --primary-color: #53BB90;
   --surface-color: #212428;
   --secondary-bg-color: #2E3034;
+  --container-bg: #292D32;
+  --container-border: #34393F;
   --primary-container-color: #EFEFEF;
   --primary-text-color: #ffffff;
   --secondary-text-color: #FFFFFF;
