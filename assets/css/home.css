@@ -266,10 +266,16 @@ body {
       -ms-flex-direction: column;
           flex-direction: column;
 }
-body #hero {
+body carousel-wrapper {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
   position: relative;
 }
-body #hero #hero-container {
+body carousel-wrapper #hero {
+  position: relative;
+}
+body carousel-wrapper #hero #hero-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -288,22 +294,22 @@ body #hero #hero-container {
       -ms-flex-pack: center;
           justify-content: center;
 }
-body #hero #hero-container h2 {
+body carousel-wrapper #hero #hero-container h2 {
   font-size: 36px;
   font-weight: 600;
   letter-spacing: 4px;
 }
-body #hero #hero-container h1 {
+body carousel-wrapper #hero #hero-container h1 {
   margin-top: 12px;
   font-size: 60px;
   font-weight: 600;
   letter-spacing: 4px;
 }
-body #hero #hero-container h1 span {
+body carousel-wrapper #hero #hero-container h1 span {
   font-weight: 300;
   color: var(--primary-color);
 }
-body #hero #hero-container p {
+body carousel-wrapper #hero #hero-container p {
   font-weight: 300;
   font-size: 14px;
   margin-top: 18px;
@@ -312,91 +318,26 @@ body #hero #hero-container p {
   max-width: 572px;
   margin-bottom: 24px;
 }
-body #hero #hero-container .btns {
+body carousel-wrapper #hero #hero-container .btns {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   gap: 24px;
+  margin-bottom: 104px;
 }
-body #hero #hero-bg {
+body carousel-wrapper #hero #hero-bg {
   position: absolute;
-  top: 56px;
+  top: 36px;
   right: 124px;
   height: 800px;
   -o-object-fit: contain;
      object-fit: contain;
 }
-body #about #about-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+body carousel-wrapper #documentations {
   width: 100%;
-  max-width: 1248px;
-  height: 800px;
-  margin: auto;
-  gap: 68px;
+  height: 100vh;
 }
-body #about #about-container #image-container {
-  width: 588px;
-  min-width: 588px;
-  height: 588px;
-  background-color: var(--primary-container-color);
-  border-radius: 8px;
-}
-body #about #about-container #about-text-container {
-  width: 588px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  margin-top: 178px;
-  color: var(--primary-text-color);
-}
-body #about #about-container #about-text-container h1 {
-  font-size: 30px;
-  font-weight: 600;
-}
-body #about #about-container #about-text-container h1 span {
-  color: var(--primary-color);
-}
-body #about #about-container #about-text-container h2 {
-  margin-top: 8px;
-  font-size: 54px;
-  font-weight: 600;
-}
-body #about #about-container #about-text-container h2 span {
-  color: var(--primary-color);
-}
-body #about #about-container #about-text-container h3 {
-  margin-top: 36px;
-  font-size: 46px;
-  font-weight: 600;
-  max-width: 80%;
-}
-body #about #about-container #about-text-container p {
-  font-size: 18px;
-  font-weight: 300;
-  margin-top: 12px;
-  line-height: 1.4;
-  letter-spacing: 1px;
-}
-body #about #about-container #about-text-container button {
-  margin-top: 24px;
-  width: 148px;
-  height: 40px;
-  background-color: var(--primary-color);
-  border-radius: 2px;
-  border: none;
-  color: var(--generic-white);
-  font-size: 14px;
-}
-body #documentations {
-  width: 100%;
-}
-body #documentations #documentations-container {
+body carousel-wrapper #documentations #documentations-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -410,16 +351,16 @@ body #documentations #documentations-container {
   width: 100%;
   max-width: 1248px;
   margin: auto;
-  margin-bottom: 84px;
+  margin-top: 72px;
 }
-body #documentations #documentations-container h2 {
+body carousel-wrapper #documentations #documentations-container h2 {
   font-size: 42px;
   font-weight: 600;
   color: var(--primary-text-color);
   text-align: center;
-  margin-bottom: 92px;
+  margin-bottom: 72px;
 }
-body #documentations #documentations-container .doc-item-container {
+body carousel-wrapper #documentations #documentations-container .doc-item-container {
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -431,7 +372,7 @@ body #documentations #documentations-container .doc-item-container {
      -moz-column-gap: 24px;
           column-gap: 24px;
 }
-body #documentations #documentations-container .doc-item-container .doc-item {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item {
   width: calc((100% - 48px - 6px) / 3 - 48px);
   overflow: hidden;
   -webkit-box-shadow: rgba(3, 3, 3, 0.05) 0px 3px 8px;
@@ -444,12 +385,12 @@ body #documentations #documentations-container .doc-item-container .doc-item {
   background-color: var(--container-bg);
   border: 1px solid var(--container-border);
 }
-body #documentations #documentations-container .doc-item-container .doc-item .title {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .title {
   font-size: 24px;
   font-weight: 600;
   color: var(--primary-text-color);
 }
-body #documentations #documentations-container .doc-item-container .doc-item .tags-container {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .tags-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -457,7 +398,7 @@ body #documentations #documentations-container .doc-item-container .doc-item .ta
   margin-top: 24px;
   margin-bottom: 18px;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .tags-container .tag {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .tags-container .tag {
   font-size: 18px;
   font-weight: 500;
   display: -webkit-box;
@@ -474,9 +415,9 @@ body #documentations #documentations-container .doc-item-container .doc-item .ta
   color: rgb(16, 171, 16);
   padding: 4px 12px;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .description {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .description {
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--primary-text-color);
   line-height: 1.5;
   text-overflow: ellipsis;
@@ -487,7 +428,7 @@ body #documentations #documentations-container .doc-item-container .doc-item .de
   -webkit-box-orient: vertical;
   margin-bottom: 24px;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .actions {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .actions {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -498,11 +439,11 @@ body #documentations #documentations-container .doc-item-container .doc-item .ac
       -ms-flex-pack: justify;
           justify-content: space-between;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .actions img {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .actions img {
   width: 20px;
   height: 20px;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .actions .info {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .actions .info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -513,14 +454,14 @@ body #documentations #documentations-container .doc-item-container .doc-item .ac
   font-size: 16px;
   font-weight: 400;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .actions .info .like-count {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .actions .info .like-count {
   margin-left: 8px;
   margin-right: 24px;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .actions .info .view-count {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .actions .info .view-count {
   margin-left: 8px;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .actions .action-btn {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .actions .action-btn {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -533,19 +474,53 @@ body #documentations #documentations-container .doc-item-container .doc-item .ac
   gap: 8px;
   cursor: pointer;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .actions .action-btn p {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .actions .action-btn p {
   color: var(--primary-color);
   font-weight: 600;
 }
-body #documentations #documentations-container .doc-item-container .doc-item .actions .action-btn img {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item .actions .action-btn img {
   width: 16px;
   height: 16px;
 }
-body #documentations #documentations-container .doc-item-container .doc-item:hover {
+body carousel-wrapper #documentations #documentations-container .doc-item-container .doc-item:hover {
   -webkit-box-shadow: rgba(3, 3, 3, 0.25) 0px 3px 8px;
           box-shadow: rgba(3, 3, 3, 0.25) 0px 3px 8px;
 }
-body #documentations #documentations-container .browse-all-btn {
+body carousel-wrapper bottom-navigator {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 48px;
+  position: absolute;
+  bottom: 56px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  gap: 24px;
+  opacity: 0;
+  -webkit-transition: all 272ms ease-in-out;
+  transition: all 272ms ease-in-out;
+}
+body carousel-wrapper bottom-navigator .item {
+  border-radius: 8px;
+  height: 48px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+  background-color: var(--surface-color);
+  border: 1px solid var(--container-border);
+  gap: 12px;
+  overflow: hidden;
+  -webkit-transition: all 272ms ease-in-out;
+  transition: all 272ms ease-in-out;
+}
+body carousel-wrapper bottom-navigator .item .img-wrapper {
+  min-width: 56px;
+  height: 48px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -555,15 +530,29 @@ body #documentations #documentations-container .browse-all-btn {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  background-color: var(--primary-color);
-  height: 40px;
-  width: 164px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 60px;
 }
-body #documentations #documentations-container .browse-all-btn p {
-  font-size: 19px;
-  font-weight: 400;
-  color: var(--generic-white);
+body carousel-wrapper bottom-navigator .item .img-wrapper img {
+  width: 20px;
+  height: 20px;
+}
+body carousel-wrapper bottom-navigator .item p {
+  font-size: 14px;
+  font-weight: 300;
+  color: transparent;
+  -webkit-transition: all 272ms ease-in-out;
+  transition: all 272ms ease-in-out;
+}
+body carousel-wrapper bottom-navigator .item.selected {
+  border: 1px solid var(--primary-color);
+  -webkit-box-shadow: 0px 4px 16px rgba(83, 187, 144, 0.1490196078);
+          box-shadow: 0px 4px 16px rgba(83, 187, 144, 0.1490196078);
+}
+body carousel-wrapper bottom-navigator .item.selected p {
+  color: var(--primary-text-color);
+}
+body carousel-wrapper bottom-navigator .item.selected .img-wrapper {
+  min-width: 38px;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }

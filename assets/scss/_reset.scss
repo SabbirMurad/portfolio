@@ -9,7 +9,7 @@ html {
 }
 
 body::selection {
-  background-color: #F4B72D; /* your desired color */
+  background-color: var(--primary-color); /* your desired color */
   color: white; /* optional: change selected text color */
 }
 
