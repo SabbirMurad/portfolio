@@ -273,7 +273,13 @@ body carousel-wrapper {
   position: relative;
 }
 body carousel-wrapper #hero {
+  z-index: 1;
+  top: 0;
+  left: 0;
   position: relative;
+  -webkit-transition: all 272ms ease-in-out;
+  transition: all 272ms ease-in-out;
+  opacity: 1;
 }
 body carousel-wrapper #hero #hero-container {
   display: -webkit-box;
@@ -334,8 +340,16 @@ body carousel-wrapper #hero #hero-bg {
      object-fit: contain;
 }
 body carousel-wrapper #documentations {
+  display: none;
+  z-index: 1;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100vh;
+  position: absolute;
+  -webkit-transition: all 272ms ease-in-out;
+  transition: all 272ms ease-in-out;
+  opacity: 0;
 }
 body carousel-wrapper #documentations #documentations-container {
   display: -webkit-box;
@@ -487,6 +501,7 @@ body carousel-wrapper #documentations #documentations-container .doc-item-contai
           box-shadow: rgba(3, 3, 3, 0.25) 0px 3px 8px;
 }
 body carousel-wrapper bottom-navigator {
+  z-index: 3;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
