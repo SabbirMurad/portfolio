@@ -2,39 +2,812 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    {% include "common.html" %}
-
-    <title>Sabbir Hassan | Home</title>
-
-    <link rel="stylesheet" href="/assets/css/home.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sabbir Hassan — Full-Stack Developer & Designer</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/home_v2.css">
 </head>
 
 <body>
-    <carousel-wrapper>
-        <!-- Hero -->
-        <section id="hero">
-            <img id="hero-bg" src="/assets/image/hero_bg.png" alt="hero_bg">
-            <div id="hero-container">
-                <h2>Hi, I’m</h2>
-                <h1>Sabbir <span>Hassan</span></h1>
-                <p>Hello, I’m Sabbir Hassan, a self-taught developer and designer. I began my journey as a developer six
-                    years ago. It’s a pleasure to meet you,</p>
-                <div class="btns">
-                    <button class="primary-btn-1">Contact Me</button>
-                    <button class="primary-btn-2">Download CV</button>
+
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <div class="grid-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="loader-logo">S<span>.</span>Hassan</div>
+        <div class="loader-bar">
+            <div class="loader-bar-fill"></div>
+        </div>
+        <div class="loader-num" id="loader-num">0%</div>
+    </div>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#about" onclick="closeMobileMenu()">About</a>
+        <a href="#skills" onclick="closeMobileMenu()">Skills</a>
+        <a href="#projects" onclick="closeMobileMenu()">Projects</a>
+        <a href="#design" onclick="closeMobileMenu()">Design</a>
+        <a href="#docs" onclick="closeMobileMenu()">Docs</a>
+        <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+        <button class="mm-cta"
+            onclick="closeMobileMenu();document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Hire
+            Me</button>
+    </div>
+
+    <!-- ══════════════════════════════════
+  NAV
+══════════════════════════════════ -->
+    <nav id="navbar">
+        <a href="#hero" class="nav-logo">S<span>.</span>Hassan</a>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#design">Design</a>
+            <a href="#docs">Docs</a>
+            <a href="#contact">Contact</a>
+            <button class="nav-cta"
+                onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Hire
+                Me</button>
+        </div>
+        <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- ══════════════════════════════════
+  01 — HERO
+══════════════════════════════════ -->
+    <section id="hero">
+        <div class="hero-bg-name">SABBIR</div>
+        <div class="hero-index">01 — HERO</div>
+        <h1 class="hero-headline">
+            <span class="line"><span>Full-Stack</span></span>
+            <span class="line"><span><em class="hl">Dev</em> &amp;</span></span>
+            <span class="line"><span>Designer.</span></span>
+        </h1>
+        <div class="role-row" id="role-row">
+            <span class="role-pill active">Rust</span><span class="role-divider"></span>
+            <span class="role-pill active">Flutter</span><span class="role-divider"></span>
+            <span class="role-pill active">Figma</span><span class="role-divider"></span>
+            <span class="role-pill">C++</span><span class="role-divider"></span>
+            <span class="role-pill">MkDocs</span>
+        </div>
+        <p class="hero-desc">
+            Building <em>fast, purposeful digital products</em> — from systems-level Rust
+            to pixel-perfect Flutter apps and brand identities.
+            Based in Dhaka. Open to global clients.
+        </p>
+        <div class="cta-row">
+            <button class="btn-primary"
+                onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View
+                Projects →</button>
+            <button class="btn-ghost">Download CV</button>
+        </div>
+        <div class="hero-visual">
+            <div class="float-tag ft-1"><span class="ft-label">Github</span><span class="ft-val">sabbirmurad</span>
+            </div>
+            <div class="avatar-frame">
+                <div class="corner corner-tl"></div>
+                <div class="corner corner-br"></div>
+                <img src="/assets/image/portfolio_image.png" alt="">
+                <div class="avatar-inner">
+                    <div class="avatar-icon">
+                        <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="#e8930a" stroke-width="1.5">
+                            <circle cx="12" cy="8" r="4" />
+                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <span class="avatar-hint">Your Photo Here</span>
                 </div>
             </div>
-        </section>
-        {% include "documentations.html" %}
-        {% include "bottom_navigator.html" %}
-    </carousel-wrapper>
-    <!-- {% include "contact_me.html" %} -->
-    <!-- {% include "footer.html" %} -->
-    <script src="/assets/js/generics/ripple.js"></script>
-    <script src="/assets/js/home.js"></script>
+            <div class="float-tag ft-2"><span class="ft-label">Status</span><span class="ft-val"
+                    style="color:#6dbf7e;">●
+                    Available</span></div>
+        </div>
+        <div class="scroll-ind">
+            <div class="scroll-line"></div><span>Scroll</span>
+        </div>
+        <div class="stats-strip">
+            <div class="stat-item">
+                <div class="stat-num">5<span>+</span></div>
+                <div class="stat-label">Years Coding</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">30<span>+</span></div>
+                <div class="stat-label">Client Projects</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">7</div>
+                <div class="stat-label">Tech Stacks</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">N<span>+</span></div>
+                <div class="stat-label">LeetCode Solved</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-wrap" style="position:relative;z-index:2;">
+        <div class="marquee-track">
+            <span class="m-item">Rust</span><span class="m-item">Flutter</span><span class="m-item">HTML / CSS</span>
+            <span class="m-item">JavaScript</span><span class="m-item">C++</span><span class="m-item">Figma</span>
+            <span class="m-item">Adobe XD</span><span class="m-item">Illustrator</span><span
+                class="m-item">Photoshop</span>
+            <span class="m-item">Premiere Pro</span><span class="m-item">MongoDB</span><span class="m-item">MySQL</span>
+            <span class="m-item">Redis</span><span class="m-item">SQLite</span><span class="m-item">MkDocs</span>
+            <span class="m-item">Rust</span><span class="m-item">Flutter</span><span class="m-item">HTML / CSS</span>
+            <span class="m-item">JavaScript</span><span class="m-item">C++</span><span class="m-item">Figma</span>
+            <span class="m-item">Adobe XD</span><span class="m-item">Illustrator</span><span
+                class="m-item">Photoshop</span>
+            <span class="m-item">Premiere Pro</span><span class="m-item">MongoDB</span><span class="m-item">MySQL</span>
+            <span class="m-item">Redis</span><span class="m-item">SQLite</span><span class="m-item">MkDocs</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+  02 — ABOUT
+══════════════════════════════════ -->
+    <section id="about">
+        <div class="section-tag reveal">02 — About Me</div>
+        <div class="about-grid">
+            <div class="about-img-wrap reveal-left">
+                <div class="about-img">
+                    <div class="about-corner tl"></div>
+                    <div class="about-corner br"></div>
+                    <svg class="about-img-icon" width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="#e8930a"
+                        stroke-width=".8">
+                        <circle cx="12" cy="8" r="5" />
+                        <path d="M3 21c0-5 4-8.5 9-8.5s9 3.5 9 8.5" stroke-linecap="round" />
+                    </svg>
+                    <span class="about-img-label">Your Photo Here</span>
+                </div>
+                <div class="about-tag-float">
+                    <div class="atf-n">25</div>
+                    <div class="atf-l">Years Old</div>
+                </div>
+            </div>
+            <div class="about-content reveal-right">
+                <div>
+                    <h2 class="section-title" style="font-size:clamp(44px,5vw,72px);">Who I<br><em
+                            style="color:var(--amber);">Am.</em></h2>
+                    <p class="about-body">
+                        I'm <em>Sabbir Hassan</em>, a full-stack developer and designer based in Dhaka, Bangladesh.
+                        I work at the intersection of <em>engineering and aesthetics</em> — writing systems-level
+                        code in Rust, shipping cross-platform apps in Flutter, and crafting interfaces in Figma
+                        and Adobe XD that people actually enjoy using.<br><br>
+                        Beyond building for clients, I sharpen my problem-solving through <em>competitive
+                            programming in C++</em> on LeetCode, and I document everything I learn through
+                        <em>technical writing on MkDocs</em>.
+                    </p>
+                </div>
+                <div class="info-grid">
+                    <div class="info-cell">
+                        <div class="ic-label">Name</div>
+                        <div class="ic-val">Sabbir Hassan</div>
+                    </div>
+                    <div class="info-cell">
+                        <div class="ic-label">Location</div>
+                        <div class="ic-val">Dhaka, BD</div>
+                    </div>
+                    <div class="info-cell">
+                        <div class="ic-label">GitHub</div>
+                        <div class="ic-val am">sabbirmurad</div>
+                    </div>
+                    <div class="info-cell">
+                        <div class="ic-label">Available</div>
+                        <div class="ic-val am">● Open to work</div>
+                    </div>
+                    <div class="info-cell">
+                        <div class="ic-label">Specialty</div>
+                        <div class="ic-val">Dev + Design</div>
+                    </div>
+                    <div class="info-cell">
+                        <div class="ic-label">Experience</div>
+                        <div class="ic-val">5+ Years</div>
+                    </div>
+                </div>
+                <div class="values-list">
+                    <div class="val-item">Every pixel is intentional — design and code go hand in hand.</div>
+                    <div class="val-item">Performance matters. Fast, clean, maintainable code is non-negotiable.</div>
+                    <div class="val-item">I build products I'd be proud to use myself.</div>
+                    <div class="val-item">Documentation is part of the work, not an afterthought.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+  03 — SKILLS
+══════════════════════════════════ -->
+    <section id="skills">
+        <div class="skills-header reveal">
+            <div>
+                <div class="section-tag">03 — Skills</div>
+                <h2 class="section-title" style="margin-bottom:0;">What I<br><em style="color:var(--amber);">Know.</em>
+                </h2>
+            </div>
+            <div class="tab-row">
+                <button class="tab-btn active" onclick="switchTab('dev',this)">Development</button>
+                <button class="tab-btn" onclick="switchTab('design',this)">Design</button>
+                <button class="tab-btn" onclick="switchTab('db',this)">Database</button>
+            </div>
+        </div>
+
+        <!-- Dev Panel -->
+        <div class="skill-panel active" id="panel-dev">
+            <div class="skills-grid">
+                <div class="skill-card reveal reveal-delay-1">
+                    <div class="sk-icon">RS</div>
+                    <div class="sk-name">Rust</div>
+                    <div class="sk-desc">Systems-level programming. Memory-safe, blazing fast. Used for backend services
+                        and CLI
+                        tools.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:88%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card reveal reveal-delay-2">
+                    <div class="sk-icon">FL</div>
+                    <div class="sk-name">Flutter</div>
+                    <div class="sk-desc">Cross-platform mobile & desktop apps with a single codebase. Dart-powered,
+                        pixel-perfect
+                        UI.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:85%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card reveal reveal-delay-3">
+                    <div class="sk-icon">JS</div>
+                    <div class="sk-name">JavaScript</div>
+                    <div class="sk-desc">Custom components, DOM manipulation, interactive UIs. Vanilla-first,
+                        framework-agnostic.
+                    </div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:90%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card reveal reveal-delay-4">
+                    <div class="sk-icon">HT</div>
+                    <div class="sk-name">HTML / CSS</div>
+                    <div class="sk-desc">Semantic markup, advanced CSS layouts, animations. Pixel-perfect cross-browser
+                        implementation.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:95%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card reveal reveal-delay-5">
+                    <div class="sk-icon">C+</div>
+                    <div class="sk-name">C++</div>
+                    <div class="sk-desc">Competitive programming & algorithms on LeetCode. Strong DSA foundations,
+                        optimized
+                        solutions.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:80%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card reveal reveal-delay-6">
+                    <div class="sk-icon">MD</div>
+                    <div class="sk-name">MkDocs</div>
+                    <div class="sk-desc">Technical documentation sites. Structured, searchable, professional — deployed
+                        and
+                        published.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:82%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design Panel -->
+        <div class="skill-panel" id="panel-design">
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="sk-icon" style="color:#a259ff;">FG</div>
+                    <div class="sk-name">Figma</div>
+                    <div class="sk-desc">UI/UX design, component systems, prototyping, auto-layout, design tokens.
+                        Primary design
+                        tool.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:92%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon" style="color:#ff6ca0;">XD</div>
+                    <div class="sk-name">Adobe XD</div>
+                    <div class="sk-desc">Wireframes, hi-fi mockups, interactive prototypes, client presentations and
+                        handoff.
+                    </div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:85%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon" style="color:#ff9a00;">AI</div>
+                    <div class="sk-name">Illustrator</div>
+                    <div class="sk-desc">Vector illustration, logo design, icon systems, brand identity assets and
+                        print-ready
+                        artwork.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:78%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon" style="color:#31a8ff;">PS</div>
+                    <div class="sk-name">Photoshop</div>
+                    <div class="sk-desc">Photo editing, compositing, web asset prep, mockup creation and image
+                        manipulation.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:72%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon" style="color:#9999ff;">PR</div>
+                    <div class="sk-name">Premiere Pro</div>
+                    <div class="sk-desc">Video editing at intermediate level. Cut, colour, motion titles, export for web
+                        and
+                        social.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:65%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon">UI</div>
+                    <div class="sk-name">UI Design</div>
+                    <div class="sk-desc">End-to-end interface design — from wireframes to polished hi-fi screens with
+                        design
+                        systems.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:90%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DB Panel -->
+        <div class="skill-panel" id="panel-db">
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="sk-icon">MG</div>
+                    <div class="sk-name">MongoDB</div>
+                    <div class="sk-desc">NoSQL document database. Schema design, aggregation pipelines, indexing and
+                        Atlas cloud.
+                    </div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:85%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon">MY</div>
+                    <div class="sk-name">MySQL</div>
+                    <div class="sk-desc">Relational database design, complex joins, stored procedures, query
+                        optimisation.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:82%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon">RD</div>
+                    <div class="sk-name">Redis</div>
+                    <div class="sk-desc">In-memory data store for caching, session management, pub/sub and rate
+                        limiting.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:75%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon">SQ</div>
+                    <div class="sk-name">SQLite</div>
+                    <div class="sk-desc">Embedded relational DB for local-first apps, mobile (Flutter) and lightweight
+                        backend
+                        services.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:80%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon">SC</div>
+                    <div class="sk-name">Schela</div>
+                    <div class="sk-desc">Schema design, data modelling, relational integrity. Structured approach to
+                        data
+                        architecture.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:70%;"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="sk-icon">DB</div>
+                    <div class="sk-name">DB Design</div>
+                    <div class="sk-desc">Entity-relationship modelling, normalisation, performance tuning across SQL and
+                        NoSQL
+                        systems.</div>
+                    <div class="sk-level">
+                        <div class="sk-level-fill" style="width:80%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tags-cloud">
+            <span class="tag-chip">Rust</span><span class="tag-chip">Flutter</span><span
+                class="tag-chip">HTML/CSS</span>
+            <span class="tag-chip">JavaScript</span><span class="tag-chip">C++</span><span
+                class="tag-chip">LeetCode</span>
+            <span class="tag-chip">Figma</span><span class="tag-chip">Adobe XD</span><span
+                class="tag-chip">Illustrator</span>
+            <span class="tag-chip">Photoshop</span><span class="tag-chip">Premiere</span><span
+                class="tag-chip">MongoDB</span>
+            <span class="tag-chip">MySQL</span><span class="tag-chip">Redis</span><span class="tag-chip">SQLite</span>
+            <span class="tag-chip">Schela</span><span class="tag-chip">MkDocs</span>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+  04 — PROJECTS
+══════════════════════════════════ -->
+    <section id="projects">
+        <div class="projects-header">
+            <div>
+                <div class="section-tag">04 — Projects</div>
+                <h2 class="section-title" style="margin-bottom:0;">Selected<br><em
+                        style="color:var(--amber);">Work.</em></h2>
+            </div>
+            <div class="filter-row">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Web</button>
+                <button class="filter-btn">Mobile</button>
+                <button class="filter-btn">Client</button>
+            </div>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card featured">
+                <div class="proj-thumb" data-n="1">
+                    <div class="proj-thumb-bg">
+                        <div class="proj-thumb-num">01</div>
+                    </div>
+                    <div class="proj-thumb-overlay"><span>View Project ↗</span></div>
+                </div>
+                <div class="proj-body">
+                    <div class="proj-tags"><span class="proj-tag">Flutter</span><span class="proj-tag">Rust</span><span
+                            class="proj-tag">MongoDB</span></div>
+                    <div class="proj-name">Client Mobile App</div>
+                    <div class="proj-desc">A cross-platform Flutter application with a Rust backend. Real-time data
+                        sync, offline
+                        support, MongoDB Atlas. Built for a client with 1000+ daily users.</div>
+                    <div class="proj-links">
+                        <a href="https://github.com/sabbirmurad" class="proj-link">GitHub ↗</a>
+                        <a href="#" class="proj-link">Live Demo ↗</a>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="proj-thumb" data-n="2">
+                    <div class="proj-thumb-bg">
+                        <div class="proj-thumb-num">02</div>
+                    </div>
+                    <div class="proj-thumb-overlay"><span>View Project ↗</span></div>
+                </div>
+                <div class="proj-body">
+                    <div class="proj-tags"><span class="proj-tag">HTML/CSS</span><span class="proj-tag">JS</span></div>
+                    <div class="proj-name">Custom Web Component Library</div>
+                    <div class="proj-desc">Vanilla JS component library. Zero dependencies, fully accessible, used
+                        across client
+                        projects.</div>
+                    <div class="proj-links">
+                        <a href="https://github.com/sabbirmurad" class="proj-link">GitHub ↗</a>
+                        <a href="#" class="proj-link">Live ↗</a>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="proj-thumb" data-n="3">
+                    <div class="proj-thumb-bg">
+                        <div class="proj-thumb-num">03</div>
+                    </div>
+                    <div class="proj-thumb-overlay"><span>View Project ↗</span></div>
+                </div>
+                <div class="proj-body">
+                    <div class="proj-tags"><span class="proj-tag">Rust</span><span class="proj-tag">Redis</span></div>
+                    <div class="proj-name">High-Performance API</div>
+                    <div class="proj-desc">REST API built in Rust with Redis caching layer. Sub-10ms response times.
+                        Deployed and
+                        battle-tested.</div>
+                    <div class="proj-links">
+                        <a href="https://github.com/sabbirmurad" class="proj-link">GitHub ↗</a>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="proj-thumb" data-n="4">
+                    <div class="proj-thumb-bg">
+                        <div class="proj-thumb-num">04</div>
+                    </div>
+                    <div class="proj-thumb-overlay"><span>View Project ↗</span></div>
+                </div>
+                <div class="proj-body">
+                    <div class="proj-tags"><span class="proj-tag">C++</span><span class="proj-tag">Algorithms</span>
+                    </div>
+                    <div class="proj-name">LeetCode Solutions</div>
+                    <div class="proj-desc">Curated collection of optimized C++ solutions. N+ problems solved, documented
+                        with
+                        time/space complexity.</div>
+                    <div class="proj-links">
+                        <a href="https://github.com/sabbirmurad" class="proj-link">GitHub ↗</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="view-all-row">
+            <span>30+ projects total</span>
+            <a href="https://github.com/sabbirmurad" class="view-all-link">View all on GitHub →</a>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+  05 — DESIGN WORK
+══════════════════════════════════ -->
+    <section id="design">
+        <div class="section-tag">05 — Design Work</div>
+        <div class="design-intro">
+            <h2 class="section-title">Visual<br><em style="color:var(--amber);">Craft.</em></h2>
+            <p style="font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);line-height:1.8;">
+                Design work spanning UI/UX in Figma and Adobe XD, brand identities in Illustrator,
+                photo editing in Photoshop, and video production in Premiere Pro.
+            </p>
+        </div>
+        <div class="design-tools-row">
+            <div class="design-tool"><span class="dt-dot" style="background:#a259ff;"></span>Figma</div>
+            <div class="design-tool"><span class="dt-dot" style="background:#ff6ca0;"></span>Adobe XD</div>
+            <div class="design-tool"><span class="dt-dot" style="background:#ff9a00;"></span>Illustrator</div>
+            <div class="design-tool"><span class="dt-dot" style="background:#31a8ff;"></span>Photoshop</div>
+            <div class="design-tool"><span class="dt-dot" style="background:#9999ff;"></span>Premiere Pro</div>
+        </div>
+        <div class="design-gallery">
+            <div class="dg-item tall">
+                <div class="dg-inner">
+                    <div class="dg-num">01</div>
+                    <div class="dg-tool-label">Figma · UI Design</div>
+                </div>
+                <div class="dg-overlay">
+                    <div class="dg-overlay-label">Mobile App UI<br>Client Project</div>
+                </div>
+            </div>
+            <div class="dg-item">
+                <div class="dg-inner">
+                    <div class="dg-num">02</div>
+                    <div class="dg-tool-label">Adobe XD · UX</div>
+                </div>
+                <div class="dg-overlay">
+                    <div class="dg-overlay-label">Web Dashboard<br>UX Prototype</div>
+                </div>
+            </div>
+            <div class="dg-item">
+                <div class="dg-inner">
+                    <div class="dg-num">03</div>
+                    <div class="dg-tool-label">Illustrator · Brand</div>
+                </div>
+                <div class="dg-overlay">
+                    <div class="dg-overlay-label">Brand Identity<br>Logo System</div>
+                </div>
+            </div>
+            <div class="dg-item">
+                <div class="dg-inner">
+                    <div class="dg-num">04</div>
+                    <div class="dg-tool-label">Figma · Design System</div>
+                </div>
+                <div class="dg-overlay">
+                    <div class="dg-overlay-label">Component Library<br>Design System</div>
+                </div>
+            </div>
+            <div class="dg-item wide">
+                <div class="dg-inner">
+                    <div class="dg-num">05</div>
+                    <div class="dg-tool-label">Photoshop · Visual</div>
+                </div>
+                <div class="dg-overlay">
+                    <div class="dg-overlay-label">Visual Campaign<br>Photo Composite</div>
+                </div>
+            </div>
+            <div class="dg-item">
+                <div class="dg-inner">
+                    <div class="dg-num">06</div>
+                    <div class="dg-tool-label">Premiere · Video</div>
+                </div>
+                <div class="dg-overlay">
+                    <div class="dg-overlay-label">Product Video<br>Motion Edit</div>
+                </div>
+            </div>
+            <div class="dg-item">
+                <div class="dg-inner">
+                    <div class="dg-num">07</div>
+                    <div class="dg-tool-label">Adobe XD · Mobile</div>
+                </div>
+                <div class="dg-overlay">
+                    <div class="dg-overlay-label">Mobile Prototype<br>Interactive Flow</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+  06 — DOCS / BLOG
+══════════════════════════════════ -->
+    <section id="docs">
+        <div class="section-tag">06 — Docs & Blog</div>
+        <div class="docs-layout">
+            <div>
+                <h2 class="section-title">Technical<br><em style="color:var(--amber);">Writing.</em></h2>
+                <div class="docs-list">
+                    <div class="doc-item">
+                        <div>
+                            <span class="doc-tag">Rust</span>
+                            <div class="doc-title">Building a High-Performance REST API in Rust</div>
+                            <div class="doc-meta">8 min read · MkDocs · 2025</div>
+                        </div>
+                        <div class="doc-arrow">↗</div>
+                    </div>
+                    <div class="doc-item">
+                        <div>
+                            <span class="doc-tag">Flutter</span>
+                            <div class="doc-title">State Management Patterns in Flutter Apps</div>
+                            <div class="doc-meta">6 min read · MkDocs · 2025</div>
+                        </div>
+                        <div class="doc-arrow">↗</div>
+                    </div>
+                    <div class="doc-item">
+                        <div>
+                            <span class="doc-tag">C++</span>
+                            <div class="doc-title">Solving LeetCode Hard Problems: A Pattern Guide</div>
+                            <div class="doc-meta">10 min read · MkDocs · 2024</div>
+                        </div>
+                        <div class="doc-arrow">↗</div>
+                    </div>
+                    <div class="doc-item">
+                        <div>
+                            <span class="doc-tag">Design</span>
+                            <div class="doc-title">Design Systems That Developers Actually Use</div>
+                            <div class="doc-meta">5 min read · MkDocs · 2024</div>
+                        </div>
+                        <div class="doc-arrow">↗</div>
+                    </div>
+                    <div class="doc-item">
+                        <div>
+                            <span class="doc-tag">MongoDB</span>
+                            <div class="doc-title">MongoDB Aggregation Pipelines: A Deep Dive</div>
+                            <div class="doc-meta">7 min read · MkDocs · 2024</div>
+                        </div>
+                        <div class="doc-arrow">↗</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mkdocs-card">
+                <div class="mkdocs-header">
+                    <div class="mkdocs-logo"><span>MK</span></div>
+                    <div>
+                        <div class="mkdocs-title">Sabbir's Docs</div>
+                        <div class="mkdocs-sub">Powered by MkDocs</div>
+                    </div>
+                </div>
+                <p class="mkdocs-desc">
+                    A growing collection of technical guides, tutorials, and notes on Rust, Flutter, C++,
+                    databases, and design systems. Written for developers who care about the craft.
+                </p>
+                <a href="#" class="mkdocs-link">Read Docs ↗</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+  07 — CONTACT
+══════════════════════════════════ -->
+    <section id="contact">
+        <div class="section-tag">07 — Contact</div>
+        <div class="contact-grid">
+            <div class="contact-left">
+                <h2 class="contact-big">Let's<br>Build<br><span>Together.</span></h2>
+                <p class="contact-desc">
+                    Open to freelance projects, full-time roles, and interesting collaborations.
+                    Drop a message and I'll get back to you within 24 hours.
+                </p>
+                <div class="social-links">
+                    <a href="https://github.com/sabbirmurad" class="social-item">
+                        <div class="si-left">
+                            <div>
+                                <div class="si-platform">GitHub</div>
+                                <div class="si-handle">sabbirmurad</div>
+                            </div>
+                        </div>
+                        <span class="si-arrow">↗</span>
+                    </a>
+                    <a href="#" class="social-item">
+                        <div class="si-left">
+                            <div>
+                                <div class="si-platform">LinkedIn</div>
+                                <div class="si-handle">Sabbir Hassan</div>
+                            </div>
+                        </div>
+                        <span class="si-arrow">↗</span>
+                    </a>
+                    <a href="mailto:hello@sabbir.dev" class="social-item">
+                        <div class="si-left">
+                            <div>
+                                <div class="si-platform">Email</div>
+                                <div class="si-handle">hello@sabbir.dev</div>
+                            </div>
+                        </div>
+                        <span class="si-arrow">↗</span>
+                    </a>
+                    <a href="#" class="social-item">
+                        <div class="si-left">
+                            <div>
+                                <div class="si-platform">MkDocs</div>
+                                <div class="si-handle">docs.sabbir.dev</div>
+                            </div>
+                        </div>
+                        <span class="si-arrow">↗</span>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <div class="contact-form" id="contact-form">
+                    <div class="form-row" id="fr-name">
+                        <label class="form-label">Your Name</label>
+                        <input class="form-input" id="inp-name" type="text" placeholder="John Doe" />
+                        <div class="form-error-msg">Please enter your name.</div>
+                    </div>
+                    <div class="form-row" id="fr-email">
+                        <label class="form-label">Email Address</label>
+                        <input class="form-input" id="inp-email" type="email" placeholder="john@example.com" />
+                        <div class="form-error-msg">Please enter a valid email.</div>
+                    </div>
+                    <div class="form-row" id="fr-subject">
+                        <label class="form-label">Subject</label>
+                        <input class="form-input" id="inp-subject" type="text" placeholder="Project inquiry…" />
+                        <div class="form-error-msg">Please enter a subject.</div>
+                    </div>
+                    <div class="form-row" id="fr-msg">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-textarea" id="inp-msg"
+                            placeholder="Tell me about your project…"></textarea>
+                        <div class="form-error-msg">Please write a message.</div>
+                    </div>
+                    <div class="form-submit">
+                        <span class="submit-note">Typically replies in 24h</span>
+                        <button class="submit-btn" onclick="submitForm(event)">Send Message →</button>
+                    </div>
+                    <div class="form-success" id="form-success">
+                        <div class="fs-icon">
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#e8930a"
+                                stroke-width="2">
+                                <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <div class="fs-title">Message Sent!</div>
+                        <div class="fs-sub">I'll get back to you within 24 hours.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <span class="footer-logo">S<span>.</span>Hassan</span>
+            <span class="footer-copy">© 2026 Sabbir Hassan · All rights reserved</span>
+            <a href="#hero" class="footer-back">↑ Back to top</a>
+        </footer>
+    </section>
+
+    <!-- ═══════════════════════════════
+  SCRIPTS
+═══════════════════════════════ -->
+    <script src="/assets/js/home_v2.js"></script>
 </body>
 
 </html>

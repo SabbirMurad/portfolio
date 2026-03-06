@@ -26,7 +26,6 @@ struct ResponseBody {
 
 pub async fn task(form_data: web::Json<RequestBody>) -> Result<HttpResponse, Error> {
     /* DATABASE ACID SESSION INIT */
-
     let (db, mut session) = MongoDB.connect_acid().await;
     if let Err(error) = session.start_transaction().await {
         log::error!("{:?}", error);

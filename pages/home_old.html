@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% include "common.html" %}
+
+    <title>Sabbir Hassan | Home</title>
+
+    <link rel="stylesheet" href="/assets/css/home.css">
+</head>
+
+<body>
+    <carousel-wrapper>
+        <!-- Hero -->
+        <section id="hero">
+            <img id="hero-bg" src="/assets/image/hero_bg.png" alt="hero_bg">
+            <div id="hero-container">
+                <h2>Hi, I’m</h2>
+                <h1>Sabbir <span>Hassan</span></h1>
+                <p>Hello, I’m Sabbir Hassan, a self-taught developer and designer. I began my journey as a developer six
+                    years ago. It’s a pleasure to meet you,</p>
+                <div class="btns">
+                    <button class="primary-btn-1">Contact Me</button>
+                    <button class="primary-btn-2">Download CV</button>
+                </div>
+            </div>
+        </section>
+        {% include "documentations.html" %}
+        {% include "bottom_navigator.html" %}
+    </carousel-wrapper>
+    <!-- {% include "contact_me.html" %} -->
+    <!-- {% include "footer.html" %} -->
+    <script src="/assets/js/generics/ripple.js"></script>
+    <script src="/assets/js/home.js"></script>
+</body>
+
+</html>
