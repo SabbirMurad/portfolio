@@ -4,14 +4,26 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
-    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Sabbir Hassan" />
-    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <title>Sabbir Hassan — Rust & Flutter Developer | Dhaka</title>
+    <meta name="description"
+        content="Sabbir Hassan is a full-stack developer and designer based in Dhaka, specializing in Rust, Flutter, and UI/UX design. Available for freelance and full-time roles." />
 
-    <title>Sabbir Hassan — Full-Stack Developer & Designer</title>
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sabbir Hassan — Rust & Flutter Developer" />
+    <meta property="og:description"
+        content="Full-stack developer and designer based in Dhaka. Building fast, purposeful digital products with Rust, Flutter, and Figma." />
+    <!-- TODO: Replace with your actual OG image (recommended size: 1200x630px) -->
+    <meta property="og:image" content="sabbir-og-preview.jpg" />
+    <meta property="og:url" content="https://sabbir.dev" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sabbir Hassan — Rust & Flutter Developer" />
+    <meta name="twitter:description"
+        content="Full-stack developer and designer based in Dhaka. Building fast, purposeful digital products with Rust, Flutter, and Figma." />
+    <!-- TODO: Replace with your actual OG image (recommended size: 1200x630px) -->
+    <meta name="twitter:image" content="sabbir-og-preview.jpg" />
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap"
         rel="stylesheet" />
@@ -42,6 +54,7 @@
         <a href="#projects" onclick="closeMobileMenu()">Projects</a>
         <a href="#design" onclick="closeMobileMenu()">Design</a>
         <a href="#docs" onclick="closeMobileMenu()">Docs</a>
+        <a href="#youtube" onclick="closeMobileMenu()">YouTube</a>
         <a href="#contact" onclick="closeMobileMenu()">Contact</a>
         <button class="mm-cta"
             onclick="closeMobileMenu();document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Hire
@@ -59,10 +72,10 @@
             <a href="#projects">Projects</a>
             <a href="#design">Design</a>
             <a href="#docs">Docs</a>
+            <a href="#youtube">YouTube</a>
             <a href="#contact">Contact</a>
             <button class="nav-cta"
-                onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Hire
-                Me</button>
+                onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Hire Me</button>
         </div>
         <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
             <span></span><span></span><span></span>
@@ -94,17 +107,17 @@
         </p>
         <div class="cta-row">
             <button class="btn-primary"
-                onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View
-                Projects →</button>
+                onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View Projects
+                →</button>
             <button class="btn-ghost">Download CV</button>
         </div>
         <div class="hero-visual">
             <div class="float-tag ft-1"><span class="ft-label">Github</span><span class="ft-val">sabbirmurad</span>
             </div>
             <div class="avatar-frame">
+                <img src="/assets/image/portfolio_image.png" alt="">
                 <div class="corner corner-tl"></div>
                 <div class="corner corner-br"></div>
-                <img src="/assets/image/portfolio_image.png" alt="">
                 <div class="avatar-inner">
                     <div class="avatar-icon">
                         <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="#e8930a" stroke-width="1.5">
@@ -116,8 +129,7 @@
                 </div>
             </div>
             <div class="float-tag ft-2"><span class="ft-label">Status</span><span class="ft-val"
-                    style="color:#6dbf7e;">●
-                    Available</span></div>
+                    style="color:#6dbf7e;">● Available</span></div>
         </div>
         <div class="scroll-ind">
             <div class="scroll-line"></div><span>Scroll</span>
@@ -256,8 +268,7 @@
                     <div class="sk-icon">RS</div>
                     <div class="sk-name">Rust</div>
                     <div class="sk-desc">Systems-level programming. Memory-safe, blazing fast. Used for backend services
-                        and CLI
-                        tools.</div>
+                        and CLI tools.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:88%;"></div>
                     </div>
@@ -266,8 +277,7 @@
                     <div class="sk-icon">FL</div>
                     <div class="sk-name">Flutter</div>
                     <div class="sk-desc">Cross-platform mobile & desktop apps with a single codebase. Dart-powered,
-                        pixel-perfect
-                        UI.</div>
+                        pixel-perfect UI.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:85%;"></div>
                     </div>
@@ -276,8 +286,7 @@
                     <div class="sk-icon">JS</div>
                     <div class="sk-name">JavaScript</div>
                     <div class="sk-desc">Custom components, DOM manipulation, interactive UIs. Vanilla-first,
-                        framework-agnostic.
-                    </div>
+                        framework-agnostic.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:90%;"></div>
                     </div>
@@ -295,8 +304,7 @@
                     <div class="sk-icon">C+</div>
                     <div class="sk-name">C++</div>
                     <div class="sk-desc">Competitive programming & algorithms on LeetCode. Strong DSA foundations,
-                        optimized
-                        solutions.</div>
+                        optimized solutions.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:80%;"></div>
                     </div>
@@ -305,8 +313,7 @@
                     <div class="sk-icon">MD</div>
                     <div class="sk-name">MkDocs</div>
                     <div class="sk-desc">Technical documentation sites. Structured, searchable, professional — deployed
-                        and
-                        published.</div>
+                        and published.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:82%;"></div>
                     </div>
@@ -321,8 +328,7 @@
                     <div class="sk-icon" style="color:#a259ff;">FG</div>
                     <div class="sk-name">Figma</div>
                     <div class="sk-desc">UI/UX design, component systems, prototyping, auto-layout, design tokens.
-                        Primary design
-                        tool.</div>
+                        Primary design tool.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:92%;"></div>
                     </div>
@@ -331,8 +337,7 @@
                     <div class="sk-icon" style="color:#ff6ca0;">XD</div>
                     <div class="sk-name">Adobe XD</div>
                     <div class="sk-desc">Wireframes, hi-fi mockups, interactive prototypes, client presentations and
-                        handoff.
-                    </div>
+                        handoff.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:85%;"></div>
                     </div>
@@ -341,8 +346,7 @@
                     <div class="sk-icon" style="color:#ff9a00;">AI</div>
                     <div class="sk-name">Illustrator</div>
                     <div class="sk-desc">Vector illustration, logo design, icon systems, brand identity assets and
-                        print-ready
-                        artwork.</div>
+                        print-ready artwork.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:78%;"></div>
                     </div>
@@ -360,8 +364,7 @@
                     <div class="sk-icon" style="color:#9999ff;">PR</div>
                     <div class="sk-name">Premiere Pro</div>
                     <div class="sk-desc">Video editing at intermediate level. Cut, colour, motion titles, export for web
-                        and
-                        social.</div>
+                        and social.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:65%;"></div>
                     </div>
@@ -370,8 +373,7 @@
                     <div class="sk-icon">UI</div>
                     <div class="sk-name">UI Design</div>
                     <div class="sk-desc">End-to-end interface design — from wireframes to polished hi-fi screens with
-                        design
-                        systems.</div>
+                        design systems.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:90%;"></div>
                     </div>
@@ -386,8 +388,7 @@
                     <div class="sk-icon">MG</div>
                     <div class="sk-name">MongoDB</div>
                     <div class="sk-desc">NoSQL document database. Schema design, aggregation pipelines, indexing and
-                        Atlas cloud.
-                    </div>
+                        Atlas cloud.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:85%;"></div>
                     </div>
@@ -414,8 +415,7 @@
                     <div class="sk-icon">SQ</div>
                     <div class="sk-name">SQLite</div>
                     <div class="sk-desc">Embedded relational DB for local-first apps, mobile (Flutter) and lightweight
-                        backend
-                        services.</div>
+                        backend services.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:80%;"></div>
                     </div>
@@ -424,8 +424,7 @@
                     <div class="sk-icon">SC</div>
                     <div class="sk-name">Schela</div>
                     <div class="sk-desc">Schema design, data modelling, relational integrity. Structured approach to
-                        data
-                        architecture.</div>
+                        data architecture.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:70%;"></div>
                     </div>
@@ -434,8 +433,7 @@
                     <div class="sk-icon">DB</div>
                     <div class="sk-name">DB Design</div>
                     <div class="sk-desc">Entity-relationship modelling, normalisation, performance tuning across SQL and
-                        NoSQL
-                        systems.</div>
+                        NoSQL systems.</div>
                     <div class="sk-level">
                         <div class="sk-level-fill" style="width:80%;"></div>
                     </div>
@@ -487,8 +485,7 @@
                             class="proj-tag">MongoDB</span></div>
                     <div class="proj-name">Client Mobile App</div>
                     <div class="proj-desc">A cross-platform Flutter application with a Rust backend. Real-time data
-                        sync, offline
-                        support, MongoDB Atlas. Built for a client with 1000+ daily users.</div>
+                        sync, offline support, MongoDB Atlas. Built for a client with 1000+ daily users.</div>
                     <div class="proj-links">
                         <a href="https://github.com/sabbirmurad" class="proj-link">GitHub ↗</a>
                         <a href="#" class="proj-link">Live Demo ↗</a>
@@ -506,8 +503,7 @@
                     <div class="proj-tags"><span class="proj-tag">HTML/CSS</span><span class="proj-tag">JS</span></div>
                     <div class="proj-name">Custom Web Component Library</div>
                     <div class="proj-desc">Vanilla JS component library. Zero dependencies, fully accessible, used
-                        across client
-                        projects.</div>
+                        across client projects.</div>
                     <div class="proj-links">
                         <a href="https://github.com/sabbirmurad" class="proj-link">GitHub ↗</a>
                         <a href="#" class="proj-link">Live ↗</a>
@@ -525,8 +521,7 @@
                     <div class="proj-tags"><span class="proj-tag">Rust</span><span class="proj-tag">Redis</span></div>
                     <div class="proj-name">High-Performance API</div>
                     <div class="proj-desc">REST API built in Rust with Redis caching layer. Sub-10ms response times.
-                        Deployed and
-                        battle-tested.</div>
+                        Deployed and battle-tested.</div>
                     <div class="proj-links">
                         <a href="https://github.com/sabbirmurad" class="proj-link">GitHub ↗</a>
                     </div>
@@ -544,8 +539,7 @@
                     </div>
                     <div class="proj-name">LeetCode Solutions</div>
                     <div class="proj-desc">Curated collection of optimized C++ solutions. N+ problems solved, documented
-                        with
-                        time/space complexity.</div>
+                        with time/space complexity.</div>
                     <div class="proj-links">
                         <a href="https://github.com/sabbirmurad" class="proj-link">GitHub ↗</a>
                     </div>
@@ -713,10 +707,158 @@
     </section>
 
     <!-- ══════════════════════════════════
-  07 — CONTACT
+  08 — YOUTUBE
+══════════════════════════════════ -->
+    <section id="youtube">
+        <div class="section-tag reveal">08 — YouTube</div>
+        <div style="margin-bottom:48px;">
+            <h2 class="section-title reveal">On The<br><em style="color:var(--amber);">Channel.</em></h2>
+            <p class="reveal"
+                style="font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);line-height:1.8;max-width:520px;">
+                I make programming videos — Rust deep-dives, Flutter tutorials, algorithm breakdowns, and design-to-code
+                walkthroughs. Subscribe to follow along.
+            </p>
+        </div>
+
+        <div class="yt-layout">
+
+            <!-- LEFT: Channel Card -->
+            <div class="reveal-left">
+                <div class="yt-channel-card">
+                    <div class="yt-banner">
+                        <div class="yt-banner-logo">
+                            <svg width="80" height="56" viewBox="0 0 90 64" fill="none">
+                                <rect width="90" height="64" rx="14" fill="#e8930a" />
+                                <path d="M36 20l22 12-22 12V20z" fill="white" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="yt-card-body">
+                        <div class="yt-avatar-wrap">
+                            <div class="yt-avatar"><span>SH</span></div>
+                            <span class="yt-sub-badge">● Active Channel</span>
+                        </div>
+                        <div class="yt-channel-name">Sabbir Hassan</div>
+                        <div class="yt-channel-handle">@sabbirmurad · Programming &amp; Design</div>
+                        <p class="yt-channel-desc">
+                            Tutorials on Rust, Flutter, C++ algorithms, UI/UX implementation, and developer tools.
+                            Real code, real projects, no fluff.
+                        </p>
+                        <div class="yt-stats-row">
+                            <div class="yt-stat">
+                                <div class="yt-stat-n">N<span>+</span></div>
+                                <div class="yt-stat-l">Subscribers</div>
+                            </div>
+                            <div class="yt-stat">
+                                <div class="yt-stat-n">N<span>+</span></div>
+                                <div class="yt-stat-l">Videos</div>
+                            </div>
+                            <div class="yt-stat">
+                                <div class="yt-stat-n">N<span>K</span></div>
+                                <div class="yt-stat-l">Total Views</div>
+                            </div>
+                        </div>
+                        <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-sub-btn">
+                            <svg width="16" height="12" viewBox="0 0 90 64" fill="var(--bg)">
+                                <rect width="90" height="64" rx="10" fill="var(--bg)" />
+                                <path d="M36 18l26 14-26 14V18z" fill="var(--amber)" />
+                            </svg>
+                            Subscribe on YouTube
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Featured + Video Grid -->
+            <div class="yt-right reveal-right">
+
+                <!-- Featured video: click-to-load -->
+                <div class="yt-featured" id="yt-featured">
+                    <div class="yt-featured-thumb" id="yt-facade" onclick="loadFeaturedVideo()">
+                        <div class="yt-play-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--bg)">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="yt-iframe-wrap" id="yt-iframe-wrap"></div>
+                    <div class="yt-featured-meta">
+                        <div>
+                            <div class="yt-vid-title" id="yt-featured-title">Building a REST API in Rust — Full Tutorial
+                            </div>
+                            <div class="yt-vid-meta">Latest video · 24 min · Rust</div>
+                        </div>
+                        <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-watch-link">Watch →</a>
+                    </div>
+                </div>
+
+                <!-- Recent videos grid -->
+                <div class="yt-videos-grid">
+                    <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-vid-card">
+                        <div class="yt-vc-thumb">
+                            <div class="yt-vc-bg" data-v="1">
+                                <div class="yt-vc-num">01</div>
+                                <div class="yt-vc-play">
+                                    <div class="yt-vc-play-icon"><svg width="10" height="12" viewBox="0 0 24 24"
+                                            fill="var(--bg)">
+                                            <path d="M8 5v14l11-7z" />
+                                        </svg></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="yt-vc-body">
+                            <span class="yt-vc-tag">Flutter</span>
+                            <div class="yt-vc-title">State Management in Flutter — Riverpod Deep Dive</div>
+                            <div class="yt-vc-meta">18 min · 2025</div>
+                        </div>
+                    </a>
+                    <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-vid-card">
+                        <div class="yt-vc-thumb">
+                            <div class="yt-vc-bg" data-v="2">
+                                <div class="yt-vc-num">02</div>
+                                <div class="yt-vc-play">
+                                    <div class="yt-vc-play-icon"><svg width="10" height="12" viewBox="0 0 24 24"
+                                            fill="var(--bg)">
+                                            <path d="M8 5v14l11-7z" />
+                                        </svg></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="yt-vc-body">
+                            <span class="yt-vc-tag">C++</span>
+                            <div class="yt-vc-title">Cracking LeetCode Hard: Sliding Window Patterns</div>
+                            <div class="yt-vc-meta">32 min · 2025</div>
+                        </div>
+                    </a>
+                    <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-vid-card">
+                        <div class="yt-vc-thumb">
+                            <div class="yt-vc-bg" data-v="3">
+                                <div class="yt-vc-num">03</div>
+                                <div class="yt-vc-play">
+                                    <div class="yt-vc-play-icon"><svg width="10" height="12" viewBox="0 0 24 24"
+                                            fill="var(--bg)">
+                                            <path d="M8 5v14l11-7z" />
+                                        </svg></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="yt-vc-body">
+                            <span class="yt-vc-tag">Design</span>
+                            <div class="yt-vc-title">Figma to Flutter — Turning a UI Design into Real Code</div>
+                            <div class="yt-vc-meta">28 min · 2024</div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+  09 — CONTACT
 ══════════════════════════════════ -->
     <section id="contact">
-        <div class="section-tag">07 — Contact</div>
+        <div class="section-tag">09 — Contact</div>
         <div class="contact-grid">
             <div class="contact-left">
                 <h2 class="contact-big">Let's<br>Build<br><span>Together.</span></h2>
@@ -725,8 +867,15 @@
                     Drop a message and I'll get back to you within 24 hours.
                 </p>
                 <div class="social-links">
-                    <a href="https://github.com/sabbirmurad" class="social-item">
+                    <a href="https://github.com/sabbirmurad" target="_blank" class="social-item">
                         <div class="si-left">
+                            <div class="si-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                    <path
+                                        d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"
+                                        fill="var(--muted)" />
+                                </svg>
+                            </div>
                             <div>
                                 <div class="si-platform">GitHub</div>
                                 <div class="si-handle">sabbirmurad</div>
@@ -736,6 +885,14 @@
                     </a>
                     <a href="#" class="social-item">
                         <div class="si-left">
+                            <div class="si-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                    <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"
+                                        fill="var(--muted)" />
+                                    <rect x="2" y="9" width="4" height="12" fill="var(--muted)" />
+                                    <circle cx="4" cy="4" r="2" fill="var(--muted)" />
+                                </svg>
+                            </div>
                             <div>
                                 <div class="si-platform">LinkedIn</div>
                                 <div class="si-handle">Sabbir Hassan</div>
@@ -745,6 +902,15 @@
                     </a>
                     <a href="mailto:hello@sabbir.dev" class="social-item">
                         <div class="si-left">
+                            <div class="si-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                                        fill="var(--muted)" />
+                                    <path d="M22 6l-10 7L2 6" stroke="var(--bg2)" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </div>
                             <div>
                                 <div class="si-platform">Email</div>
                                 <div class="si-handle">hello@sabbir.dev</div>
@@ -754,6 +920,15 @@
                     </a>
                     <a href="#" class="social-item">
                         <div class="si-left">
+                            <div class="si-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                    <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9l-7-7z"
+                                        fill="var(--muted)" />
+                                    <path d="M13 2v7h7" stroke="var(--bg2)" stroke-width="1.5" />
+                                    <path d="M9 17h6M9 13h6M9 9h1" stroke="var(--bg2)" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </div>
                             <div>
                                 <div class="si-platform">MkDocs</div>
                                 <div class="si-handle">docs.sabbir.dev</div>

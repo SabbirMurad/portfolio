@@ -26,7 +26,7 @@ document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; })
 /* ── NAV SCROLL + ACTIVE ── */
 window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', scrollY > 40);
-    const sections = ['hero', 'about', 'skills', 'projects', 'design', 'docs', 'contact'];
+    const sections = ['hero', 'about', 'skills', 'projects', 'design', 'docs', 'youtube', 'contact'];
     const links = document.querySelectorAll('.nav-links a');
     let active = '';
     sections.forEach(id => {
@@ -121,11 +121,21 @@ function submitForm(e) {
     btn.textContent = 'Sending…';
     btn.style.opacity = '.6';
     setTimeout(() => {
-        document.getElementById('contact-form').querySelector('.form-row') &&
-            ['fr-name', 'fr-email', 'fr-subject', 'fr-msg'].forEach(id => {
-                document.getElementById(id).style.display = 'none';
-            });
+        ['fr-name', 'fr-email', 'fr-subject', 'fr-msg'].forEach(id => {
+            document.getElementById(id).style.display = 'none';
+        });
         document.querySelector('.form-submit').style.display = 'none';
         document.getElementById('form-success').classList.add('visible');
     }, 1200);
+}
+
+/* ── YOUTUBE CLICK-TO-LOAD ── */
+function loadFeaturedVideo() {
+    const facade = document.getElementById('yt-facade');
+    const wrap = document.getElementById('yt-iframe-wrap');
+    // Replace with your actual YouTube video ID
+    const videoId = 'dQw4w9WgXcQ';
+    facade.style.display = 'none';
+    wrap.style.display = 'block';
+    wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
 }
