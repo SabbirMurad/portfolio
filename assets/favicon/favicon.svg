@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" width="512" height="512" viewBox="0 0 512 512"><defs><style>.cls-1{fill:#E7940D;}</style></defs><rect class="cls-1" y="303.91" width="208.09" height="208.09" rx="37.45" ry="37.45"></rect><path class="cls-1" d="M465.92,256h-163.84c-25.45,0-46.08-20.63-46.08-46.08V46.08c0-25.45-20.63-46.08-46.08-46.08H46.08C20.63,0,0,20.63,0,46.08V209.92c0,25.45,20.63,46.08,46.08,46.08H209.92c25.45,0,46.08,20.63,46.08,46.08v163.84c0,25.45,20.63,46.08,46.08,46.08h163.84c25.45,0,46.08-20.63,46.08-46.08v-163.84c0-25.45-20.63-46.08-46.08-46.08Z"></path></svg>
+<svg xmlns="http://www.w3.org/2000/svg" id="svg-a1" width="80" height="80" viewBox="0 0 80 80" fill="none"><defs>
+          <clipPath id="clip-top-a1">
+            <polygon points="0,0 80,0 0,80"></polygon>
+          </clipPath>
+          <clipPath id="clip-bot-a1">
+            <polygon points="80,0 80,80 0,80"></polygon>
+          </clipPath>
+        </defs><polygon points="0,0 68,0 80,12 80,80 12,80 0,68" fill="#111110"></polygon><polygon points="0,0 68,0 80,12 80,80 12,80 0,68" fill="#e8930a" clip-path="url(#clip-top-a1)"></polygon><polygon points="0,0 68,0 80,12 80,80 12,80 0,68" fill="#dc143c" clip-path="url(#clip-bot-a1)"></polygon><line x1="80" y1="0" x2="0" y2="80" stroke="#0c0c0a" stroke-width="1.5"></line><text x="12" y="52" font-family="'Bebas Neue', sans-serif" font-size="36" fill="#0c0c0a" letter-spacing="2" opacity="0.85">SH</text><polyline points="68,0 80,12" stroke="#0c0c0a" stroke-width="1.5" opacity="0.4"></polyline></svg>

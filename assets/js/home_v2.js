@@ -139,3 +139,91 @@ function loadFeaturedVideo() {
     wrap.style.display = 'block';
     wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
 }
+
+/* ── AUTO THEME SWITCH — SLICE GLITCH every 10s ── */
+let currentTheme = 'amber';
+let glitching = false;
+
+function glitchSwitchTheme() {
+    if (glitching) return;
+    glitching = true;
+
+    const nextTheme = currentTheme === 'amber' ? 'crimson' : 'amber';
+    const overlay = document.getElementById('glitch-overlay');
+    const flash = document.getElementById('glitch-flash');
+
+    // 1. Scanline sweep
+    const sweep = document.createElement('div');
+    sweep.className = 'scanline-sweep';
+    document.body.appendChild(sweep);
+
+    // 2. RGB body class
+    document.body.classList.add('glitching');
+
+    // 3. Build random slices
+    overlay.innerHTML = '';
+    overlay.style.opacity = '1';
+    let topPos = 0;
+    const sliceCount = 12;
+    for (let i = 0; i < sliceCount; i++) {
+        const h = Math.random() * 12 + 3;
+        const slice = document.createElement('div');
+        slice.className = 'g-slice';
+        slice.style.top = topPos + '%';
+        slice.style.height = h + '%';
+        slice.style.transform = `translateX(${(Math.random() - 0.5) * 28}px)`;
+        slice.style.opacity = (Math.random() * 0.8 + 0.2).toString();
+        slice.style.background = i % 3 === 0
+            ? 'rgba(220,20,60,0.08)'
+            : i % 3 === 1
+                ? 'rgba(var(--amber-rgb),0.06)'
+                : 'rgba(12,12,10,0.9)';
+        overlay.appendChild(slice);
+        topPos += h;
+        if (topPos > 100) break;
+    }
+
+    // 4. Flash
+    flash.style.transition = 'none';
+    flash.style.opacity = '0.15';
+
+    // 5. Jitter loop
+    let jitterCount = 0;
+    const jitterInterval = setInterval(() => {
+        overlay.querySelectorAll('.g-slice').forEach(s => {
+            s.style.transform = `translateX(${(Math.random() - 0.5) * 32}px)`;
+            s.style.opacity = (Math.random() * 0.7 + 0.1).toString();
+        });
+        jitterCount++;
+        if (jitterCount > 6) {
+            clearInterval(jitterInterval);
+
+            // 6. Switch theme at peak
+            document.documentElement.classList.toggle('theme-crimson', nextTheme === 'crimson');
+            currentTheme = nextTheme;
+
+            // 7. Sweep out
+            overlay.querySelectorAll('.g-slice').forEach((s, i) => {
+                s.style.transition = `transform ${0.1 + i * 0.018}s ease, opacity ${0.12 + i * 0.015}s ease`;
+                s.style.transform = 'translateX(0)';
+                s.style.opacity = '0';
+            });
+            flash.style.transition = 'opacity .25s ease';
+            flash.style.opacity = '0';
+
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                overlay.innerHTML = '';
+                sweep.remove();
+                document.body.classList.remove('glitching');
+                glitching = false;
+            }, 350);
+        }
+    }, 45);
+}
+
+// Auto-trigger every 10 seconds
+setTimeout(() => {
+    glitchSwitchTheme();
+    setInterval(glitchSwitchTheme, 10000);
+}, 10000);
