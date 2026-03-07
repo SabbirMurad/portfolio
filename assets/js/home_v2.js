@@ -141,14 +141,17 @@ function loadFeaturedVideo() {
 }
 
 /* ── AUTO THEME SWITCH — SLICE GLITCH every 10s ── */
-let currentTheme = 'amber';
 let glitching = false;
+const themes = ['amber', 'crimson', 'emerald'];
+const startIndex = Math.floor(Math.random() * themes.length);
+let currentTheme = themes[startIndex];
+if (currentTheme !== 'amber') document.documentElement.classList.add('theme-' + currentTheme);
 
 function glitchSwitchTheme() {
     if (glitching) return;
     glitching = true;
 
-    const nextTheme = currentTheme === 'amber' ? 'crimson' : 'amber';
+    const nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
     const overlay = document.getElementById('glitch-overlay');
     const flash = document.getElementById('glitch-flash');
 
@@ -163,6 +166,9 @@ function glitchSwitchTheme() {
     // 3. Build random slices
     overlay.innerHTML = '';
     overlay.style.opacity = '1';
+    const accentMap = { amber: '232,147,10', crimson: '220,20,60', emerald: '46,204,113' };
+    const rgbNew = accentMap[nextTheme];
+    const rgbOld = accentMap[currentTheme];
     let topPos = 0;
     const sliceCount = 12;
     for (let i = 0; i < sliceCount; i++) {
@@ -174,9 +180,9 @@ function glitchSwitchTheme() {
         slice.style.transform = `translateX(${(Math.random() - 0.5) * 28}px)`;
         slice.style.opacity = (Math.random() * 0.8 + 0.2).toString();
         slice.style.background = i % 3 === 0
-            ? 'rgba(220,20,60,0.08)'
+            ? `rgba(${rgbNew},0.08)`
             : i % 3 === 1
-                ? 'rgba(var(--amber-rgb),0.06)'
+                ? `rgba(${rgbOld},0.06)`
                 : 'rgba(12,12,10,0.9)';
         overlay.appendChild(slice);
         topPos += h;
@@ -199,7 +205,8 @@ function glitchSwitchTheme() {
             clearInterval(jitterInterval);
 
             // 6. Switch theme at peak
-            document.documentElement.classList.toggle('theme-crimson', nextTheme === 'crimson');
+            document.documentElement.classList.remove('theme-crimson', 'theme-emerald');
+            if (nextTheme !== 'amber') document.documentElement.classList.add('theme-' + nextTheme);
             currentTheme = nextTheme;
 
             // 7. Sweep out
@@ -222,8 +229,58 @@ function glitchSwitchTheme() {
     }, 45);
 }
 
-// Auto-trigger every 10 seconds
+// Auto-trigger every 8 seconds
 setTimeout(() => {
     glitchSwitchTheme();
-    setInterval(glitchSwitchTheme, 10000);
-}, 10000);
+    setInterval(glitchSwitchTheme, 8000);
+}, 8000);
+
+/* ── COUNT-UP ANIMATION for stat numbers ── */
+function animateCountUp(el) {
+    const raw = el.textContent.trim();
+    const match = raw.match(/^([\d.]+)(.*)$/);
+    if (!match) { el.classList.add('counted'); return; }
+    const target = parseFloat(match[1]);
+    const suffix = match[2] || '';
+    const isFloat = match[1].includes('.');
+    const duration = 1200;
+    const start = performance.now();
+    el.classList.remove('count-up');
+    el.classList.add('counted');
+    function step(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        const val = isFloat ? (target * ease).toFixed(1) : Math.round(target * ease);
+        el.textContent = val + suffix;
+        if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+}
+
+const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.stat-num, .uw-stat-val').forEach(el => {
+                if (!el.dataset.counted) {
+                    el.dataset.counted = '1';
+                    animateCountUp(el);
+                }
+            });
+        }
+    });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.stats-strip, .uw-stats').forEach(el => countObserver.observe(el));
+
+/* ── PARALLAX TILT on project cards ── */
+document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `translateY(-6px) perspective(600px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+    });
+});
