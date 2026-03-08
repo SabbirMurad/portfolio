@@ -480,14 +480,14 @@
                             style="color:var(--amber);">Work.</em></h2>
                 </div>
                 <div class="filter-row">
-                    <button class="filter-btn active">All</button>
-                    <button class="filter-btn">Web</button>
-                    <button class="filter-btn">Mobile</button>
-                    <button class="filter-btn">Client</button>
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="web">Web</button>
+                    <button class="filter-btn" data-filter="mobile">Mobile</button>
+                    <button class="filter-btn" data-filter="client">Client</button>
                 </div>
             </div>
             <div class="projects-grid">
-                <div class="project-card featured reveal">
+                <div class="project-card featured reveal" data-category="mobile client">
                     <div class="proj-thumb" data-n="1">
                         <div class="proj-thumb-bg">
                             <div class="proj-thumb-num">01</div>
@@ -506,7 +506,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="project-card reveal reveal-delay-1">
+                <div class="project-card reveal reveal-delay-1" data-category="web">
                     <div class="proj-thumb" data-n="2">
                         <div class="proj-thumb-bg">
                             <div class="proj-thumb-num">02</div>
@@ -525,7 +525,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="project-card reveal reveal-delay-2">
+                <div class="project-card reveal reveal-delay-2" data-category="web client">
                     <div class="proj-thumb" data-n="3">
                         <div class="proj-thumb-bg">
                             <div class="proj-thumb-num">03</div>
@@ -543,7 +543,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="project-card reveal reveal-delay-3">
+                <div class="project-card reveal reveal-delay-3" data-category="web">
                     <div class="proj-thumb" data-n="4">
                         <div class="proj-thumb-bg">
                             <div class="proj-thumb-num">04</div>
@@ -877,7 +877,9 @@
             <div class="upwork-banner reveal">
                 <div class="upwork-banner-bg">
                     <svg class="uw-logo-bg" viewBox="0 0 56.7 56.7" fill="none">
-                        <path d="M42.4 17.7c-4.2 0-7.5 2.7-8.8 7-2-3.1-3.6-6.8-4.5-9.9h-4.6v14.1c0 2.3-1.9 4.2-4.2 4.2s-4.2-1.9-4.2-4.2V14.8H11.5v14.1c0 4.9 3.9 8.8 8.8 8.8s8.8-3.9 8.8-8.8v-2.4c.9 1.8 2 3.7 3.3 5.4l-2.8 13.3h4.7l2-9.6c1.6 1 3.5 1.6 5.5 1.6 5.1 0 9.1-4.1 9.1-9.3.1-5.1-3.8-10.2-8.5-10.2zm0 15c-1.7 0-3.5-.9-4.9-2.2l.6-2.6v-.1c.4-2.4 1.7-6.4 4.8-6.4 2.5 0 4.2 2.5 4.2 5.5-.1 3.1-2.2 5.8-4.7 5.8z" fill="currentColor"/>
+                        <path
+                            d="M42.4 17.7c-4.2 0-7.5 2.7-8.8 7-2-3.1-3.6-6.8-4.5-9.9h-4.6v14.1c0 2.3-1.9 4.2-4.2 4.2s-4.2-1.9-4.2-4.2V14.8H11.5v14.1c0 4.9 3.9 8.8 8.8 8.8s8.8-3.9 8.8-8.8v-2.4c.9 1.8 2 3.7 3.3 5.4l-2.8 13.3h4.7l2-9.6c1.6 1 3.5 1.6 5.5 1.6 5.1 0 9.1-4.1 9.1-9.3.1-5.1-3.8-10.2-8.5-10.2zm0 15c-1.7 0-3.5-.9-4.9-2.2l.6-2.6v-.1c.4-2.4 1.7-6.4 4.8-6.4 2.5 0 4.2 2.5 4.2 5.5-.1 3.1-2.2 5.8-4.7 5.8z"
+                            fill="currentColor" />
                     </svg>
                 </div>
                 <div class="upwork-banner-inner">
@@ -904,7 +906,8 @@
                             <span class="uw-stat-label">Status</span>
                         </div>
                     </div>
-                    <a href="https://www.upwork.com/freelancers/sabbir" target="_blank" class="btn-primary" style="align-self:center;">Hire Me on Upwork ↗</a>
+                    <a href="https://www.upwork.com/freelancers/sabbir" target="_blank" class="btn-primary"
+                        style="align-self:center;">Hire Me on Upwork ↗</a>
                 </div>
             </div>
         </section>
