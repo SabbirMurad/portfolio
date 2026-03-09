@@ -20,7 +20,7 @@ html { scroll-behavior:smooth; }
   --amber-rgb: 232,147,10;
   --amber-glow:rgba(var(--amber-rgb),.12);
   --text:      #f0ede6;
-  --muted:     #5a5650;
+  --muted:     #7a756e;
   --muted2:    #3a3830;
   --border:    #222220;
   --border2:   #2a2a28;
@@ -459,6 +459,18 @@ section { position:relative; z-index:1; }
 .stat-num { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--text); letter-spacing:1px; line-height:1; }
 .stat-num span { color:var(--amber); font-size:20px; }
 .stat-label { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
+.stat-lc {
+  text-decoration:none; cursor:none;
+  transition:background .3s;
+}
+.stat-lc:hover {
+  background:var(--amber-glow);
+}
+.stat-lc:hover .stat-num { color:var(--amber); }
+.lc-breakdown {
+  display:flex; gap:10px; margin-top:4px;
+  font-family:'DM Mono',monospace; font-size:8px; letter-spacing:1px; color:var(--muted);
+}
 .scroll-ind {
   position:absolute; bottom:90px; right:48px;
   display:flex; flex-direction:column; align-items:center; gap:6px;
@@ -649,6 +661,12 @@ section { position:relative; z-index:1; }
   background:var(--amber-glow);
   transition:background .3s, border-color .3s;
 }
+
+.sk-icon-original {
+  width: 36px;
+  height: 36px;
+}
+
 .skill-card:hover .sk-icon {
   border-color:var(--amber);
   background:rgba(var(--amber-rgb),.18);
@@ -840,7 +858,18 @@ section { position:relative; z-index:1; }
 .dg-item {
   background:var(--bg2); position:relative; overflow:hidden;
   cursor:none; transition:background .2s;
+  position: relative;
 }
+
+.dg-item > img {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  object-fit: contain;
+  background: white;
+  padding: 32px;
+}
+
 .dg-item:hover { background:var(--bg3); }
 .dg-item:hover .dg-overlay { opacity:1; }
 .dg-item.tall { grid-row:span 2; }
@@ -856,7 +885,8 @@ section { position:relative; z-index:1; }
 }
 .dg-num {
   font-family:'Bebas Neue',sans-serif; font-size:56px; color:transparent;
-  -webkit-text-stroke:1px rgba(var(--amber-rgb),.1); z-index:1;
+  /* -webkit-text-stroke:1px rgba(var(--amber-rgb),.1); */
+  z-index:1;
 }
 .dg-tool-label {
   font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:3px;
