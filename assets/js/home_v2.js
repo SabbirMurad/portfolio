@@ -26,7 +26,7 @@ document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; })
 /* ── NAV SCROLL + ACTIVE ── */
 window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', scrollY > 40);
-    const sections = ['hero', 'about', 'skills', 'projects', 'design', 'docs', 'youtube', 'contact'];
+    const sections = ['hero', 'about', 'services', 'skills', 'experience', 'projects', 'opensource', 'design', 'docs', 'youtube', 'contact'];
     const links = document.querySelectorAll('.nav-links a');
     let active = '';
     sections.forEach(id => {
@@ -321,8 +321,8 @@ function glitchSwitchTheme() {
 // Auto-trigger every 8 seconds
 setTimeout(() => {
     glitchSwitchTheme();
-    setInterval(glitchSwitchTheme, 8000);
-}, 8000);
+    setInterval(glitchSwitchTheme, 10000);
+}, 10000);
 
 /* ── COUNT-UP ANIMATION for stat numbers ── */
 function animateCountUp(el) {

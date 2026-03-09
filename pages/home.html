@@ -61,6 +61,7 @@
     <!-- MOBILE MENU -->
     <div class="mobile-menu" id="mobile-menu">
         <a href="#about" onclick="closeMobileMenu()">About</a>
+        <a href="#services" onclick="closeMobileMenu()">Services</a>
         <a href="#skills" onclick="closeMobileMenu()">Skills</a>
         <a href="#projects" onclick="closeMobileMenu()">Projects</a>
         <a href="#design" onclick="closeMobileMenu()">Design</a>
@@ -80,6 +81,7 @@
             <a href="#hero" class="nav-logo">S<span>.</span>Hassan</a>
             <div class="nav-links">
                 <a href="#about">About</a>
+                <a href="#services">Services</a>
                 <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
                 <a href="#design">Design</a>
@@ -177,7 +179,7 @@
                     class="m-item">Photoshop</span>
                 <span class="m-item">Premiere Pro</span><span class="m-item">MongoDB</span><span
                     class="m-item">MySQL</span>
-                <span class="m-item">Redis</span><span class="m-item">SQLite</span><span class="m-item">MkDocs</span>
+                <span class="m-item">Redis</span><span class="m-item">SQLite</span><span class="m-item">Tauri</span><span class="m-item">MkDocs</span>
                 <span class="m-item">Rust</span><span class="m-item">Flutter</span><span class="m-item">HTML /
                     CSS</span>
                 <span class="m-item">JavaScript</span><span class="m-item">C++</span><span class="m-item">Figma</span>
@@ -185,7 +187,7 @@
                     class="m-item">Photoshop</span>
                 <span class="m-item">Premiere Pro</span><span class="m-item">MongoDB</span><span
                     class="m-item">MySQL</span>
-                <span class="m-item">Redis</span><span class="m-item">SQLite</span><span class="m-item">MkDocs</span>
+                <span class="m-item">Redis</span><span class="m-item">SQLite</span><span class="m-item">Tauri</span><span class="m-item">MkDocs</span>
             </div>
         </div>
 
@@ -278,12 +280,119 @@
         </section>
 
         <!-- ══════════════════════════════════
-  03 — SKILLS
+  03 — SERVICES
+══════════════════════════════════ -->
+        <section id="services">
+            <div class="section-tag reveal">03 — What I Offer</div>
+            <h2 class="section-title reveal" style="margin-bottom:0;">My<br><em
+                    style="color:var(--amber);">Services.</em></h2>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="svc-num">01</div>
+                    <div class="svc-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M20 16V7a2 2 0 00-2-2H6a2 2 0 00-2 2v9m16 0H4m16 0l1 3H3l1-3" />
+                            <path d="M9 10l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="svc-title">API & Backend</div>
+                    <div class="svc-desc">High-performance REST APIs, microservices, and backend systems built in Rust.
+                        Designed for speed, safety, and scalability.</div>
+                    <div class="svc-tags">
+                        <span class="svc-tag">Rust</span>
+                        <span class="svc-tag">Actix</span>
+                        <span class="svc-tag">REST</span>
+                        <span class="svc-tag">Redis</span>
+                    </div>
+                </div>
+                <div class="service-card reveal">
+                    <div class="svc-num">02</div>
+                    <div class="svc-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="5" y="2" width="14" height="20" rx="2" />
+                            <line x1="12" y1="18" x2="12" y2="18.01" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="svc-title">Mobile Apps</div>
+                    <div class="svc-desc">Cross-platform mobile applications with Flutter. Pixel-perfect UI, smooth
+                        animations, and native performance on iOS and Android.</div>
+                    <div class="svc-tags">
+                        <span class="svc-tag">Flutter</span>
+                        <span class="svc-tag">Dart</span>
+                        <span class="svc-tag">iOS</span>
+                        <span class="svc-tag">Android</span>
+                    </div>
+                </div>
+                <div class="service-card reveal">
+                    <div class="svc-num">03</div>
+                    <div class="svc-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M2 6a2 2 0 012-2h16a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                            <path d="M8 21h8M12 17v4" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="svc-title">Desktop Software</div>
+                    <div class="svc-desc">Native desktop applications for Windows, macOS, and Linux using Tauri or Flutter.
+                        Lightweight, fast, and cross-platform with native feel.</div>
+                    <div class="svc-tags">
+                        <span class="svc-tag">Tauri</span>
+                        <span class="svc-tag">Flutter</span>
+                        <span class="svc-tag">Rust</span>
+                        <span class="svc-tag">Cross-platform</span>
+                    </div>
+                </div>
+                <div class="service-card reveal">
+                    <div class="svc-num">04</div>
+                    <div class="svc-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M12 19l7-7 3 3-7 7-3-3z" />
+                            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+                            <path d="M2 2l7.586 7.586" />
+                            <circle cx="11" cy="11" r="2" />
+                        </svg>
+                    </div>
+                    <div class="svc-title">UI/UX Design</div>
+                    <div class="svc-desc">User interfaces and experiences crafted in Figma. From wireframes to polished
+                        design systems — every detail considered.</div>
+                    <div class="svc-tags">
+                        <span class="svc-tag">Figma</span>
+                        <span class="svc-tag">Adobe XD</span>
+                        <span class="svc-tag">Prototyping</span>
+                    </div>
+                </div>
+                <div class="service-card reveal">
+                    <div class="svc-num">05</div>
+                    <div class="svc-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" />
+                            <path d="M14 2v6h6" />
+                            <path d="M16 13H8M16 17H8M10 9H8" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="svc-title">Technical Docs</div>
+                    <div class="svc-desc">Clear, structured documentation and technical writing. API references,
+                        tutorials, and guides built with MkDocs.</div>
+                    <div class="svc-tags">
+                        <span class="svc-tag">MkDocs</span>
+                        <span class="svc-tag">Markdown</span>
+                        <span class="svc-tag">Writing</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════
+  04 — SKILLS
 ══════════════════════════════════ -->
         <section id="skills">
             <div class="skills-header reveal">
                 <div>
-                    <div class="section-tag">03 — Skills</div>
+                    <div class="section-tag">04 — Skills</div>
                     <h2 class="section-title" style="margin-bottom:0;">What I<br><em
                             style="color:var(--amber);">Know.</em></h2>
                 </div>
@@ -298,58 +407,67 @@
             <div class="skill-panel active" id="panel-dev">
                 <div class="skills-grid">
                     <div class="skill-card reveal reveal-delay-1">
-                        <div class="sk-icon">RS</div>
-                        <div class="sk-name">Rust</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">RS</div>
+                            <div class="sk-name">Rust</div>
+                            <span class="sk-yrs">4+ yrs</span>
+                        </div>
                         <div class="sk-desc">Systems-level programming. Memory-safe, blazing fast. Used for backend
                             services and CLI tools.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:88%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card reveal reveal-delay-2">
-                        <div class="sk-icon">FL</div>
-                        <div class="sk-name">Flutter</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">FL</div>
+                            <div class="sk-name">Flutter</div>
+                            <span class="sk-yrs">4+ yrs</span>
+                        </div>
                         <div class="sk-desc">Cross-platform mobile & desktop apps with a single codebase. Dart-powered,
                             pixel-perfect UI.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:85%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card reveal reveal-delay-3">
-                        <div class="sk-icon">JS</div>
-                        <div class="sk-name">JavaScript</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">JS</div>
+                            <div class="sk-name">JavaScript</div>
+                            <span class="sk-yrs">5+ yrs</span>
+                        </div>
                         <div class="sk-desc">Custom components, DOM manipulation, interactive UIs. Vanilla-first,
                             framework-agnostic.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:90%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card reveal reveal-delay-4">
-                        <div class="sk-icon">HT</div>
-                        <div class="sk-name">HTML / CSS</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">HT</div>
+                            <div class="sk-name">HTML / CSS</div>
+                            <span class="sk-yrs">6+ yrs</span>
+                        </div>
                         <div class="sk-desc">Semantic markup, advanced CSS layouts, animations. Pixel-perfect
                             cross-browser implementation.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:95%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card reveal reveal-delay-5">
-                        <div class="sk-icon">C+</div>
-                        <div class="sk-name">C++</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">C+</div>
+                            <div class="sk-name">C++</div>
+                            <span class="sk-yrs">3+ yrs</span>
+                        </div>
                         <div class="sk-desc">Competitive programming & algorithms on LeetCode. Strong DSA foundations,
                             optimized solutions.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:80%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card reveal reveal-delay-6">
-                        <div class="sk-icon">MD</div>
-                        <div class="sk-name">MkDocs</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">Ta</div>
+                            <div class="sk-name">Tauri</div>
+                            <span class="sk-yrs">2+ yrs</span>
+                        </div>
+                        <div class="sk-desc">Lightweight native desktop apps with web frontends and Rust backends.
+                            Fast, secure, cross-platform.</div>
+                    </div>
+                    <div class="skill-card reveal reveal-delay-7">
+                        <div class="sk-head">
+                            <div class="sk-icon">MD</div>
+                            <div class="sk-name">MkDocs</div>
+                            <span class="sk-yrs">3+ yrs</span>
+                        </div>
                         <div class="sk-desc">Technical documentation sites. Structured, searchable, professional —
                             deployed and published.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:82%;"></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -358,58 +476,58 @@
             <div class="skill-panel" id="panel-design">
                 <div class="skills-grid">
                     <div class="skill-card">
-                        <div class="sk-icon" style="color:#a259ff;">FG</div>
-                        <div class="sk-name">Figma</div>
+                        <div class="sk-head">
+                            <div class="sk-icon" style="color:#a259ff;border-color:#a259ff44;background:rgba(162,89,255,.1);">FG</div>
+                            <div class="sk-name">Figma</div>
+                            <span class="sk-yrs">5+ yrs</span>
+                        </div>
                         <div class="sk-desc">UI/UX design, component systems, prototyping, auto-layout, design tokens.
                             Primary design tool.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:92%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon" style="color:#ff6ca0;">XD</div>
-                        <div class="sk-name">Adobe XD</div>
+                        <div class="sk-head">
+                            <div class="sk-icon" style="color:#ff6ca0;border-color:#ff6ca044;background:rgba(255,108,160,.1);">XD</div>
+                            <div class="sk-name">Adobe XD</div>
+                            <span class="sk-yrs">4+ yrs</span>
+                        </div>
                         <div class="sk-desc">Wireframes, hi-fi mockups, interactive prototypes, client presentations and
                             handoff.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:85%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon" style="color:#ff9a00;">AI</div>
-                        <div class="sk-name">Illustrator</div>
+                        <div class="sk-head">
+                            <div class="sk-icon" style="color:#ff9a00;border-color:#ff9a0044;background:rgba(255,154,0,.1);">AI</div>
+                            <div class="sk-name">Illustrator</div>
+                            <span class="sk-yrs">3+ yrs</span>
+                        </div>
                         <div class="sk-desc">Vector illustration, logo design, icon systems, brand identity assets and
                             print-ready artwork.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:78%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon" style="color:#31a8ff;">PS</div>
-                        <div class="sk-name">Photoshop</div>
+                        <div class="sk-head">
+                            <div class="sk-icon" style="color:#31a8ff;border-color:#31a8ff44;background:rgba(49,168,255,.1);">PS</div>
+                            <div class="sk-name">Photoshop</div>
+                            <span class="sk-yrs">3+ yrs</span>
+                        </div>
                         <div class="sk-desc">Photo editing, compositing, web asset prep, mockup creation and image
                             manipulation.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:72%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon" style="color:#9999ff;">PR</div>
-                        <div class="sk-name">Premiere Pro</div>
+                        <div class="sk-head">
+                            <div class="sk-icon" style="color:#9999ff;border-color:#9999ff44;background:rgba(153,153,255,.1);">PR</div>
+                            <div class="sk-name">Premiere Pro</div>
+                            <span class="sk-yrs">2+ yrs</span>
+                        </div>
                         <div class="sk-desc">Video editing at intermediate level. Cut, colour, motion titles, export for
                             web and social.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:65%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon">UI</div>
-                        <div class="sk-name">UI Design</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">UI</div>
+                            <div class="sk-name">UI Design</div>
+                            <span class="sk-yrs">5+ yrs</span>
+                        </div>
                         <div class="sk-desc">End-to-end interface design — from wireframes to polished hi-fi screens
                             with design systems.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:90%;"></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -418,58 +536,58 @@
             <div class="skill-panel" id="panel-db">
                 <div class="skills-grid">
                     <div class="skill-card">
-                        <div class="sk-icon">MG</div>
-                        <div class="sk-name">MongoDB</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">MG</div>
+                            <div class="sk-name">MongoDB</div>
+                            <span class="sk-yrs">4+ yrs</span>
+                        </div>
                         <div class="sk-desc">NoSQL document database. Schema design, aggregation pipelines, indexing and
                             Atlas cloud.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:85%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon">MY</div>
-                        <div class="sk-name">MySQL</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">MY</div>
+                            <div class="sk-name">MySQL</div>
+                            <span class="sk-yrs">4+ yrs</span>
+                        </div>
                         <div class="sk-desc">Relational database design, complex joins, stored procedures, query
                             optimisation.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:82%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon">RD</div>
-                        <div class="sk-name">Redis</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">RD</div>
+                            <div class="sk-name">Redis</div>
+                            <span class="sk-yrs">3+ yrs</span>
+                        </div>
                         <div class="sk-desc">In-memory data store for caching, session management, pub/sub and rate
                             limiting.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:75%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon">SQ</div>
-                        <div class="sk-name">SQLite</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">SQ</div>
+                            <div class="sk-name">SQLite</div>
+                            <span class="sk-yrs">3+ yrs</span>
+                        </div>
                         <div class="sk-desc">Embedded relational DB for local-first apps, mobile (Flutter) and
                             lightweight backend services.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:80%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon">SC</div>
-                        <div class="sk-name">Schela</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">SC</div>
+                            <div class="sk-name">Schela</div>
+                            <span class="sk-yrs">2+ yrs</span>
+                        </div>
                         <div class="sk-desc">Schema design, data modelling, relational integrity. Structured approach to
                             data architecture.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:70%;"></div>
-                        </div>
                     </div>
                     <div class="skill-card">
-                        <div class="sk-icon">DB</div>
-                        <div class="sk-name">DB Design</div>
+                        <div class="sk-head">
+                            <div class="sk-icon">DB</div>
+                            <div class="sk-name">DB Design</div>
+                            <span class="sk-yrs">4+ yrs</span>
+                        </div>
                         <div class="sk-desc">Entity-relationship modelling, normalisation, performance tuning across SQL
                             and NoSQL systems.</div>
-                        <div class="sk-level">
-                            <div class="sk-level-fill" style="width:80%;"></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -478,7 +596,7 @@
                 <span class="tag-chip">Rust</span><span class="tag-chip">Flutter</span><span
                     class="tag-chip">HTML/CSS</span>
                 <span class="tag-chip">JavaScript</span><span class="tag-chip">C++</span><span
-                    class="tag-chip">LeetCode</span>
+                    class="tag-chip">Tauri</span><span class="tag-chip">LeetCode</span>
                 <span class="tag-chip">Figma</span><span class="tag-chip">Adobe XD</span><span
                     class="tag-chip">Illustrator</span>
                 <span class="tag-chip">Photoshop</span><span class="tag-chip">Premiere</span><span
@@ -490,12 +608,72 @@
         </section>
 
         <!-- ══════════════════════════════════
-  04 — PROJECTS
+  05 — EXPERIENCE
+══════════════════════════════════ -->
+        <section id="experience">
+            <div class="section-tag reveal">05 — Experience</div>
+            <h2 class="section-title reveal" style="margin-bottom:0;">Where I've<br><em
+                    style="color:var(--amber);">Been.</em></h2>
+            <div class="exp-timeline">
+                <div class="exp-item reveal">
+                    <div class="exp-dot"></div>
+                    <div class="exp-date">2022 — Present</div>
+                    <div class="exp-role">Freelance Developer & Designer</div>
+                    <div class="exp-company">Self-employed · Upwork · Remote</div>
+                    <div class="exp-body">
+                        <ul>
+                            <li>Building full-stack web and mobile applications for clients worldwide</li>
+                            <li>Delivering high-performance Rust backends and Flutter mobile apps</li>
+                            <li>Designing UI/UX in Figma — from concept to production-ready assets</li>
+                            <li>Maintaining a 100% Job Success Score with 5.0 average rating</li>
+                        </ul>
+                    </div>
+                    <div class="exp-stack">
+                        <span>Rust</span><span>Flutter</span><span>Figma</span><span>MongoDB</span>
+                    </div>
+                </div>
+                <div class="exp-item reveal">
+                    <div class="exp-dot"></div>
+                    <div class="exp-date">2021 — 2022</div>
+                    <div class="exp-role">Junior Developer</div>
+                    <div class="exp-company">Dhaka, Bangladesh</div>
+                    <div class="exp-body">
+                        <ul>
+                            <li>Developed and maintained cross-platform mobile applications using Flutter</li>
+                            <li>Collaborated with design teams to implement pixel-perfect UI from Figma mockups</li>
+                            <li>Worked with REST APIs and integrated backend services</li>
+                        </ul>
+                    </div>
+                    <div class="exp-stack">
+                        <span>Flutter</span><span>Dart</span><span>REST APIs</span><span>Git</span>
+                    </div>
+                </div>
+                <div class="exp-item reveal">
+                    <div class="exp-dot"></div>
+                    <div class="exp-date">2020 — 2021</div>
+                    <div class="exp-role">Self-Taught Developer</div>
+                    <div class="exp-company">Learning Phase · Open Source</div>
+                    <div class="exp-body">
+                        <ul>
+                            <li>Started competitive programming in C++ on LeetCode and Codeforces</li>
+                            <li>Built personal projects to learn Rust, Flutter, and web technologies</li>
+                            <li>Began documenting learnings through technical writing on MkDocs</li>
+                        </ul>
+                    </div>
+                    <div class="exp-stack">
+                        <span>C++</span><span>HTML/CSS</span><span>JavaScript</span><span>MkDocs</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════
+  06 — PROJECTS
 ══════════════════════════════════ -->
         <section id="projects">
             <div class="projects-header reveal">
                 <div>
-                    <div class="section-tag">04 — Projects</div>
+                    <div class="section-tag">06 — Projects</div>
                     <h2 class="section-title" style="margin-bottom:0;">Selected<br><em
                             style="color:var(--amber);">Work.</em></h2>
                 </div>
@@ -589,10 +767,106 @@
         </section>
 
         <!-- ══════════════════════════════════
-  05 — DESIGN WORK
+  07 — CURRENTLY WORKING ON
+══════════════════════════════════ -->
+        <section id="opensource">
+            <div class="section-tag reveal">07 — Currently Working On</div>
+            <h2 class="section-title reveal" style="margin-bottom:0;">Open<br><em
+                    style="color:var(--amber);">Source.</em></h2>
+            <div class="oss-grid">
+                <div class="oss-card reveal">
+                    <div class="oss-card-header">
+                        <span class="oss-status active">Active</span>
+                        <span class="oss-lang-dot rust" title="Rust"></span>
+                    </div>
+                    <div class="oss-card-name">rust-api-starter</div>
+                    <div class="oss-card-desc">A production-ready REST API boilerplate in Rust with Actix-web, MongoDB,
+                        JWT auth, and structured error handling.</div>
+                    <div class="oss-card-tags">
+                        <span class="oss-card-tag">Rust</span>
+                        <span class="oss-card-tag">Actix</span>
+                        <span class="oss-card-tag">MongoDB</span>
+                    </div>
+                    <div class="oss-card-footer">
+                        <span>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="var(--muted)">
+                                <path
+                                    d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" />
+                            </svg> N
+                        </span>
+                        <span>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="var(--muted)">
+                                <path
+                                    d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-.878a2.25 2.25 0 111.5 0v.878a2.25 2.25 0 01-2.25 2.25h-1.5v2.128a2.251 2.251 0 11-1.5 0V8.5h-1.5A2.25 2.25 0 013.5 6.25v-.878a2.25 2.25 0 111.5 0z" />
+                            </svg> N
+                        </span>
+                    </div>
+                </div>
+                <div class="oss-card reveal">
+                    <div class="oss-card-header">
+                        <span class="oss-status active">Active</span>
+                        <span class="oss-lang-dot flutter" title="Flutter"></span>
+                    </div>
+                    <div class="oss-card-name">flutter-ui-kit</div>
+                    <div class="oss-card-desc">A custom UI component library for Flutter with adaptive theming, animated
+                        widgets, and production-tested patterns.</div>
+                    <div class="oss-card-tags">
+                        <span class="oss-card-tag">Flutter</span>
+                        <span class="oss-card-tag">Dart</span>
+                        <span class="oss-card-tag">Widgets</span>
+                    </div>
+                    <div class="oss-card-footer">
+                        <span>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="var(--muted)">
+                                <path
+                                    d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" />
+                            </svg> N
+                        </span>
+                        <span>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="var(--muted)">
+                                <path
+                                    d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-.878a2.25 2.25 0 111.5 0v.878a2.25 2.25 0 01-2.25 2.25h-1.5v2.128a2.251 2.251 0 11-1.5 0V8.5h-1.5A2.25 2.25 0 013.5 6.25v-.878a2.25 2.25 0 111.5 0z" />
+                            </svg> N
+                        </span>
+                    </div>
+                </div>
+                <div class="oss-card reveal">
+                    <div class="oss-card-header">
+                        <span class="oss-status maintained">Maintained</span>
+                        <span class="oss-lang-dot cpp" title="C++"></span>
+                    </div>
+                    <div class="oss-card-name">leetcode-solutions</div>
+                    <div class="oss-card-desc">Categorized solutions to LeetCode problems in C++ with time/space complexity
+                        analysis and editorial-style explanations.</div>
+                    <div class="oss-card-tags">
+                        <span class="oss-card-tag">C++</span>
+                        <span class="oss-card-tag">Algorithms</span>
+                        <span class="oss-card-tag">DSA</span>
+                    </div>
+                    <div class="oss-card-footer">
+                        <span>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="var(--muted)">
+                                <path
+                                    d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" />
+                            </svg> N
+                        </span>
+                        <span>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="var(--muted)">
+                                <path
+                                    d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-.878a2.25 2.25 0 111.5 0v.878a2.25 2.25 0 01-2.25 2.25h-1.5v2.128a2.251 2.251 0 11-1.5 0V8.5h-1.5A2.25 2.25 0 013.5 6.25v-.878a2.25 2.25 0 111.5 0z" />
+                            </svg> N
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <a href="https://github.com/sabbirmurad" target="_blank" class="oss-link reveal">View all repositories →</a>
+        </section>
+
+        <!-- ══════════════════════════════════
+  08 — DESIGN WORK
 ══════════════════════════════════ -->
         <section id="design">
-            <div class="section-tag reveal">05 — Design Work</div>
+            <div class="section-tag reveal">08 — Design Work</div>
             <div class="design-intro reveal">
                 <h2 class="section-title">Visual<br><em style="color:var(--amber);">Craft.</em></h2>
                 <p style="font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);line-height:1.8;">
@@ -675,10 +949,10 @@
         </section>
 
         <!-- ══════════════════════════════════
-  06 — DOCS / BLOG
+  09 — DOCS / BLOG
 ══════════════════════════════════ -->
         <section id="docs">
-            <div class="section-tag reveal">06 — Docs & Blog</div>
+            <div class="section-tag reveal">09 — Docs & Blog</div>
             <div class="docs-layout reveal">
                 <div>
                     <h2 class="section-title">Technical<br><em style="color:var(--amber);">Writing.</em></h2>
@@ -743,10 +1017,10 @@
         </section>
 
         <!-- ══════════════════════════════════
-  08 — YOUTUBE
+  10 — YOUTUBE
 ══════════════════════════════════ -->
         <section id="youtube">
-            <div class="section-tag reveal">08 — YouTube</div>
+            <div class="section-tag reveal">10 — YouTube</div>
             <div style="margin-bottom:48px;">
                 <h2 class="section-title reveal">On The<br><em style="color:var(--amber);">Channel.</em></h2>
                 <p class="reveal"
@@ -933,10 +1207,10 @@
         </section>
 
         <!-- ══════════════════════════════════
-  09 — CONTACT
+  11 — CONTACT
 ══════════════════════════════════ -->
         <section id="contact">
-            <div class="section-tag reveal">09 — Contact</div>
+            <div class="section-tag reveal">11 — Contact</div>
             <div class="contact-grid">
                 <div class="contact-left reveal-left">
                     <h2 class="contact-big">Let's<br>Build<br><span>Together.</span></h2>
