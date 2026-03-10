@@ -548,7 +548,7 @@ section { position:relative; z-index:1; }
 
 /* Secondary workspace image — top right */
 .gi-secondary {
-  aspect-ratio:4/3;
+  aspect-ratio:16/9;
   clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
 }
 
@@ -866,7 +866,6 @@ section { position:relative; z-index:1; }
   width: 100%;
   position: absolute;
   object-fit: contain;
-  background: white;
   padding: 32px;
 }
 

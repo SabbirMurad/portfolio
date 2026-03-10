@@ -384,7 +384,7 @@ document.querySelectorAll('.project-card').forEach(card => {
         const statEl = document.getElementById('lc-stat');
         const projEl = document.getElementById('lc-proj');
         const breakEl = document.getElementById('lc-breakdown');
-        if (statEl) statEl.innerHTML = total + '<span>+</span>';
+        if (statEl) statEl.innerHTML = total + '+';
         if (projEl) projEl.textContent = total + '+';
         if (breakEl) {
             const e = data.easySolved || 0;
