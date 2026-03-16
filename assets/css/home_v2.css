@@ -208,7 +208,7 @@ body::before {
 ═══════════════════════════════════════════ */
 nav {
   position:fixed; top:0; left:0; right:0; z-index:100;
-  padding:20px 48px;
+  padding:20px 72px;
   display:flex; align-items:center; justify-content:space-between;
   border-bottom:1px solid transparent;
   transition:border-color .3s,background .3s,backdrop-filter .3s;
@@ -331,7 +331,7 @@ section { position:relative; z-index:1; }
 #hero {
   min-height:100vh;
   display:flex; flex-direction:column; justify-content:center;
-  padding:120px 48px 80px; overflow:hidden;
+  padding:120px 72px 80px; overflow:hidden;
 }
 .hero-bg-name {
   position:absolute; top:50%; left:-10px; transform:translateY(-50%);
@@ -510,7 +510,7 @@ section { position:relative; z-index:1; }
    02 — ABOUT
 ═══════════════════════════════════════════ */
 #about {
-  padding:120px 48px;
+  padding:120px 72px;
   border-top:1px solid var(--border);
 }
 .about-grid {
@@ -620,7 +620,7 @@ section { position:relative; z-index:1; }
    03 — SKILLS
 ═══════════════════════════════════════════ */
 #skills {
-  padding:120px 48px;
+  padding:120px 72px;
   border-top:1px solid var(--border);
 }
 .skills-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; }
@@ -705,7 +705,7 @@ section { position:relative; z-index:1; }
    04 — PROJECTS
 ═══════════════════════════════════════════ */
 #projects {
-  padding:120px 48px;
+  padding:120px 72px;
   border-top:1px solid var(--border);
 }
 .projects-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px; }
@@ -835,7 +835,7 @@ section { position:relative; z-index:1; }
    05 — DESIGN WORK
 ═══════════════════════════════════════════ */
 #design {
-  padding:120px 48px;
+  padding:120px 72px;
   border-top:1px solid var(--border);
 }
 .design-intro { max-width:600px; margin-bottom:56px; }
@@ -906,7 +906,7 @@ section { position:relative; z-index:1; }
    06 — DOCS / BLOG
 ═══════════════════════════════════════════ */
 #docs {
-  padding:120px 48px;
+  padding:120px 72px;
   border-top:1px solid var(--border);
 }
 .docs-layout { display:grid; grid-template-columns:1fr 340px; gap:48px; align-items:start; }
@@ -958,14 +958,30 @@ section { position:relative; z-index:1; }
 .mkdocs-link:hover { background:var(--amber-lt); }
 
 /* ═══════════════════════════════════════════
-   UPWORK CTA
+   FREELANCE CTA (Upwork + Fiverr)
 ═══════════════════════════════════════════ */
-#upwork {
-  padding:120px 48px;
+#freelance {
+  padding:120px 72px;
 }
-.upwork-banner {
+.freelance-banners {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
+  gap:24px;
+  max-width:1200px;
+  margin:0 auto;
+}
+.freelance-banner {
   position:relative; overflow:hidden;
   padding:64px 48px;
+  min-height:420px;
+}
+.upwork-banner {
+  background:var(--bg2);
+  border:1px solid var(--border);
+}
+.fiverr-banner {
+  background:var(--bg2);
+  border:1px solid var(--border);
 }
 .upwork-banner-bg {
   position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
@@ -1010,12 +1026,92 @@ section { position:relative; z-index:1; }
 .uw-stat-divider {
   width:1px; height:36px; background:var(--border);
 }
+.fiverr-banner-bg {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.fv-logo-bg {
+  width:320px; height:320px; opacity:.04; color:#1dbf73;
+}
+.fiverr-banner-inner {
+  position:relative; z-index:1;
+  display:flex; flex-direction:column; align-items:center; text-align:center; gap:24px;
+}
+.fv-top { display:flex; align-items:center; gap:10px; }
+.fv-badge {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px;
+  color:#1dbf73; border:1px solid #1dbf73;
+  padding:6px 16px; text-transform:uppercase;
+}
+.fv-heading {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(36px,5vw,60px); line-height:.95; letter-spacing:1px;
+  color:var(--text);
+}
+.fv-heading em { color:#1dbf73; font-style:normal; }
+.fv-desc {
+  font-family:'DM Mono',monospace; font-size:12px; letter-spacing:1px;
+  color:var(--muted); text-transform:uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   HIRE PAGE HERO
+═══════════════════════════════════════════ */
+#hire-hero {
+  padding:180px 48px 120px;
+  min-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:radial-gradient(ellipse at top, var(--bg3) 0%, var(--bg) 100%);
+}
+.hire-hero-content { max-width:700px; }
+.hire-tag {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px;
+  color:var(--amber); border:1px solid var(--amber-dim);
+  padding:6px 16px; text-transform:uppercase;
+  display:inline-block; margin-bottom:24px;
+  animation:glow-pulse 3s ease-in-out infinite;
+}
+.hire-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(48px,8vw,80px); line-height:.9; letter-spacing:1px;
+  color:var(--text);
+  margin-bottom:24px;
+}
+.hire-title span { color:var(--amber); }
+.hire-desc {
+  font-family:'DM Mono',monospace; font-size:14px; letter-spacing:.5px;
+  color:var(--muted); line-height:1.8;
+  margin-bottom:40px;
+}
+.hire-cta-row {
+  display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+}
+.hire-cta-row .btn-primary,
+.hire-cta-row .btn-secondary {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px;
+  text-transform:uppercase; padding:14px 28px;
+  text-decoration:none;
+  transition:all .2s;
+}
+.hire-cta-row .btn-primary {
+  background:var(--amber); color:var(--bg);
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+.hire-cta-row .btn-primary:hover { background:var(--amber-lt); transform:translateY(-2px); }
+.hire-cta-row .btn-secondary {
+  background:transparent; color:var(--text);
+  border:1px solid var(--border);
+}
+.hire-cta-row .btn-secondary:hover { border-color:var(--amber); color:var(--amber); }
 
 /* ═══════════════════════════════════════════
    07 — CONTACT
 ═══════════════════════════════════════════ */
 #contact {
-  padding:120px 48px 0;
+  padding:120px 72px 0;
 }
 .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; margin-bottom:0; }
 .contact-left { display:flex; flex-direction:column; gap:32px; }
@@ -1198,7 +1294,7 @@ footer {
    08 — YOUTUBE
 ═══════════════════════════════════════════ */
 #youtube {
-  padding:120px 48px;
+  padding:120px 72px;
   border-top:1px solid var(--border);
 }
 .yt-layout {
@@ -1427,7 +1523,7 @@ footer {
    03 — SERVICES
 ═══════════════════════════════════════════ */
 #services {
-  padding:120px 48px;
+  padding:120px 72px;
   border-top:1px solid var(--border);
 }
 .services-grid {
@@ -1494,7 +1590,7 @@ footer {
    EXPERIENCE TIMELINE
 ═══════════════════════════════════════════ */
 #experience {
-  padding:120px 48px;
+  padding:120px 72px;
   border-top:1px solid var(--border);
 }
 .exp-timeline {
@@ -1584,7 +1680,7 @@ footer {
    OPEN SOURCE / CURRENTLY WORKING ON
 ═══════════════════════════════════════════ */
 #opensource {
-  padding:120px 48px;
+  padding:120px 72px;
   border-top:1px solid var(--border);
 }
 .oss-grid {

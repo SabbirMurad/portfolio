@@ -26,7 +26,7 @@ document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; })
 /* ── NAV SCROLL + ACTIVE ── */
 window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', scrollY > 40);
-    const sections = ['hero', 'about', 'services', 'skills', 'experience', 'projects', 'opensource', 'design', 'docs', 'youtube', 'contact'];
+    const sections = ['hero', 'about', 'services', 'skills', 'experience', 'projects', 'opensource', 'design', 'docs', 'youtube', 'freelance', 'contact'];
     const links = document.querySelectorAll('.nav-links a');
     let active = '';
     sections.forEach(id => {
