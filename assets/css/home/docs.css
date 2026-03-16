@@ -1,0 +1,54 @@
+/* ═══════════════════════════════════════════
+   06 — DOCS / BLOG
+═══════════════════════════════════════════ */
+#docs {
+  padding:120px 72px;
+  border-top:1px solid var(--border);
+}
+.docs-layout { display:grid; grid-template-columns:1fr 340px; gap:48px; align-items:start; }
+.docs-list { display:flex; flex-direction:column; gap:0; border:1px solid var(--border); }
+.doc-item {
+  padding:24px 28px; border-bottom:1px solid var(--border);
+  display:grid; grid-template-columns:1fr auto;
+  gap:16px; align-items:start; cursor:none;
+  transition:background .2s;
+}
+.doc-item:last-child { border-bottom:none; }
+.doc-item:hover { background:var(--bg2); }
+.doc-item:hover .doc-arrow { transform:translate(4px,-4px); color:var(--amber); }
+.doc-tag {
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px;
+  color:var(--amber); border:1px solid var(--amber-dim); padding:3px 8px;
+  text-transform:uppercase; background:var(--amber-glow);
+  display:inline-block; margin-bottom:8px;
+}
+.doc-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:1px; margin-bottom:6px; }
+.doc-meta { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; }
+.doc-arrow {
+  font-size:20px; color:var(--muted); margin-top:4px;
+  transition:transform .2s,color .2s;
+}
+/* mkdocs featured */
+.mkdocs-card {
+  background:var(--bg2); border:1px solid var(--border);
+  padding:28px;
+  position:sticky; top:96px;
+}
+.mkdocs-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.mkdocs-logo {
+  width:36px; height:36px; background:var(--amber);
+  display:flex; align-items:center; justify-content:center;
+  clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
+}
+.mkdocs-logo span { font-family:'Bebas Neue',sans-serif; font-size:14px; color:var(--bg); }
+.mkdocs-title { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:1px; }
+.mkdocs-sub { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; }
+.mkdocs-desc { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); line-height:1.7; margin-bottom:20px; }
+.mkdocs-link {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--bg); background:var(--amber); padding:11px 22px;
+  display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+  transition:background .2s;
+}
+.mkdocs-link:hover { background:var(--amber-lt); }

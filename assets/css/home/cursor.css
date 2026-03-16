@@ -1,0 +1,18 @@
+/* ═══════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════ */
+#cursor {
+  position:fixed; top:0; left:0; z-index:9999;
+  width:10px; height:10px; background:var(--amber); border-radius:50%;
+  pointer-events:none; transform:translate(-50%,-50%);
+  transition:width .2s, height .2s, background .2s;
+  mix-blend-mode:difference;
+}
+#cursor-ring {
+  position:fixed; top:0; left:0; z-index:9998;
+  width:36px; height:36px;
+  border:1px solid rgba(var(--amber-rgb),.35); border-radius:50%;
+  pointer-events:none; transform:translate(-50%,-50%);
+  transition:transform .12s ease-out;
+  mix-blend-mode:difference;
+}

@@ -1,0 +1,144 @@
+<section id="youtube">
+    <div class="section-tag reveal">10 — YouTube</div>
+    <div style="margin-bottom:48px;">
+        <h2 class="section-title reveal">On The<br><em style="color:var(--amber);">Channel.</em></h2>
+        <p class="reveal"
+            style="font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);line-height:1.8;max-width:520px;">
+            I make programming videos — Rust deep-dives, Flutter tutorials, algorithm breakdowns, and
+            design-to-code walkthroughs. Subscribe to follow along.
+        </p>
+    </div>
+
+    <div class="yt-layout">
+
+        <!-- LEFT: Channel Card -->
+        <div class="reveal-left">
+            <div class="yt-channel-card">
+                <div class="yt-banner">
+                    <div class="yt-banner-logo">
+                        <svg width="80" height="56" viewBox="0 0 90 64" fill="none">
+                            <rect width="90" height="64" rx="14" fill="#e8930a" />
+                            <path d="M36 20l22 12-22 12V20z" fill="white" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="yt-card-body">
+                    <div class="yt-avatar-wrap">
+                        <div class="yt-avatar"><span>SH</span></div>
+                        <span class="yt-sub-badge">● Active Channel</span>
+                    </div>
+                    <div class="yt-channel-name">Sabbir Hassan</div>
+                    <div class="yt-channel-handle">@sabbirmurad · Programming &amp; Design</div>
+                    <p class="yt-channel-desc">
+                        Tutorials on Rust, Flutter, C++ algorithms, UI/UX implementation, and developer tools.
+                        Real code, real projects, no fluff.
+                    </p>
+                    <div class="yt-stats-row">
+                        <div class="yt-stat">
+                            <div class="yt-stat-n">N<span>+</span></div>
+                            <div class="yt-stat-l">Subscribers</div>
+                        </div>
+                        <div class="yt-stat">
+                            <div class="yt-stat-n">N<span>+</span></div>
+                            <div class="yt-stat-l">Videos</div>
+                        </div>
+                        <div class="yt-stat">
+                            <div class="yt-stat-n">N<span>K</span></div>
+                            <div class="yt-stat-l">Total Views</div>
+                        </div>
+                    </div>
+                    <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-sub-btn">
+                        <svg width="16" height="12" viewBox="0 0 90 64" fill="var(--text)">
+                            <rect width="90" height="64" rx="10" fill="var(--text)" />
+                            <path d="M36 18l26 14-26 14V18z" fill="var(--amber)" />
+                        </svg>
+                        Subscribe on YouTube
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Featured + Video Grid -->
+        <div class="yt-right reveal-right">
+
+            <!-- Featured video: click-to-load -->
+            <div class="yt-featured" id="yt-featured">
+                <div class="yt-featured-thumb" id="yt-facade" onclick="loadFeaturedVideo()">
+                    <div class="yt-play-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--bg)">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="yt-iframe-wrap" id="yt-iframe-wrap"></div>
+                <div class="yt-featured-meta">
+                    <div>
+                        <div class="yt-vid-title" id="yt-featured-title">Building a REST API in Rust — Full
+                            Tutorial</div>
+                        <div class="yt-vid-meta">Latest video · 24 min · Rust</div>
+                    </div>
+                    <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-watch-link">Watch →</a>
+                </div>
+            </div>
+
+            <!-- Recent videos grid -->
+            <div class="yt-videos-grid">
+                <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-vid-card">
+                    <div class="yt-vc-thumb">
+                        <div class="yt-vc-bg" data-v="1">
+                            <div class="yt-vc-num">01</div>
+                            <div class="yt-vc-play">
+                                <div class="yt-vc-play-icon"><svg width="10" height="12" viewBox="0 0 24 24"
+                                        fill="var(--bg)">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="yt-vc-body">
+                        <span class="yt-vc-tag">Flutter</span>
+                        <div class="yt-vc-title">State Management in Flutter — Riverpod Deep Dive</div>
+                        <div class="yt-vc-meta">18 min · 2025</div>
+                    </div>
+                </a>
+                <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-vid-card">
+                    <div class="yt-vc-thumb">
+                        <div class="yt-vc-bg" data-v="2">
+                            <div class="yt-vc-num">02</div>
+                            <div class="yt-vc-play">
+                                <div class="yt-vc-play-icon"><svg width="10" height="12" viewBox="0 0 24 24"
+                                        fill="var(--bg)">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="yt-vc-body">
+                        <span class="yt-vc-tag">C++</span>
+                        <div class="yt-vc-title">Cracking LeetCode Hard: Sliding Window Patterns</div>
+                        <div class="yt-vc-meta">32 min · 2025</div>
+                    </div>
+                </a>
+                <a href="https://youtube.com/@sabbirmurad" target="_blank" class="yt-vid-card">
+                    <div class="yt-vc-thumb">
+                        <div class="yt-vc-bg" data-v="3">
+                            <div class="yt-vc-num">03</div>
+                            <div class="yt-vc-play">
+                                <div class="yt-vc-play-icon"><svg width="10" height="12" viewBox="0 0 24 24"
+                                        fill="var(--bg)">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="yt-vc-body">
+                        <span class="yt-vc-tag">Design</span>
+                        <div class="yt-vc-title">Figma to Flutter — Turning a UI Design into Real Code</div>
+                        <div class="yt-vc-meta">28 min · 2024</div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>

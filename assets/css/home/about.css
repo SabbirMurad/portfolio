@@ -1,0 +1,109 @@
+/* ═══════════════════════════════════════════
+   02 — ABOUT
+═══════════════════════════════════════════ */
+#about {
+  padding:120px 72px;
+  border-top:1px solid var(--border);
+}
+.about-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start;
+}
+.about-img-wrap { position:relative; }
+
+/* ─── ABOUT GALLERY GRID ─── */
+.about-gallery {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:12px;
+}
+.gallery-item {
+  background:var(--bg2); border:1px solid var(--border);
+  overflow:hidden; position:relative;
+}
+.gallery-item img { width:100%; height:100%; object-fit:cover; display:block; }
+
+/* Main portrait — spans left column both rows */
+.gi-main {
+  grid-row:1 / 3;
+  aspect-ratio:3/4;
+  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px));
+}
+.gi-main::before {
+  content:''; position:absolute; inset:0; z-index:2;
+  background:repeating-linear-gradient(-45deg,transparent,transparent 20px,rgba(var(--amber-rgb),.02) 20px,rgba(var(--amber-rgb),.02) 21px);
+}
+.gi-main::after {
+  content:''; position:absolute; inset:0; z-index:2;
+  background:linear-gradient(160deg,rgba(var(--amber-rgb),.08) 0%,transparent 60%);
+}
+
+/* Secondary workspace image — top right */
+.gi-secondary {
+  aspect-ratio:16/9;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
+}
+
+/* Accent stat block — bottom right top */
+.gi-accent {
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  background:var(--amber);
+  clip-path:polygon(0 0,100% 0,100% 100%,16px 100%,0 calc(100% - 16px));
+}
+.gallery-stat { text-align:center; }
+.gs-number {
+  font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--bg); line-height:1; display:block;
+}
+.gs-label {
+  font-family:'DM Mono',monospace; font-size:9px; color:var(--bg); letter-spacing:2px; opacity:.7; text-transform:uppercase;
+}
+
+/* Code snippet block — bottom right bottom */
+.gi-code {
+  display:flex; align-items:center; padding:16px;
+  border-color:rgba(var(--amber-rgb),.2);
+  background:var(--bg);
+}
+.gallery-code-snippet {
+  font-family:'DM Mono',monospace; font-size:11px; line-height:1.7; color:var(--muted);
+}
+.gc-keyword { color:var(--amber); }
+.gc-var { color:var(--text); }
+.gc-key { color:var(--muted); }
+.gc-str { color:var(--amber); opacity:.7; }
+
+.about-corner { position:absolute; width:20px; height:20px; border-color:var(--amber); z-index:3; }
+.about-corner.tl { top:-1px; left:-1px; border-top:2px solid; border-left:2px solid; }
+.about-corner.br { bottom:-1px; right:-1px; border-bottom:2px solid; border-right:2px solid; }
+
+.about-tag-float {
+  position:absolute; bottom:-20px; right:-20px;
+  background:var(--amber); padding:14px 20px;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+  z-index:4;
+}
+.about-tag-float .atf-n { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--bg); line-height:1; }
+.about-tag-float .atf-l { font-family:'DM Mono',monospace; font-size:9px; color:var(--bg); letter-spacing:2px; opacity:.7; }
+
+.about-content { display:flex; flex-direction:column; gap:28px; }
+.about-body {
+  font-family:'DM Mono',monospace; font-size:13px; line-height:1.9; color:var(--muted);
+}
+.about-body em { color:var(--text); font-style:normal; }
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.info-cell {
+  background:var(--bg2); border:1px solid var(--border);
+  padding:14px 16px;
+  transition:border-color .2s;
+}
+.info-cell:hover { border-color:var(--amber-dim); }
+.ic-label { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+.ic-val { font-family:'DM Mono',monospace; font-size:13px; color:var(--text); }
+.ic-val.am { color:var(--amber); }
+.values-list { display:flex; flex-direction:column; gap:10px; }
+.val-item {
+  display:flex; align-items:flex-start; gap:12px;
+  font-family:'DM Mono',monospace; font-size:12px; color:var(--muted); line-height:1.6;
+}
+.val-item::before { content:'→'; color:var(--amber); flex-shrink:0; margin-top:1px; }

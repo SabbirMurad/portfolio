@@ -1,0 +1,122 @@
+/* ═══════════════════════════════════════════
+   OPEN SOURCE / CURRENTLY WORKING ON
+═══════════════════════════════════════════ */
+#opensource {
+  padding:120px 72px;
+  border-top:1px solid var(--border);
+}
+.oss-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px; background:var(--border);
+  border:1px solid var(--border);
+  margin-top:48px;
+}
+.oss-card {
+  background:var(--bg);
+  padding:28px 24px;
+  transition:background .3s;
+  cursor:none;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.oss-card:hover { background:var(--bg2); }
+.oss-card-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.oss-lang-dot {
+  width:8px; height:8px;
+  border-radius:50%;
+  display:inline-block;
+}
+.oss-lang-dot.rust { background:#c0451a; }
+.oss-lang-dot.flutter { background:#027DFD; }
+.oss-lang-dot.ts { background:#3178c6; }
+.oss-lang-dot.cpp { background:#f34b7d; }
+.oss-lang-dot.py { background:#3572A5; }
+.oss-card-name {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:20px; letter-spacing:1px;
+}
+.oss-card-desc {
+  font-family:'DM Mono',monospace;
+  font-size:11px; color:var(--muted);
+  line-height:1.7; letter-spacing:.3px;
+  flex:1;
+}
+.oss-card-footer {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  font-family:'DM Mono',monospace;
+  font-size:10px; color:var(--muted);
+  letter-spacing:.5px;
+}
+.oss-card-footer span {
+  display:flex; align-items:center; gap:4px;
+}
+.oss-status {
+  font-family:'DM Mono',monospace;
+  font-size:8px; letter-spacing:2px;
+  text-transform:uppercase;
+  padding:3px 8px;
+}
+.oss-status.active {
+  color:#2ecc71;
+  border:1px solid rgba(46,204,113,.3);
+  background:rgba(46,204,113,.08);
+}
+.oss-status.maintained {
+  color:var(--amber);
+  border:1px solid var(--amber-dim);
+  background:var(--amber-glow);
+}
+.oss-card-tags {
+  display:flex; flex-wrap:wrap; gap:5px;
+}
+.oss-card-tag {
+  font-family:'DM Mono',monospace;
+  font-size:8px; letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--muted);
+  border:1px solid var(--border2);
+  padding:2px 6px;
+}
+.oss-link {
+  font-family:'DM Mono',monospace;
+  font-size:10px; letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--amber);
+  text-decoration:none;
+  display:inline-flex; align-items:center; gap:6px;
+  margin-top:32px;
+  transition:gap .2s;
+}
+.oss-link:hover { gap:12px; }
+
+/* ─── MOBILE RESPONSIVE ─── */
+@media(max-width:1000px){
+  nav { padding:16px 20px; }
+  .nav-links { display:none; }
+  .hamburger { display:flex; }
+  #hero { padding:90px 20px 80px; }
+  .hero-visual { display:none; }
+  .about-grid,
+  .contact-grid,
+  .docs-layout { grid-template-columns:1fr; }
+  .projects-grid { grid-template-columns:1fr; }
+  .project-card.featured { grid-column:span 1; }
+  .skills-grid { grid-template-columns:1fr 1fr; }
+  .design-gallery { grid-template-columns:1fr 1fr; }
+  .services-grid { grid-template-columns:1fr 1fr; }
+  .oss-grid { grid-template-columns:1fr; }
+  .yt-layout { grid-template-columns:1fr; }
+  .yt-videos-grid { grid-template-columns:1fr; }
+  section { padding-left:20px !important; padding-right:20px !important; }
+  .upwork-banner { padding:48px 24px; }
+  .uw-stats { gap:20px; }
+  .uw-stat-val { font-size:22px; }
+}
