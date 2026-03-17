@@ -147,3 +147,26 @@
   border:1px solid var(--border);
 }
 .hire-cta-row .btn-secondary:hover { border-color:var(--amber); color:var(--amber); }
+
+/* Back to Home button on hire page */
+.back-to-home-wrapper {
+  text-align:center;
+  padding:80px 24px 40px;
+}
+.back-to-home-wrapper .btn-secondary {
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:14px 28px;
+  background:var(--bg2);
+  color:var(--text);
+  border:1px solid var(--border);
+  text-decoration:none;
+  display:inline-block;
+  transition:all .2s;
+}
+.back-to-home-wrapper .btn-secondary:hover {
+  border-color:var(--amber);
+  color:var(--amber);
+}

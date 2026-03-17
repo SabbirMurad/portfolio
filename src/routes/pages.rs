@@ -10,6 +10,14 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             web::get().to(Markup::home)
         )
         .route(
+            "/hire",
+            web::get().to(Markup::hire)
+        )
+        .route(
+            "/contact",
+            web::get().to(Markup::contact)
+        )
+        .route(
             "/admin/sign-in",
             web::get().to(Markup::sign_in)
         )

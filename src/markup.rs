@@ -11,6 +11,26 @@ pub async fn home(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
   Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
 }
 
+pub async fn hire(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
+  let res_data = template.render(
+    "hire.html",
+    &Context::new()
+  )
+  .map_err(|e|error::ErrorInternalServerError(e))?;
+  
+  Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
+}
+
+pub async fn contact(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
+  let res_data = template.render(
+    "contact.html",
+    &Context::new()
+  )
+  .map_err(|e|error::ErrorInternalServerError(e))?;
+  
+  Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
+}
+
 pub async fn sign_in(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
   let res_data = template.render(
     "sign_in.html",

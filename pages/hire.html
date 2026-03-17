@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hire Me — Sabbir Hassan</title>
+    <meta name="description"
+        content="Hire Sabbir Hassan for freelance or full-time projects. Expert full-stack developer with expertise in Rust, Flutter, JavaScript, and UI/UX design. Available for new opportunities." />
+
+    {% include "common/favicon.html" %}
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Hire Me — Sabbir Hassan" />
+    <meta property="og:description"
+        content="Hire Sabbir Hassan for freelance or full-time projects. Expert full-stack developer with expertise in Rust, Flutter, JavaScript, and UI/UX design." />
+    <!-- TODO: Replace with your actual OG image (recommended size: 1200x630px) -->
+    <meta property="og:image" content="sabbir-og-preview.jpg" />
+    <meta property="og:url" content="https://sabbirhassan.com/hire" />
+    <link rel="canonical" href="https://sabbirhassan.com/hire" />
+    <meta name="author" content="Sabbir Hassan" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" content="#0a0a0a" />
+
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Hire Me — Sabbir Hassan" />
+    <meta name="twitter:description"
+        content="Hire Sabbir Hassan for freelance or full-time projects. Expert full-stack developer with expertise in Rust, Flutter, JavaScript, and UI/UX design." />
+    <!-- TODO: Replace with your actual OG image (recommended size: 1200x630px) -->
+    <meta name="twitter:image" content="sabbir-og-preview.jpg" />
+
+    <!-- Structured Data (JSON-LD) - ProfessionalService -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Sabbir Hassan - Development Services",
+      "url": "https://sabbirhassan.com/hire",
+      "description": "Professional full-stack development and design services. Available for freelance and full-time opportunities.",
+      "image": "https://sabbirhassan.com/assets/image/portfolio_image.png",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Dhaka",
+        "addressCountry": "Bangladesh"
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Sabbir Hassan",
+        "url": "https://sabbirhassan.com/",
+        "jobTitle": "Full-Stack Developer & Designer",
+        "sameAs": [
+          "https://github.com/SabbirMurad",
+          "https://www.facebook.com/sabbir.murad.503",
+          "https://leetcode.com/u/sabbir0087/"
+        ]
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Development Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Full-Stack Development",
+              "description": "End-to-end web and mobile application development"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "UI/UX Design",
+              "description": "User interface and experience design"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Mobile Development",
+              "description": "Cross-platform mobile apps with Flutter"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/home/variables.css">
+    <link rel="stylesheet" href="/assets/css/home/loader.css">
+    <link rel="stylesheet" href="/assets/css/home/cursor.css">
+    <link rel="stylesheet" href="/assets/css/home/background.css">
+    <link rel="stylesheet" href="/assets/css/home/sections.css">
+    <link rel="stylesheet" href="/assets/css/home/hero.css">
+    <link rel="stylesheet" href="/assets/css/home/freelance.css">
+    <link rel="stylesheet" href="/assets/css/home/animations.css">
+</head>
+
+<body>
+
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <div class="grid-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- GLITCH FX -->
+    <div id="glitch-overlay"></div>
+    <div id="glitch-flash"></div>
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="loader-logo">S<span>.</span>Hassan</div>
+        <div class="loader-bar">
+            <div class="loader-bar-fill"></div>
+        </div>
+        <div class="loader-num" id="loader-num">0%</div>
+    </div>
+
+    <!-- ═════ NAV ═════ -->
+    <div id="page-wrap">
+
+        {% include "home/freelance.html" %}
+
+        <div class="back-to-home-wrapper">
+            <a href="/" class="btn-secondary">← Back to Home</a>
+        </div>
+
+    </div><!-- /page-wrap -->
+    <!-- ═══════════════════════════════
+    SCRIPTS
+    ═══════════════════════════════ -->
+    <script src="/assets/js/loader.js"></script>
+    <script src="/assets/js/cursor.js"></script>
+    <script src="/assets/js/scroll-reveal.js"></script>
+    <script src="/assets/js/theme-switcher.js"></script>
+</body>
+
+</html>
