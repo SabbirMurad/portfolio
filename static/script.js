@@ -200,11 +200,20 @@ cform.addEventListener('submit', async e => {
         });
     }
 
+    let rafId;
     function loop() {
         particles.forEach(p => p.update());
         draw();
-        requestAnimationFrame(loop);
+        rafId = requestAnimationFrame(loop);
     }
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            cancelAnimationFrame(rafId);
+        } else {
+            loop();
+        }
+    });
 
     window.addEventListener('resize', init);
     window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
@@ -213,10 +222,6 @@ cform.addEventListener('submit', async e => {
     init();
     loop();
 })();
-
-const ks = document.createElement('style');
-ks.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
-document.head.appendChild(ks);
 
 // Page loader — dismiss on load or after 1.5s max, whichever is first
 const dismissLoader = () => document.getElementById('loader').classList.add('done');
@@ -284,6 +289,26 @@ document.querySelectorAll('.bp').forEach(btn => {
     });
     btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
 });
+
+// Copy email
+const copyBtn = document.querySelector('.copy-email');
+if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText('sbbir0087@gmail.com').then(() => {
+            copyBtn.classList.add('copied');
+            copyBtn.innerHTML = `<svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+            setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtn.innerHTML = `<svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>`;
+            }, 2000);
+        });
+    });
+}
+
+// Back to top
+const btt = document.getElementById('btt');
+lenis.on('scroll', ({ scroll: y }) => { btt.classList.toggle('vis', y > 400); });
+btt.addEventListener('click', () => lenis.scrollTo(0, { duration: 0.9 }));
 
 // Orb scroll parallax — driven by Lenis
 const o1 = document.querySelector('.o1');
