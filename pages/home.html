@@ -83,7 +83,7 @@
   </script>
 
   <!-- ── THEME (inline — prevents flash) ── -->
-  <script>(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.classList.add('light');}());</script>
+  <script>(function () { var t = localStorage.getItem('theme'); if (t === 'light') document.documentElement.classList.add('light'); }());</script>
 
   <!-- ── PERFORMANCE ── -->
   <link rel="icon" href="./assets/img/logo.svg" type="image/svg+xml">
@@ -121,7 +121,7 @@
   <nav id="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-in">
       <a href="#hero" class="logo" aria-label="Home">
-        <img src="./assets/img/logo.svg" alt="">
+        {% include "logo.html" %}
       </a>
       <ul class="nl" role="list">
         <li><a href="#about">About</a></li>
