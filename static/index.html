@@ -134,9 +134,12 @@
         <li><a href="#freelance">Freelance</a></li>
         <li><a href="#contact" class="hire"><span class="hire-dot" aria-hidden="true"></span>Hire Me</a></li>
       </ul>
-      <button class="theme-toggle" id="themetoggle" aria-label="Toggle theme">
-        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-      </button>
+      <label aria-checked="true" role="switch" class="switch" id="themetoggle" aria-label="Toggle theme">
+        <input type="checkbox" id="themecheckbox" checked />
+        <span class="slider">
+          <span class="slider-inner"></span>
+        </span>
+      </label>
       <button class="mb-btn" id="mbtoggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
