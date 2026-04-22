@@ -165,7 +165,7 @@ cform.addEventListener('submit', async e => {
         const d = Math.sqrt(dx * dx + dy * dy);
         if (d < CONNECT_DIST) {
           ctx.beginPath();
-          ctx.strokeStyle = a.color + (1 - d / CONNECT_DIST) * 0.18 + ')';
+          ctx.strokeStyle = a.color + (1 - d / CONNECT_DIST) * 0.28 + ')';
           ctx.lineWidth = 0.7;
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
@@ -318,4 +318,20 @@ lenis.on('scroll', ({ scroll: y }) => {
   if (o1) o1.style.transform = `translate(${y * 0.04}px, ${y * 0.06}px) scale(1)`;
   if (o2) o2.style.transform = `translate(${-y * 0.03}px, ${-y * 0.05}px) scale(1)`;
   if (o3) o3.style.transform = `translate(${y * 0.02}px, ${-y * 0.04}px) scale(1)`;
+});
+
+// Theme toggle
+const themeToggle = document.getElementById('themetoggle');
+const themecheckbox = document.getElementById('themecheckbox');
+
+function applyTheme(light) {
+  document.documentElement.classList.toggle('light', light);
+  themecheckbox.checked = !light; // checked = dark/moon, unchecked = light/sun
+  themeToggle.setAttribute('aria-checked', !light);
+  localStorage.setItem('theme', light ? 'light' : 'dark');
+}
+
+applyTheme(document.documentElement.classList.contains('light'));
+themecheckbox.addEventListener('change', () => {
+  applyTheme(!themecheckbox.checked);
 });
