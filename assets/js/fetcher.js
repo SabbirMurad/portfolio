@@ -187,7 +187,7 @@ class Fetcher {
             if (showError) {
                 toast.setNotification({
                     type: 'error',
-                    message: error.tostring(),
+                    message: error.toString(),
                 })
             }
 
@@ -195,7 +195,7 @@ class Fetcher {
                 ok: false,
                 status: -1,
                 data: null,
-                error: error.tostring(),
+                error: error.toString(),
             })
         }
 

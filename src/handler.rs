@@ -6,3 +6,9 @@ pub use documentation as Documentation;
 
 pub mod seo;
 pub use seo as Seo;
+
+pub mod resume;
+pub use resume as Resume;
+
+pub mod contact;
+pub use contact as Contact;

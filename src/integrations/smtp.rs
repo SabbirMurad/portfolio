@@ -174,7 +174,46 @@ pub fn password_reset_verification_code_template(email: &str, code: &str) -> Mes
     .unwrap()
 }
 
-pub fn send_email(message: Message) -> Result<(),()>{
+pub fn contact_message_template(name: &str, from_email: &str, subject: &str, message: &str) -> Message {
+    let smtp_email = env::var("SMTP_EMAIL")
+        .expect("SMTP_EMAIL must be set on .env file");
+
+    let smtp_project_name = env::var("SMTP_PROJECT_NAME")
+        .expect("SMTP_PROJECT_NAME must be set on .env file");
+
+    let from = format!("{} <{}>", smtp_project_name, smtp_email);
+
+    Message::builder()
+        .from(from.parse().unwrap())
+        .to(smtp_email.parse().unwrap())
+        .reply_to(format!("{} <{}>", name, from_email).parse().unwrap())
+        .subject(format!("[Contact] {}", subject))
+        .multipart(
+            MultiPart::alternative()
+                .singlepart(SinglePart::plain(format!(
+                    "From: {} <{}>\n\n{}",
+                    name, from_email, message
+                )))
+                .singlepart(
+                    SinglePart::builder()
+                        .header(header::ContentType::TEXT_HTML)
+                        .body(format!(
+                            r#"<html><body style="font-family:Arial,sans-serif;background:#f4f4f4;padding:24px">
+                            <div style="background:#fff;border-radius:8px;padding:32px;max-width:600px;margin:auto">
+                                <h2 style="margin-top:0">New Contact Message</h2>
+                                <p><strong>Name:</strong> {name}</p>
+                                <p><strong>Email:</strong> {from_email}</p>
+                                <p><strong>Subject:</strong> {subject}</p>
+                                <hr style="border:none;border-top:1px solid #eee;margin:16px 0">
+                                <p style="white-space:pre-wrap">{message}</p>
+                            </div></body></html>"#
+                        )),
+                ),
+        )
+        .unwrap()
+}
+
+pub fn send_email(message: Message) -> Result<(),String>{
     let smtp_email = env::var("SMTP_EMAIL")
     .expect("SMTP_EMAIL must be set on .env file");
 
@@ -198,7 +237,7 @@ pub fn send_email(message: Message) -> Result<(),()>{
         },
         Err(err) => {
             log::error!("{:?}", err);
-            Err(())
+            Err(err.to_string())
         }
     }
 }
