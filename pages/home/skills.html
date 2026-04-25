@@ -1,214 +1,174 @@
-<section id="skills">
-    <div class="skills-header reveal">
-        <div>
-            <div class="section-tag">04 — Skills</div>
-            <h2 class="section-title" style="margin-bottom:0;">What I<br><em style="color:var(--amber);">Know.</em></h2>
+<section id="skills" aria-label="Skills">
+    <div class="wrap">
+        <div class="sh">
+            <div class="tag rv">
+                <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
+                </svg>
+                Tech Stack
+            </div>
+            <h2 class="st rv d1">Tools of the trade</h2>
+            <p class="ssub rv d2">Languages, frameworks, and tools I use to bring ideas to life — from systems code to
+                polished UI.</p>
         </div>
-        <div class="tab-row">
-            <button class="tab-btn active" onclick="switchTab('dev',this)">Development</button>
-            <button class="tab-btn" onclick="switchTab('design',this)">Design</button>
-            <button class="tab-btn" onclick="switchTab('db',this)">Database</button>
-        </div>
-    </div>
 
-    <!-- Dev Panel -->
-    <div class="skill-panel active" id="panel-dev">
-        <div class="skills-grid">
-            <div class="skill-card reveal reveal-delay-1">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/rust.svg" alt="">
-                    <div class="sk-name">Rust</div>
-                    <span class="sk-yrs">4+ yrs</span>
+        <div class="sg">
+            <!-- Backend -->
+            <div class="gc scat rv">
+                <div class="scath">
+                    <div class="scaticon i"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" />
+                        </svg></div>
+                    <div>
+                        <div class="scatt">Backend &amp; Systems</div>
+                        <div class="scats">Performance-critical engineering</div>
+                    </div>
                 </div>
-                <div class="sk-desc">Systems-level programming. Memory-safe, blazing fast. Used for backend
-                    services and CLI tools.</div>
-            </div>
-            <div class="skill-card reveal reveal-delay-2">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/flutter.svg" alt="">
-                    <div class="sk-name">Flutter</div>
-                    <span class="sk-yrs">4+ yrs</span>
+                <div class="stags">
+                    <span class="stag"><span class="sd" style="background:#f74c00"></span>Rust</span>
+                    <span class="stag"><span class="sd" style="background:#00599c"></span>C++</span>
+                    <span class="stag"><span class="sd" style="background:#6366f1"></span>Actix-Web</span>
+                    <span class="stag"><span class="sd" style="background:#6366f1"></span>Tokio</span>
+                    <span class="stag"><span class="sd" style="background:#6366f1"></span>Axum</span>
+                    <span class="stag"><span class="sd" style="background:#339933"></span>REST APIs</span>
+                    <span class="stag"><span class="sd" style="background:#339933"></span>WebSockets</span>
+                    <span class="stag"><span class="sd" style="background:#94a3b8"></span>Algorithms &amp; STL</span>
                 </div>
-                <div class="sk-desc">Cross-platform mobile & desktop apps with a single codebase. Dart-powered,
-                    pixel-perfect UI.</div>
             </div>
-            <div class="skill-card reveal reveal-delay-3">
-                <div class="sk-head">
-                    <div class="sk-icon">JS</div>
-                    <div class="sk-name">JavaScript</div>
-                    <span class="sk-yrs">5+ yrs</span>
-                </div>
-                <div class="sk-desc">Custom components, DOM manipulation, interactive UIs. Vanilla-first,
-                    framework-agnostic.</div>
-            </div>
-            <div class="skill-card reveal reveal-delay-4">
-                <div class="sk-head">
-                    <div class="sk-icon">HT</div>
-                    <div class="sk-name">HTML / CSS</div>
-                    <span class="sk-yrs">6+ yrs</span>
-                </div>
-                <div class="sk-desc">Semantic markup, advanced CSS layouts, animations. Pixel-perfect
-                    cross-browser implementation.</div>
-            </div>
-            <div class="skill-card reveal reveal-delay-5">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/c_plus_plsu.svg" alt="">
-                    <div class="sk-name">C++</div>
-                    <span class="sk-yrs">3+ yrs</span>
-                </div>
-                <div class="sk-desc">Competitive programming & algorithms on LeetCode. Strong DSA foundations,
-                    optimized solutions.</div>
-            </div>
-            <div class="skill-card reveal reveal-delay-6">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/tauri.svg" alt="">
-                    <div class="sk-name">Tauri</div>
-                    <span class="sk-yrs">2+ yrs</span>
-                </div>
-                <div class="sk-desc">Lightweight native desktop apps with web frontends and Rust backends.
-                    Fast, secure, cross-platform.</div>
-            </div>
-            <div class="skill-card reveal reveal-delay-7">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/mkdocs.svg" alt="">
-                    <div class="sk-name">MkDocs</div>
-                    <span class="sk-yrs">3+ yrs</span>
-                </div>
-                <div class="sk-desc">Technical documentation sites. Structured, searchable, professional —
-                    deployed and published.</div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Design Panel -->
-    <div class="skill-panel" id="panel-design">
-        <div class="skills-grid">
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/figma.svg" alt="">
-                    <div class="sk-name">Figma</div>
-                    <span class="sk-yrs">5+ yrs</span>
+            <!-- Mobile -->
+            <div class="gc scat rv d1">
+                <div class="scath">
+                    <div class="scaticon c"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 18h.01M8 21h8a2 2 0 002-2v-14a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg></div>
+                    <div>
+                        <div class="scatt">Mobile Development</div>
+                        <div class="scats">Cross-platform native experience</div>
+                    </div>
                 </div>
-                <div class="sk-desc">UI/UX design, component systems, prototyping, auto-layout, design tokens.
-                    Primary design tool.</div>
-            </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/adobe_xd.svg" alt="">
-                    <div class="sk-name">Adobe XD</div>
-                    <span class="sk-yrs">4+ yrs</span>
+                <div class="stags">
+                    <span class="stag"><span class="sd" style="background:#54c5f8"></span>Flutter</span>
+                    <span class="stag"><span class="sd" style="background:#0175c2"></span>Dart</span>
+                    <span class="stag"><span class="sd" style="background:#54c5f8"></span>Riverpod</span>
+                    <span class="stag"><span class="sd" style="background:#54c5f8"></span>BLoC</span>
+                    <span class="stag"><span class="sd" style="background:#06b6d4"></span>GetX</span>
+                    <span class="stag"><span class="sd" style="background:#06b6d4"></span>Hive / SQLite</span>
+                    <span class="stag"><span class="sd" style="background:#f5a623"></span>Firebase</span>
+                    <span class="stag"><span class="sd" style="background:#94a3b8"></span>Animations</span>
                 </div>
-                <div class="sk-desc">Wireframes, hi-fi mockups, interactive prototypes, client presentations and
-                    handoff.</div>
             </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/illustrator.svg" alt="">
-                    <div class="sk-name">Illustrator</div>
-                    <span class="sk-yrs">3+ yrs</span>
-                </div>
-                <div class="sk-desc">Vector illustration, logo design, icon systems, brand identity assets and
-                    print-ready artwork.</div>
-            </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/photoshop.svg" alt="">
-                    <div class="sk-name">Photoshop</div>
-                    <span class="sk-yrs">3+ yrs</span>
-                </div>
-                <div class="sk-desc">Photo editing, compositing, web asset prep, mockup creation and image
-                    manipulation.</div>
-            </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/premiere_pro.svg" alt="">
-                    <div class="sk-name">Premiere Pro</div>
-                    <span class="sk-yrs">2+ yrs</span>
-                </div>
-                <div class="sk-desc">Video editing at intermediate level. Cut, colour, motion titles, export for
-                    web and social.</div>
-            </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <div class="sk-icon">UI</div>
-                    <div class="sk-name">UI Design</div>
-                    <span class="sk-yrs">5+ yrs</span>
-                </div>
-                <div class="sk-desc">End-to-end interface design — from wireframes to polished hi-fi screens
-                    with design systems.</div>
-            </div>
-        </div>
-    </div>
 
-    <!-- DB Panel -->
-    <div class="skill-panel" id="panel-db">
-        <div class="skills-grid">
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/mongodb.svg" alt="">
-                    <div class="sk-name">MongoDB</div>
-                    <span class="sk-yrs">4+ yrs</span>
+            <!-- Web -->
+            <div class="gc scat rv d2">
+                <div class="scath">
+                    <div class="scaticon g"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" />
+                        </svg></div>
+                    <div>
+                        <div class="scatt">Web &amp; Frontend</div>
+                        <div class="scats">Custom components, no framework bloat</div>
+                    </div>
                 </div>
-                <div class="sk-desc">NoSQL document database. Schema design, aggregation pipelines, indexing and
-                    Atlas cloud.</div>
-            </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/mysql.svg" alt="">
-                    <div class="sk-name">MySQL</div>
-                    <span class="sk-yrs">4+ yrs</span>
+                <div class="stags">
+                    <span class="stag"><span class="sd" style="background:#f7df1e"></span>JavaScript</span>
+                    <span class="stag"><span class="sd" style="background:#e34c26"></span>HTML5</span>
+                    <span class="stag"><span class="sd" style="background:#264de4"></span>CSS3</span>
+                    <span class="stag"><span class="sd" style="background:#22c55e"></span>Custom Components</span>
+                    <span class="stag"><span class="sd" style="background:#22c55e"></span>Animations API</span>
+                    <span class="stag"><span class="sd" style="background:#22c55e"></span>Intersection Observer</span>
+                    <span class="stag"><span class="sd" style="background:#94a3b8"></span>Web APIs</span>
                 </div>
-                <div class="sk-desc">Relational database design, complex joins, stored procedures, query
-                    optimisation.</div>
             </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/redis.svg" alt="">
-                    <div class="sk-name">Redis</div>
-                    <span class="sk-yrs">3+ yrs</span>
-                </div>
-                <div class="sk-desc">In-memory data store for caching, session management, pub/sub and rate
-                    limiting.</div>
-            </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/sqlite.svg" alt="">
-                    <div class="sk-name">SQLite</div>
-                    <span class="sk-yrs">3+ yrs</span>
-                </div>
-                <div class="sk-desc">Embedded relational DB for local-first apps, mobile (Flutter) and
-                    lightweight backend services.</div>
-            </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <img class="sk-icon-original" src="/assets/icon/skills/scylla.svg" alt="">
-                    <div class="sk-name">Schela</div>
-                    <span class="sk-yrs">2+ yrs</span>
-                </div>
-                <div class="sk-desc">Schema design, data modelling, relational integrity. Structured approach to
-                    data architecture.</div>
-            </div>
-            <div class="skill-card">
-                <div class="sk-head">
-                    <div class="sk-icon">DB</div>
-                    <div class="sk-name">DB Design</div>
-                    <span class="sk-yrs">4+ yrs</span>
-                </div>
-                <div class="sk-desc">Entity-relationship modelling, normalisation, performance tuning across SQL
-                    and NoSQL systems.</div>
-            </div>
-        </div>
-    </div>
 
-    <div class="tags-cloud">
-        <span class="tag-chip">Rust</span><span class="tag-chip">Flutter</span><span class="tag-chip">HTML/CSS</span>
-        <span class="tag-chip">JavaScript</span><span class="tag-chip">C++</span><span
-            class="tag-chip">Tauri</span><span class="tag-chip">LeetCode</span>
-        <span class="tag-chip">Figma</span><span class="tag-chip">Adobe XD</span><span
-            class="tag-chip">Illustrator</span>
-        <span class="tag-chip">Photoshop</span><span class="tag-chip">Premiere</span><span
-            class="tag-chip">MongoDB</span>
-        <span class="tag-chip">MySQL</span><span class="tag-chip">Redis</span><span class="tag-chip">SQLite</span>
-        <span class="tag-chip">Schela</span><span class="tag-chip">MkDocs</span>
+            <!-- Design -->
+            <div class="gc scat rv d3">
+                <div class="scath">
+                    <div class="scaticon p"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                        </svg></div>
+                    <div>
+                        <div class="scatt">Design &amp; Creative</div>
+                        <div class="scats">From wireframe to final asset</div>
+                    </div>
+                </div>
+                <div class="stags">
+                    <span class="stag"><span class="sd" style="background:#f24e1e"></span>Figma</span>
+                    <span class="stag"><span class="sd" style="background:#ff61f6"></span>Adobe XD</span>
+                    <span class="stag"><span class="sd" style="background:#ff9a00"></span>Illustrator</span>
+                    <span class="stag"><span class="sd" style="background:#31a8ff"></span>Photoshop</span>
+                    <span class="stag"><span class="sd" style="background:#ea77ff"></span>Premiere Pro</span>
+                    <span class="stag"><span class="sd" style="background:#a855f7"></span>UI/UX Design</span>
+                    <span class="stag"><span class="sd" style="background:#a855f7"></span>Logo Design</span>
+                    <span class="stag"><span class="sd" style="background:#94a3b8"></span>Motion Graphics</span>
+                </div>
+            </div>
+
+            <!-- Competitive Programming -->
+            <div class="gc scat rv d2">
+                <div class="scath">
+                    <div class="scaticon" style="background:rgba(251,191,36,.1);color:#fbbf24">
+                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="scatt">Competitive Programming</div>
+                        <div class="scats">Algorithms, data structures &amp; problem solving</div>
+                    </div>
+                </div>
+                <div class="stags">
+                    <span class="stag"><span class="sd" style="background:#00599c"></span>C++</span>
+                    <span class="stag"><span class="sd" style="background:#fbbf24"></span>STL</span>
+                    <span class="stag"><span class="sd" style="background:#fbbf24"></span>Dynamic Programming</span>
+                    <span class="stag"><span class="sd" style="background:#fbbf24"></span>Graph Theory</span>
+                    <span class="stag"><span class="sd" style="background:#fbbf24"></span>Segment Trees</span>
+                    <span class="stag"><span class="sd" style="background:#fbbf24"></span>Binary Search</span>
+                    <span class="stag"><span class="sd" style="background:#94a3b8"></span>Codeforces</span>
+                    <span class="stag"><span class="sd" style="background:#94a3b8"></span>LeetCode</span>
+                    <span class="stag"><span class="sd" style="background:#94a3b8"></span>AtCoder</span>
+                </div>
+            </div>
+
+            <!-- Databases -->
+            <div class="gc scat rv d3">
+                <div class="scath">
+                    <div class="scaticon" style="background:rgba(16,185,129,.1);color:#10b981">
+                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <ellipse cx="12" cy="5" rx="9" ry="3" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 12c0 1.657-4.03 3-9 3S3 13.657 3 12" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 5v14c0 1.657 4.03 3 9 3s9-1.343 9-3V5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="scatt">Database Management</div>
+                        <div class="scats">Relational, document &amp; in-memory stores</div>
+                    </div>
+                </div>
+                <div class="stags">
+                    <span class="stag"><span class="sd" style="background:#47a248"></span>MongoDB</span>
+                    <span class="stag"><span class="sd" style="background:#4479a1"></span>MySQL</span>
+                    <span class="stag"><span class="sd" style="background:#003b57"></span>SQLite</span>
+                    <span class="stag"><span class="sd" style="background:#5bc4f5"></span>ScyllaDB</span>
+                    <span class="stag"><span class="sd" style="background:#dc382d"></span>Redis</span>
+                    <span class="stag"><span class="sd" style="background:#10b981"></span>Schema Design</span>
+                    <span class="stag"><span class="sd" style="background:#10b981"></span>Query Optimisation</span>
+                    <span class="stag"><span class="sd" style="background:#94a3b8"></span>Indexing</span>
+                </div>
+            </div>
+
+        </div>
     </div>
 </section>

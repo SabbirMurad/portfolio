@@ -1,64 +1,196 @@
-<section id="docs">
-    <div class="section-tag reveal">09 — Docs & Blog</div>
-    <div class="docs-layout reveal">
-        <div>
-            <h2 class="section-title">Technical<br><em style="color:var(--amber);">Writing.</em></h2>
-            <div class="docs-list">
-                <div class="doc-item">
-                    <div>
-                        <span class="doc-tag">Rust</span>
-                        <div class="doc-title">Building a High-Performance REST API in Rust</div>
-                        <div class="doc-meta">8 min read · MkDocs · 2025</div>
-                    </div>
-                    <div class="doc-arrow">↗</div>
-                </div>
-                <div class="doc-item">
-                    <div>
-                        <span class="doc-tag">Flutter</span>
-                        <div class="doc-title">State Management Patterns in Flutter Apps</div>
-                        <div class="doc-meta">6 min read · MkDocs · 2025</div>
-                    </div>
-                    <div class="doc-arrow">↗</div>
-                </div>
-                <div class="doc-item">
-                    <div>
-                        <span class="doc-tag">C++</span>
-                        <div class="doc-title">Solving LeetCode Hard Problems: A Pattern Guide</div>
-                        <div class="doc-meta">10 min read · MkDocs · 2024</div>
-                    </div>
-                    <div class="doc-arrow">↗</div>
-                </div>
-                <div class="doc-item">
-                    <div>
-                        <span class="doc-tag">Design</span>
-                        <div class="doc-title">Design Systems That Developers Actually Use</div>
-                        <div class="doc-meta">5 min read · MkDocs · 2024</div>
-                    </div>
-                    <div class="doc-arrow">↗</div>
-                </div>
-                <div class="doc-item">
-                    <div>
-                        <span class="doc-tag">MongoDB</span>
-                        <div class="doc-title">MongoDB Aggregation Pipelines: A Deep Dive</div>
-                        <div class="doc-meta">7 min read · MkDocs · 2024</div>
-                    </div>
-                    <div class="doc-arrow">↗</div>
-                </div>
+<section id="docs" aria-label="Documentation">
+    <div class="wrap">
+        <div class="sh">
+            <div class="tag rv">
+                <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Documentation
             </div>
+            <h2 class="st rv d1">Written guides &amp; references</h2>
+            <p class="ssub rv d2">Technical documentation I maintain with MkDocs — covering languages, tooling, and
+                system
+                design patterns.</p>
         </div>
-        <div class="mkdocs-card">
-            <div class="mkdocs-header">
-                <div class="mkdocs-logo"><span>MK</span></div>
-                <div>
-                    <div class="mkdocs-title">Sabbir's Docs</div>
-                    <div class="mkdocs-sub">Powered by MkDocs</div>
+
+        <div class="dg">
+
+            <div class="gc dcard tilt rv">
+                <div class="dcard-top">
+                    <div class="dcard-icon"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg></div>
+                    <span class="dcard-views"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>2.4k</span>
+                </div>
+                <h3 class="dcard-title">Rust Systems Programming Guide</h3>
+                <p class="dcard-desc">A comprehensive reference covering ownership, borrowing, and lifetimes from first
+                    principles. Includes async runtimes with Tokio, error handling patterns, and building
+                    production-grade HTTP
+                    services with Actix-Web.</p>
+                <div class="dcard-footer">
+                    <div class="dtags"><span class="dtag">Rust</span><span class="dtag">Async</span><span
+                            class="dtag">Systems</span></div>
+                    <a href="#" class="dcard-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg></a>
                 </div>
             </div>
-            <p class="mkdocs-desc">
-                A growing collection of technical guides, tutorials, and notes on Rust, Flutter, C++,
-                databases, and design systems. Written for developers who care about the craft.
-            </p>
-            <a href="#" class="mkdocs-link">Read Docs ↗</a>
+
+            <div class="gc dcard rv d1">
+                <div class="dcard-top">
+                    <div class="dcard-icon" style="background:rgba(84,197,248,.1);color:#54c5f8"><svg aria-hidden="true"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 18h.01M8 21h8a2 2 0 002-2v-14a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg></div>
+                    <span class="dcard-views"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>1.8k</span>
+                </div>
+                <h3 class="dcard-title">Flutter Architecture Patterns</h3>
+                <p class="dcard-desc">Deep-dive into scalable Flutter app architecture. Covers Riverpod state
+                    management,
+                    feature-first folder structure, dependency injection, and building reusable widget systems with
+                    proper
+                    separation of concerns.</p>
+                <div class="dcard-footer">
+                    <div class="dtags"><span class="dtag">Flutter</span><span class="dtag">Dart</span><span
+                            class="dtag">Architecture</span></div>
+                    <a href="#" class="dcard-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+
+            <div class="gc dcard rv d2">
+                <div class="dcard-top">
+                    <div class="dcard-icon" style="background:rgba(247,223,30,.08);color:#f7df1e"><svg
+                            aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" />
+                        </svg></div>
+                    <span class="dcard-views"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>3.1k</span>
+                </div>
+                <h3 class="dcard-title">Vanilla JS — Beyond the Basics</h3>
+                <p class="dcard-desc">An opinionated guide to writing maintainable JavaScript without frameworks. Event
+                    delegation, custom element patterns, the Intersection Observer API, Web Workers, and performance
+                    profiling
+                    in the browser.</p>
+                <div class="dcard-footer">
+                    <div class="dtags"><span class="dtag">JavaScript</span><span class="dtag">Web APIs</span><span
+                            class="dtag">Performance</span></div>
+                    <a href="#" class="dcard-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+
+            <div class="gc dcard rv d1">
+                <div class="dcard-top">
+                    <div class="dcard-icon" style="background:rgba(0,89,156,.18);color:#60a5fa"><svg aria-hidden="true"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
+                        </svg></div>
+                    <span class="dcard-views"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>987</span>
+                </div>
+                <h3 class="dcard-title">C++ Competitive Programming Notes</h3>
+                <p class="dcard-desc">Curated notes from years of competitive programming. Covers segment trees, graph
+                    algorithms, dynamic programming optimisations, and STL internals with annotated solutions to classic
+                    problems.</p>
+                <div class="dcard-footer">
+                    <div class="dtags"><span class="dtag">C++</span><span class="dtag">Algorithms</span><span
+                            class="dtag">DSA</span></div>
+                    <a href="#" class="dcard-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+
+            <div class="gc dcard rv d2">
+                <div class="dcard-top">
+                    <div class="dcard-icon" style="background:rgba(168,85,247,.1);color:var(--ap)"><svg
+                            aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                        </svg></div>
+                    <span class="dcard-views"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>1.2k</span>
+                </div>
+                <h3 class="dcard-title">UI Design Systems from Scratch</h3>
+                <p class="dcard-desc">A practical walkthrough of building a design system in Figma and translating it to
+                    CSS
+                    custom properties. Covers token naming conventions, component variants, dark mode strategy, and
+                    handoff
+                    workflows.</p>
+                <div class="dcard-footer">
+                    <div class="dtags"><span class="dtag">Figma</span><span class="dtag">CSS</span><span
+                            class="dtag">Design
+                            Tokens</span></div>
+                    <a href="#" class="dcard-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+
+            <div class="gc dcard rv d3">
+                <div class="dcard-top">
+                    <div class="dcard-icon" style="background:rgba(34,197,94,.1);color:var(--a3)"><svg
+                            aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" />
+                        </svg></div>
+                    <span class="dcard-views"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>756</span>
+                </div>
+                <h3 class="dcard-title">Database Internals &amp; Query Design</h3>
+                <p class="dcard-desc">Internals of MySQL, MongoDB, ScyllaDB, and SQLite explained side by side. Covers
+                    indexing strategies, query planning, schema design trade-offs, and when to reach for each engine in
+                    a
+                    production stack.</p>
+                <div class="dcard-footer">
+                    <div class="dtags"><span class="dtag">MySQL</span><span class="dtag">MongoDB</span><span
+                            class="dtag">ScyllaDB</span></div>
+                    <a href="#" class="dcard-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>

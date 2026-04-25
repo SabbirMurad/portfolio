@@ -12,3 +12,6 @@ pub use resume as Resume;
 
 pub mod contact;
 pub use contact as Contact;
+
+pub mod youtube;
+pub use youtube as Youtube;

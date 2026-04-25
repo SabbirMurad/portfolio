@@ -9,6 +9,9 @@ pub use documentation as Documentation;
 pub mod contact;
 pub use contact as Contact;
 
+pub mod youtube;
+pub use youtube as Youtube;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum AllowedImageType { Gif, Png, Jpeg, Webp }
 
