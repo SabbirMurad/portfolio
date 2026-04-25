@@ -10,7 +10,7 @@ use crate::Model::Youtube;
 use crate::utils::response::Response;
 
 const CACHE_KEY: &str = "feed";
-const CACHE_TTL: i64  = 3600;
+const CACHE_TTL: i64  = 3600 * 1000;
 
 fn format_count(n: u64) -> String {
     if n >= 1_000_000 {
@@ -177,7 +177,7 @@ pub async fn task() -> Result<HttpResponse, Error> {
 
     let db         = MongoDB.connect();
     let collection = db.collection::<Youtube::YoutubeCache>("youtube_cache");
-    let now        = Utc::now().timestamp();
+    let now        = Utc::now().timestamp_millis();
 
     // ── Check cache ───────────────────────────────────────────────────────────
     if let Ok(Some(cached)) = collection.find_one(doc! { "key": CACHE_KEY }).await {

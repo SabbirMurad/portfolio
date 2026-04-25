@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── PRIMARY SEO ── -->
+  <title>Technical Documentation — Rust, Flutter &amp; JavaScript Guides by Sabbir Hassan</title>
+  <meta name="description"
+    content="Technical documentation by Sabbir Hassan covering Rust systems programming, Flutter architecture, Vanilla JS, C++ algorithms, UI design systems, and database internals.">
+  <meta name="keywords"
+    content="Sabbir Hassan, documentation, Rust guide, Flutter tutorial, JavaScript reference, C++ algorithms, UI design system, database internals, MkDocs, programming guides">
+  <meta name="author" content="Sabbir Hassan">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://sabbirhassan.com/documentation">
+
+  <!-- ── OPEN GRAPH ── -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Technical Documentation — Rust, Flutter &amp; JavaScript Guides by Sabbir Hassan">
+  <meta property="og:description"
+    content="Written guides and references by Sabbir Hassan — Rust, Flutter, Vanilla JS, C++ competitive programming, UI design systems, and database internals.">
+  <meta property="og:url" content="https://sabbirhassan.com/documentation">
+  <meta property="og:site_name" content="Sabbir Hassan">
+  <meta property="og:image" content="https://sabbirhassan.com/assets/img/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Sabbir Hassan — Technical Documentation">
+  <meta property="og:locale" content="en_US">
+
+  <!-- ── TWITTER CARD ── -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Technical Documentation — Rust, Flutter &amp; JS Guides by Sabbir Hassan">
+  <meta name="twitter:description"
+    content="Written guides covering Rust · Flutter · Vanilla JS · C++ · Design Systems · Databases. Maintained by Sabbir Hassan.">
+  <meta name="twitter:image" content="https://sabbirhassan.com/assets/img/og-cover.jpg">
+  <meta name="twitter:image:alt" content="Sabbir Hassan documentation">
+  <meta name="twitter:creator" content="@sabbirhassan">
+  <meta name="twitter:site" content="@sabbirhassan">
+
+  <!-- ── SCHEMA.ORG JSON-LD ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Technical Documentation by Sabbir Hassan",
+    "url": "https://sabbirhassan.com/documentation",
+    "description": "A collection of technical guides and references covering Rust, Flutter, JavaScript, C++, UI design systems, and database internals.",
+    "inLanguage": "en",
+    "author": {
+      "@type": "Person",
+      "name": "Sabbir Hassan",
+      "url": "https://sabbirhassan.com/"
+    },
+    "hasPart": [
+      { "@type": "TechArticle", "name": "Rust Systems Programming Guide", "description": "Ownership, borrowing, lifetimes, async Tokio, and Actix-Web." },
+      { "@type": "TechArticle", "name": "Flutter Architecture Patterns", "description": "Riverpod, feature-first structure, and reusable widget systems." },
+      { "@type": "TechArticle", "name": "Vanilla JS — Beyond the Basics", "description": "Event delegation, Intersection Observer, Web Workers, and performance." },
+      { "@type": "TechArticle", "name": "C++ Competitive Programming Notes", "description": "Segment trees, graph algorithms, DP optimisations, and STL internals." },
+      { "@type": "TechArticle", "name": "UI Design Systems from Scratch", "description": "Figma design systems, CSS tokens, dark mode, and handoff workflows." },
+      { "@type": "TechArticle", "name": "Database Internals & Query Design", "description": "MySQL, MongoDB, ScyllaDB, and SQLite explained side by side." }
+    ],
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://sabbirhassan.com/documentation"
+    }
+  }
+  </script>
+
+  {% include "common/favicon.html" %}
+
+  <script>(function () { var t = localStorage.getItem('theme'); if (t === 'light') document.documentElement.classList.add('light'); }());</script>
+
+  <link rel="icon" href="/assets/icon/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/documentation.css">
+  <noscript>
+    <style>
+      .rv,
+      .rv-left,
+      .rv-right {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
+  </noscript>
+</head>
+
+<body>
+
+  <div id="loader" aria-hidden="true">
+    <div class="loader-ring"></div>
+  </div>
+  <canvas id="constellation" aria-hidden="true"></canvas>
+
+  <div class="orb o1" aria-hidden="true"></div>
+  <div class="orb o2" aria-hidden="true"></div>
+  <div class="orb o3" aria-hidden="true"></div>
+
+  <!-- NAV -->
+  <nav class="dp-nav" id="dp-nav" role="navigation" aria-label="Documentation page navigation">
+    <div class="dp-nav-in">
+      <a href="/" class="dp-back" aria-label="Back to home">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        Home
+      </a>
+      <a href="/" class="logo" aria-label="Sabbir Hassan">
+        <img src="/assets/icon/logo.svg" alt="">
+      </a>
+      <div class="dp-nav-right">
+        <label aria-checked="true" role="switch" class="switch" id="themetoggle" aria-label="Toggle theme">
+          <input type="checkbox" id="themecheckbox" checked />
+          <span class="slider">
+            <span class="slider-inner"></span>
+          </span>
+        </label>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="dp-hero" aria-label="Documentation">
+    <div class="wrap">
+      <div class="dp-hero-tag rv">
+        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        Documentation
+      </div>
+      <h1 class="rv d1">Written guides &amp; <em>references</em></h1>
+      <p class="rv d2">Technical documentation I maintain with MkDocs — covering languages, tooling, and system design
+        patterns. Use the filters below to browse by topic.</p>
+
+      <!-- SEARCH -->
+      <div class="dp-search-wrap rv d3">
+        <svg class="dp-search-icon" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 105 11a6 6 0 0012 0z" />
+        </svg>
+        <input type="search" id="dp-search" class="dp-search" placeholder="Search docs…" aria-label="Search documentation">
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="dp-filters rv d4" id="dp-filters" role="group" aria-label="Filter documentation by category">
+        <button class="dp-filter active" data-filter="all">All</button>
+        <button class="dp-filter" data-filter="Rust">Rust</button>
+        <button class="dp-filter" data-filter="Flutter">Flutter</button>
+        <button class="dp-filter" data-filter="JavaScript">JavaScript</button>
+        <button class="dp-filter" data-filter="C++">C++</button>
+        <button class="dp-filter" data-filter="Design">Design</button>
+        <button class="dp-filter" data-filter="Databases">Databases</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOCS GRID -->
+  <main>
+    <div class="wrap">
+      <div id="dp-grid">
+
+        <div class="dp-card rv" data-categories="Rust">
+          <div class="dp-card-top">
+            <div class="dp-card-icon">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <span class="dp-card-views">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>2.4k
+            </span>
+          </div>
+          <h2 class="dp-card-title">Rust Systems Programming Guide</h2>
+          <p class="dp-card-desc">A comprehensive reference covering ownership, borrowing, and lifetimes from first
+            principles. Includes async runtimes with Tokio, error handling patterns, and building production-grade HTTP
+            services with Actix-Web.</p>
+          <div class="dp-card-footer">
+            <div class="dp-tags">
+              <span class="dp-tag">Rust</span>
+              <span class="dp-tag">Async</span>
+              <span class="dp-tag">Systems</span>
+            </div>
+            <a href="#" class="dp-card-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg></a>
+          </div>
+        </div>
+
+        <div class="dp-card rv d1" data-categories="Flutter">
+          <div class="dp-card-top">
+            <div class="dp-card-icon" style="background:rgba(84,197,248,.1);color:#54c5f8">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 18h.01M8 21h8a2 2 0 002-2v-14a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <span class="dp-card-views">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>1.8k
+            </span>
+          </div>
+          <h2 class="dp-card-title">Flutter Architecture Patterns</h2>
+          <p class="dp-card-desc">Deep-dive into scalable Flutter app architecture. Covers Riverpod state management,
+            feature-first folder structure, dependency injection, and building reusable widget systems with proper
+            separation of concerns.</p>
+          <div class="dp-card-footer">
+            <div class="dp-tags">
+              <span class="dp-tag">Flutter</span>
+              <span class="dp-tag">Dart</span>
+              <span class="dp-tag">Architecture</span>
+            </div>
+            <a href="#" class="dp-card-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg></a>
+          </div>
+        </div>
+
+        <div class="dp-card rv d2" data-categories="JavaScript">
+          <div class="dp-card-top">
+            <div class="dp-card-icon" style="background:rgba(247,223,30,.08);color:#f7df1e">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" />
+              </svg>
+            </div>
+            <span class="dp-card-views">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>3.1k
+            </span>
+          </div>
+          <h2 class="dp-card-title">Vanilla JS — Beyond the Basics</h2>
+          <p class="dp-card-desc">An opinionated guide to writing maintainable JavaScript without frameworks. Event
+            delegation, custom element patterns, the Intersection Observer API, Web Workers, and performance profiling
+            in the browser.</p>
+          <div class="dp-card-footer">
+            <div class="dp-tags">
+              <span class="dp-tag">JavaScript</span>
+              <span class="dp-tag">Web APIs</span>
+              <span class="dp-tag">Performance</span>
+            </div>
+            <a href="#" class="dp-card-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg></a>
+          </div>
+        </div>
+
+        <div class="dp-card rv d1" data-categories="C++">
+          <div class="dp-card-top">
+            <div class="dp-card-icon" style="background:rgba(0,89,156,.18);color:#60a5fa">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
+              </svg>
+            </div>
+            <span class="dp-card-views">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>987
+            </span>
+          </div>
+          <h2 class="dp-card-title">C++ Competitive Programming Notes</h2>
+          <p class="dp-card-desc">Curated notes from years of competitive programming. Covers segment trees, graph
+            algorithms, dynamic programming optimisations, and STL internals with annotated solutions to classic
+            problems.</p>
+          <div class="dp-card-footer">
+            <div class="dp-tags">
+              <span class="dp-tag">C++</span>
+              <span class="dp-tag">Algorithms</span>
+              <span class="dp-tag">DSA</span>
+            </div>
+            <a href="#" class="dp-card-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg></a>
+          </div>
+        </div>
+
+        <div class="dp-card rv d2" data-categories="Design">
+          <div class="dp-card-top">
+            <div class="dp-card-icon" style="background:rgba(168,85,247,.1);color:var(--ap)">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+            </div>
+            <span class="dp-card-views">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>1.2k
+            </span>
+          </div>
+          <h2 class="dp-card-title">UI Design Systems from Scratch</h2>
+          <p class="dp-card-desc">A practical walkthrough of building a design system in Figma and translating it to CSS
+            custom properties. Covers token naming conventions, component variants, dark mode strategy, and handoff
+            workflows.</p>
+          <div class="dp-card-footer">
+            <div class="dp-tags">
+              <span class="dp-tag">Figma</span>
+              <span class="dp-tag">CSS</span>
+              <span class="dp-tag">Design Tokens</span>
+            </div>
+            <a href="#" class="dp-card-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg></a>
+          </div>
+        </div>
+
+        <div class="dp-card rv d3" data-categories="Databases">
+          <div class="dp-card-top">
+            <div class="dp-card-icon" style="background:rgba(34,197,94,.1);color:var(--a3)">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" />
+              </svg>
+            </div>
+            <span class="dp-card-views">
+              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>756
+            </span>
+          </div>
+          <h2 class="dp-card-title">Database Internals &amp; Query Design</h2>
+          <p class="dp-card-desc">Internals of MySQL, MongoDB, ScyllaDB, and SQLite explained side by side. Covers
+            indexing strategies, query planning, schema design trade-offs, and when to reach for each engine in a
+            production stack.</p>
+          <div class="dp-card-footer">
+            <div class="dp-tags">
+              <span class="dp-tag">MySQL</span>
+              <span class="dp-tag">MongoDB</span>
+              <span class="dp-tag">ScyllaDB</span>
+            </div>
+            <a href="#" class="dp-card-link">Read<svg aria-hidden="true" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg></a>
+          </div>
+        </div>
+
+        <p class="dp-empty" id="dp-empty">No docs found for this category.</p>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="dp-footer" aria-label="Footer">
+    <div class="wrap">
+      <div class="dp-footer-inner">
+        <div class="dp-footer-logo">
+          <img src="/assets/icon/logo.svg" alt="">
+        </div>
+        <p class="dp-footer-copy">© 2026 Sabbir Hassan. Designed &amp; built with care.</p>
+        <nav class="dp-footer-links" aria-label="Footer links">
+          <a href="/">Home</a>
+          <a href="/#projects">Work</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="/assets/js/lenis.js"></script>
+  <script src="/assets/js/theme.js"></script>
+  <script>
+    // nav scroll effect
+    (function () {
+      var nav = document.getElementById('dp-nav');
+      if (!nav) return;
+      window.addEventListener('scroll', function () {
+        nav.classList.toggle('scrolled', window.scrollY > 20);
+      }, { passive: true });
+    })();
+
+    // reveal on scroll
+    (function () {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.rv,.rv-left,.rv-right').forEach(function (el) {
+          el.classList.add('vis');
+        });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.rv,.rv-left,.rv-right').forEach(function (el) { io.observe(el); });
+    })();
+
+    // loader
+    window.addEventListener('load', function () {
+      var l = document.getElementById('loader');
+      if (l) l.classList.add('done');
+    });
+
+    // search + filter
+    (function () {
+      var filters = document.querySelectorAll('.dp-filter');
+      var cards = document.querySelectorAll('.dp-card');
+      var searchInput = document.getElementById('dp-search');
+      var empty = document.getElementById('dp-empty');
+      var activeFilter = 'all';
+
+      function applyFilters() {
+        var query = searchInput.value.trim().toLowerCase();
+        var visible = 0;
+
+        cards.forEach(function (card) {
+          var cats = card.dataset.categories || '';
+          var title = (card.querySelector('.dp-card-title') || {}).textContent || '';
+          var desc = (card.querySelector('.dp-card-desc') || {}).textContent || '';
+          var tags = (card.querySelector('.dp-tags') || {}).textContent || '';
+          var text = (title + ' ' + desc + ' ' + tags + ' ' + cats).toLowerCase();
+
+          var matchFilter = activeFilter === 'all' || cats.indexOf(activeFilter) !== -1;
+          var matchSearch = !query || text.indexOf(query) !== -1;
+          var show = matchFilter && matchSearch;
+
+          card.classList.toggle('hidden', !show);
+          if (show) visible++;
+        });
+
+        empty.classList.toggle('visible', visible === 0);
+      }
+
+      filters.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          filters.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          activeFilter = btn.dataset.filter;
+          applyFilters();
+        });
+      });
+
+      searchInput.addEventListener('input', applyFilters);
+    })();
+  </script>
+  <script src="/assets/js/constellation.js"></script>
+</body>
+
+</html>

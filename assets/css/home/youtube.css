@@ -40,13 +40,18 @@
   margin-bottom: 18px;
   padding-bottom: 18px;
   border-bottom: 1px solid var(--gb);
+  text-decoration: none;
+  transition: opacity var(--tr);
+}
+
+.yt-channel-top:hover {
+  opacity: 0.75;
 }
 
 .yt-avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff0000, #ff6b6b);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,8 +109,11 @@
   font-size: 0.8375rem;
   color: var(--t2);
   line-height: 1.7;
-  flex: 1;
   margin-bottom: 18px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .yt-sub-btn {

@@ -10,26 +10,20 @@ pub async fn handler() -> impl Responder {
   <url>
     <loc>https://sabbirhassan.com/</loc>
     <lastmod>{date}</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://sabbirhassan.com/contact</loc>
+    <loc>https://sabbirhassan.com/about</loc>
     <lastmod>{date}</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sabbirhassan.com/hire</loc>
+    <loc>https://sabbirhassan.com/documentations</loc>
     <lastmod>{date}</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sabbirhassan.com/admin/sign-in</loc>
-    <lastmod>{date}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
 </urlset>"#,
         date = today

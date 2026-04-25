@@ -1,4 +1,5 @@
 @import "base.css";
+@import "home/ui.css";
 
 @import "home/nav.css";
 @import "home/hero.css";
@@ -12,5 +13,4 @@
 @import "home/freelance.css";
 @import "home/contact.css";
 @import "home/footer.css";
-@import "home/ui.css";
 @import "home/responsive.css";

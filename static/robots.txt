@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://sabbirhassan.dev/sitemap.xml

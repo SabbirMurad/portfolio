@@ -1,15 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>About — Sabbir Hassan</title>
+  <!-- ── PRIMARY SEO ── -->
+  <title>About Sabbir Hassan — Fullstack Developer, UI Designer &amp; Competitive Programmer</title>
   <meta name="description"
-    content="Learn more about Sabbir Hassan — fullstack developer, UI designer, competitive programmer, and content creator based in Bangladesh.">
+    content="Learn more about Sabbir Hassan — a fullstack developer and UI designer specializing in Rust, Flutter, and C++. Based in Bangladesh, available for freelance worldwide.">
+  <meta name="keywords"
+    content="Sabbir Hassan, about, fullstack developer, UI designer, Rust developer, Flutter developer, C++ programmer, competitive programmer, Bangladesh developer, freelance developer">
   <meta name="author" content="Sabbir Hassan">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="https://sabbirhassan.com/about">
+
+  <!-- ── OPEN GRAPH ── -->
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="About Sabbir Hassan — Fullstack Developer &amp; UI Designer">
+  <meta property="og:description"
+    content="Fullstack developer and UI designer specializing in Rust backends, Flutter apps, and C++ systems. Read the full story behind the work.">
+  <meta property="og:url" content="https://sabbirhassan.com/about">
+  <meta property="og:site_name" content="Sabbir Hassan">
+  <meta property="og:image" content="https://sabbirhassan.com/assets/img/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Sabbir Hassan — Fullstack Developer & Designer">
+  <meta property="og:locale" content="en_US">
+  <meta property="profile:first_name" content="Sabbir">
+  <meta property="profile:last_name" content="Hassan">
+  <meta property="profile:username" content="sabbirhassan">
+
+  <!-- ── TWITTER CARD ── -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About Sabbir Hassan — Fullstack Developer &amp; UI Designer">
+  <meta name="twitter:description"
+    content="Fullstack developer and UI designer. Rust · Flutter · C++ · UI/UX. Read the story behind the work.">
+  <meta name="twitter:image" content="https://sabbirhassan.com/assets/img/og-cover.jpg">
+  <meta name="twitter:image:alt" content="Sabbir Hassan portfolio">
+  <meta name="twitter:creator" content="@sabbirhassan">
+  <meta name="twitter:site" content="@sabbirhassan">
+
+  <!-- ── SCHEMA.ORG JSON-LD ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Sabbir Hassan",
+    "url": "https://sabbirhassan.com/about",
+    "description": "The full story of Sabbir Hassan — fullstack developer, UI designer, and competitive programmer based in Bangladesh.",
+    "inLanguage": "en",
+    "author": {
+      "@type": "Person",
+      "name": "Sabbir Hassan",
+      "url": "https://sabbirhassan.com/",
+      "image": "https://sabbirhassan.com/assets/img/sabbir.jpg",
+      "jobTitle": "Fullstack Developer & Designer",
+      "email": "sbbir0087@gmail.com",
+      "sameAs": [
+        "https://github.com/sabbirmurad",
+        "https://www.fiverr.com/sabbirhassan",
+        "https://www.upwork.com/freelancers/sabbirhassan",
+        "https://www.youtube.com/@itscompiletime"
+      ]
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://sabbirhassan.com/about"
+    }
+  }
+  </script>
 
   {% include "common/favicon.html" %}
 
@@ -58,10 +118,15 @@
         <img src="/assets/icon/logo.svg" alt="">
       </a>
       <div class="ap-nav-right">
-        <label role="switch" class="switch" id="themetoggle" aria-label="Toggle theme">
+        <label aria-checked="true" role="switch" class="switch" id="themetoggle" aria-label="Toggle theme">
           <input type="checkbox" id="themecheckbox" checked />
-          <span class="slider"><span class="slider-inner"></span></span>
+          <span class="slider">
+            <span class="slider-inner"></span>
+          </span>
         </label>
+        <button class="mb-btn" id="mbtoggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </nav>
@@ -464,6 +529,7 @@
     </div>
   </footer>
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="/assets/js/lenis.js"></script>
   <script src="/assets/js/theme.js"></script>
   <script>
     // nav scroll effect
