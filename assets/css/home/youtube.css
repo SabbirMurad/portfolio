@@ -1,0 +1,292 @@
+/* ── YOUTUBE ── */
+#youtube {
+  padding-bottom: 240px;
+}
+
+.yt-main {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  margin-bottom: 24px;
+  align-items: stretch;
+}
+
+.yt-featured {
+  position: relative;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: #000;
+  aspect-ratio: 16/9;
+  border: 1px solid var(--gb);
+}
+
+.yt-featured iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.yt-channel {
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+}
+
+.yt-channel-top {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--gb);
+}
+
+.yt-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff0000, #ff6b6b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: "Archivo", sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.yt-channel-name {
+  font-family: "Archivo", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--t1);
+  letter-spacing: -0.02em;
+}
+
+.yt-channel-handle {
+  font-size: 0.8rem;
+  color: var(--t3);
+  margin-top: 2px;
+}
+
+.yt-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.yt-stat {
+  border: 1px solid var(--gb);
+  border-radius: var(--rs);
+  padding: 12px 13px;
+}
+
+.yt-stat-n {
+  font-family: "Archivo", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--t1);
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.yt-stat-l {
+  font-size: 0.72rem;
+  color: var(--t3);
+  font-weight: 500;
+}
+
+.yt-desc {
+  font-size: 0.8375rem;
+  color: var(--t2);
+  line-height: 1.7;
+  flex: 1;
+  margin-bottom: 18px;
+}
+
+.yt-sub-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 13px;
+  background: #ff0000;
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  border-radius: var(--rs);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background var(--tr),
+    transform var(--tr),
+    box-shadow var(--tr);
+  box-shadow: 0 0 22px rgba(255, 0, 0, 0.2);
+}
+
+.yt-sub-btn:hover {
+  background: #cc0000;
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(255, 0, 0, 0.35);
+}
+
+.yt-sub-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.yt-small-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.yt-small-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.yt-thumb {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border-radius: var(--r) var(--r) 0 0;
+  flex-shrink: 0;
+}
+
+.yt-thumb-bg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.yt-thumb-label {
+  font-family: "Archivo", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.yt-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.38);
+  transition: background var(--tr);
+}
+
+.yt-play-btn {
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 0, 0, 0.88);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform var(--tr),
+    background var(--tr);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.yt-play-btn svg {
+  width: 17px;
+  height: 17px;
+  color: #fff;
+  margin-left: 2px;
+}
+
+.yt-small-card:hover .yt-play {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.yt-small-card:hover .yt-play-btn {
+  transform: scale(1.1);
+  background: #ff0000;
+}
+
+.yt-duration {
+  position: absolute;
+  bottom: 7px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.82);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.yt-info {
+  padding: 13px 15px 17px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.yt-video-title {
+  font-family: "Archivo", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--t1);
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.yt-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.72rem;
+  color: var(--t3);
+  font-weight: 500;
+  margin-top: auto;
+}
+
+.yt-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.yt-meta svg {
+  width: 12px;
+  height: 12px;
+}
+
+@media (max-width: 1024px) {
+  .yt-main {
+    grid-template-columns: 1fr;
+  }
+
+  .yt-small-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .yt-small-grid {
+    grid-template-columns: 1fr;
+  }
+}

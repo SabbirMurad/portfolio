@@ -1,0 +1,110 @@
+/* ── SKILLS ── */
+#skills {
+  padding-bottom: 240px;
+}
+
+.sg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.scat {
+  padding: 30px;
+}
+
+.scath {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--gb);
+}
+
+.scaticon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.scaticon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.scaticon.i {
+  background: var(--a1d);
+  color: var(--a1);
+}
+
+.scaticon.c {
+  background: var(--a2d);
+  color: var(--a2);
+}
+
+.scaticon.g {
+  background: var(--a3d);
+  color: var(--a3);
+}
+
+.scaticon.p {
+  background: var(--apd);
+  color: var(--ap);
+}
+
+.scatt {
+  font-family: "Archivo", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--t1);
+  letter-spacing: -0.01em;
+}
+
+.scats {
+  font-size: 0.8rem;
+  color: var(--t3);
+  margin-top: 2px;
+}
+
+.stags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  background: var(--bg-3);
+  border: 1px solid var(--gb);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--t2);
+  transition:
+    border-color var(--tr),
+    color var(--tr),
+    transform 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+  cursor: default;
+}
+
+.stag:hover {
+  border-color: var(--gb-h);
+  color: var(--t1);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.sd {
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

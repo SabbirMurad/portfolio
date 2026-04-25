@@ -1,0 +1,198 @@
+/* ── ABOUT ── */
+#about {
+  padding: 120px 0;
+  padding-bottom: 240px;
+}
+
+.aav {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.aav-ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--a1), var(--ap), var(--a2));
+  box-shadow: 0 0 28px rgba(99, 102, 241, 0.35);
+}
+
+.aav-ring img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  object-fit: cover;
+  background: var(--bg-2);
+}
+
+.aav-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--a3);
+}
+
+.ag {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.ac .tag,
+.ac h2 {
+  text-align: left;
+}
+
+.ac h2 {
+  margin-bottom: 24px;
+}
+
+.atext p {
+  color: var(--t2);
+  line-height: 1.85;
+  margin-bottom: 20px;
+  font-size: 1.0625rem;
+}
+
+.atext p:last-child {
+  margin-bottom: 0;
+}
+
+.atext strong {
+  color: var(--t1);
+  font-weight: 600;
+}
+
+.ahl {
+  color: var(--a1) !important;
+  font-weight: 500 !important;
+}
+
+.acg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.acard {
+  padding: 22px;
+}
+
+.aicon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.aicon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.aicon.i {
+  background: var(--a1d);
+  color: var(--a1);
+}
+
+.aicon.c {
+  background: var(--a2d);
+  color: var(--a2);
+}
+
+.aicon.g {
+  background: var(--a3d);
+  color: var(--a3);
+}
+
+.aicon.p {
+  background: var(--apd);
+  color: var(--ap);
+}
+
+.acard h4 {
+  font-family: "Archivo", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--t1);
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.acard p {
+  font-size: 0.8125rem;
+  color: var(--t3);
+  line-height: 1.55;
+}
+
+/* ── view more ── */
+.amore {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 36px;
+}
+
+.amore-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--a1);
+  padding: 10px 0;
+  position: relative;
+  transition:
+    gap var(--tr),
+    color var(--tr);
+  text-decoration: none;
+}
+
+.amore-link::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 26px;
+  height: 1px;
+  background: var(--a1);
+  opacity: 0.35;
+  transition:
+    right var(--tr),
+    opacity var(--tr);
+}
+
+.amore-link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform var(--tr);
+}
+
+.amore-link:hover {
+  gap: 13px;
+}
+
+.amore-link:hover::after {
+  right: 31px;
+  opacity: 0.6;
+}
+
+.amore-link:hover svg {
+  transform: translateX(4px);
+}

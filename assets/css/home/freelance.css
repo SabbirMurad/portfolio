@@ -1,0 +1,276 @@
+/* ── FREELANCE ── */
+#freelance {
+  padding-bottom: 240px;
+}
+
+.fl-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.fl-card {
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background var(--tr),
+    border-color var(--tr),
+    transform var(--tr);
+}
+
+.fl-card:hover {
+  transform: translateY(-4px);
+}
+
+.fl-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--tr);
+  pointer-events: none;
+}
+
+.fl-card.fiverr::before {
+  background: radial-gradient(
+    ellipse at 0% 0%,
+    rgba(29, 191, 115, 0.07),
+    transparent 60%
+  );
+}
+
+.fl-card.upwork::before {
+  background: radial-gradient(
+    ellipse at 0% 0%,
+    rgba(20, 163, 139, 0.07),
+    transparent 60%
+  );
+}
+
+.fl-card:hover::before {
+  opacity: 1;
+}
+
+.fl-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.fl-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fl-logo-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fl-logo-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.fiverr .fl-logo-icon {
+  background: rgba(29, 191, 115, 0.12);
+  color: #1dbf73;
+}
+
+.upwork .fl-logo-icon {
+  background: rgba(20, 163, 139, 0.12);
+  color: #14a38b;
+}
+
+.fl-platform-name {
+  font-family: "Archivo", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.fiverr .fl-platform-name {
+  color: #1dbf73;
+}
+
+.upwork .fl-platform-name {
+  color: #14a38b;
+}
+
+.fl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.fiverr .fl-badge {
+  background: rgba(29, 191, 115, 0.12);
+  color: #1dbf73;
+  border: 1px solid rgba(29, 191, 115, 0.2);
+}
+
+.upwork .fl-badge {
+  background: rgba(20, 163, 139, 0.12);
+  color: #14a38b;
+  border: 1px solid rgba(20, 163, 139, 0.2);
+}
+
+.fl-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.fiverr .fl-badge-dot {
+  background: #1dbf73;
+}
+
+.upwork .fl-badge-dot {
+  background: #14a38b;
+}
+
+.fl-desc {
+  font-size: 0.9375rem;
+  color: var(--t2);
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+
+.fl-stats {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28px;
+  border: 1px solid var(--gb);
+  border-radius: var(--rs);
+  overflow: hidden;
+}
+
+.fl-stat {
+  flex: 1;
+  padding: 14px 16px;
+  text-align: center;
+  border-right: 1px solid var(--gb);
+}
+
+.fl-stat:last-child {
+  border-right: none;
+}
+
+.fl-stat-n {
+  font-family: "Archivo", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.fiverr .fl-stat-n {
+  color: #1dbf73;
+}
+
+.upwork .fl-stat-n {
+  color: #14a38b;
+}
+
+.fl-stat-l {
+  font-size: 0.72rem;
+  color: var(--t3);
+  font-weight: 500;
+}
+
+.fl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  border-radius: var(--rs);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    filter var(--tr),
+    transform var(--tr),
+    box-shadow var(--tr);
+  margin-top: auto;
+}
+
+.fl-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.fl-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.fiverr .fl-btn {
+  background: #1dbf73;
+  color: #fff;
+  box-shadow: 0 0 24px rgba(29, 191, 115, 0.25);
+}
+
+.fiverr .fl-btn:hover {
+  box-shadow: 0 0 36px rgba(29, 191, 115, 0.4);
+}
+
+.upwork .fl-btn {
+  background: #14a38b;
+  color: #fff;
+  box-shadow: 0 0 24px rgba(20, 163, 139, 0.25);
+}
+
+.upwork .fl-btn:hover {
+  box-shadow: 0 0 36px rgba(20, 163, 139, 0.4);
+}
+
+.fl-bottom {
+  text-align: center;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.fl-bottom-text {
+  font-size: 0.9375rem;
+  color: var(--t2);
+}
+
+.fl-bottom-text strong {
+  color: var(--t1);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .fl-grid {
+    grid-template-columns: 1fr;
+  }
+}

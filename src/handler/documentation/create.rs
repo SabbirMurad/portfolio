@@ -14,6 +14,8 @@ use actix_web::{web, Error, HttpResponse, Result};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RequestBody {
     name: String,
+    description: String,
+    tags: Vec<String>,
     file: Vec<u8>,
 }
 
@@ -59,6 +61,8 @@ pub async fn task(form_data: web::Json<RequestBody>) -> Result<HttpResponse, Err
     let document = Model::Documentation::Documentation {
         uuid: doc_id.clone(),
         name: doc_name.clone(),
+        description: form_data.description.clone(),
+        tags: form_data.tags.clone(),
         view_count: 0,
         created_at: now,
         created_by: "admin".to_string(),

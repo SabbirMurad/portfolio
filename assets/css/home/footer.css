@@ -1,0 +1,54 @@
+/* ── FOOTER ── */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--gb);
+  padding: 36px 0;
+}
+
+.fi2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.flogo {
+  font-family: "Archivo", sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: -0.03em;
+}
+
+.flogo img {
+  width: 24px;
+  height: 24px;
+}
+
+.flogo span {
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fcopy {
+  font-size: 0.875rem;
+  color: var(--t3);
+}
+
+.flinks {
+  display: flex;
+  gap: 22px;
+}
+
+.flinks a {
+  font-size: 0.875rem;
+  color: var(--t3);
+  transition: color var(--tr);
+}
+
+.flinks a:hover {
+  color: var(--t2);
+}

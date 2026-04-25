@@ -1,0 +1,271 @@
+/* ── CONTACT ── */
+#contact {
+  padding-bottom: 240px;
+}
+
+.cg {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.ci .tag,
+.ci h2 {
+  text-align: left;
+}
+
+.ci h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+.cdesc {
+  color: var(--t2);
+  line-height: 1.8;
+  margin-bottom: 32px;
+  font-size: 1.0625rem;
+}
+
+.citems {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.citem {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.ciicon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--glass);
+  border: 1px solid var(--gb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--a1);
+  transition:
+    background var(--tr),
+    border-color var(--tr);
+}
+
+.ciicon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.citem:hover .ciicon {
+  background: var(--a1d);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.citext {
+  font-size: 0.9375rem;
+  color: var(--t2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.citext a {
+  color: var(--t2);
+  transition: color var(--tr);
+}
+
+.citext a:hover {
+  color: var(--a1);
+}
+
+.copy-email {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--glass);
+  border: 1px solid var(--gb);
+  color: var(--t3);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background var(--tr),
+    border-color var(--tr),
+    color var(--tr);
+}
+
+.copy-email svg {
+  width: 13px;
+  height: 13px;
+}
+
+.copy-email:hover {
+  background: var(--a1d);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: var(--a1);
+}
+
+.copy-email.copied {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: var(--a3);
+}
+
+.slinks {
+  display: flex;
+  gap: 16px;
+}
+
+.sl {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--rs);
+  background: var(--glass);
+  border: 1px solid var(--gb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--t2);
+  transition:
+    background var(--tr),
+    border-color var(--tr),
+    color var(--tr),
+    transform var(--tr);
+}
+
+.sl svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sl:hover {
+  background: var(--glass-hover);
+  border-color: var(--gb-h);
+  color: var(--t1);
+  transform: translateY(-2px);
+}
+
+.cfw {
+  padding: 34px;
+}
+
+.frow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.fg {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+.fg:last-of-type {
+  margin-bottom: 0;
+}
+
+.fl {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--t2);
+  letter-spacing: 0.02em;
+}
+
+.fi,
+.fta {
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--gb);
+  border-radius: var(--rs);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9375rem;
+  color: var(--t1);
+  outline: none;
+  transition:
+    border-color var(--tr),
+    background var(--tr),
+    box-shadow var(--tr);
+  resize: none;
+}
+
+.fi::placeholder,
+.fta::placeholder {
+  color: var(--t3);
+}
+
+.fi:focus,
+.fta:focus {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(99, 102, 241, 0.04);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.fta {
+  height: 118px;
+}
+
+.fsub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 22px;
+  gap: 14px;
+}
+
+.fnote {
+  font-size: 0.8rem;
+  color: var(--t3);
+}
+
+.bform {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 26px;
+  background: linear-gradient(135deg, var(--a1), var(--ap));
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: var(--rs);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    transform var(--tr),
+    box-shadow var(--tr);
+  box-shadow: 0 0 22px rgba(99, 102, 241, 0.25);
+}
+
+.bform:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 34px rgba(99, 102, 241, 0.4);
+}
+
+.bform:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.bform svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* ── light theme ── */
+html.light .fi,
+html.light .fta {
+  background: rgba(0, 0, 0, 0.03);
+}

@@ -1,0 +1,152 @@
+/* ── DOCS ── */
+#docs {
+  padding-bottom: 240px;
+}
+
+.dg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.dcard {
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  cursor: default;
+  transition:
+    background var(--tr),
+    border-color var(--tr),
+    transform var(--tr);
+}
+
+.dcard:hover {
+  transform: translateY(-3px);
+}
+
+.dcard-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.dcard-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--a2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dcard-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dcard-views {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.775rem;
+  font-weight: 500;
+  color: var(--t3);
+  flex-shrink: 0;
+}
+
+.dcard-views svg {
+  width: 13px;
+  height: 13px;
+}
+
+.dcard-title {
+  font-family: "Archivo", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--t1);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.dcard-desc {
+  font-size: 0.8375rem;
+  color: var(--t2);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+  margin-bottom: 16px;
+}
+
+.dcard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.dtags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dtag {
+  padding: 3px 9px;
+  background: var(--glass);
+  border: 1px solid var(--gb);
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--t3);
+}
+
+.dcard-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--a2);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    gap var(--tr),
+    color var(--tr);
+}
+
+.dcard-link svg {
+  width: 13px;
+  height: 13px;
+  transition: transform var(--tr);
+}
+
+.dcard:hover .dcard-link {
+  gap: 8px;
+}
+
+.dcard:hover .dcard-link svg {
+  transform: translateX(2px);
+}
+
+@media (max-width: 1024px) {
+  .dg {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .dg {
+    grid-template-columns: 1fr;
+  }
+}

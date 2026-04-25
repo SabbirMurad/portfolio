@@ -1,0 +1,131 @@
+/* ── PROJECTS ── */
+#projects {
+  padding-bottom: 240px;
+}
+
+.pg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.pcard {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+}
+
+.ptop {
+  height: 4px;
+  transition: height var(--tr);
+}
+
+.pcard:hover .ptop {
+  height: 6px;
+}
+
+.pbody {
+  padding: 26px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.picon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.picon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.ptitle {
+  font-family: "Archivo", sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--t1);
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.pdesc {
+  font-size: 0.875rem;
+  color: var(--t2);
+  line-height: 1.75;
+  flex: 1;
+  margin-bottom: 18px;
+}
+
+.ptags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.ptag {
+  padding: 3px 9px;
+  background: var(--glass);
+  border: 1px solid var(--gb);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--t3);
+}
+
+.plinks {
+  display: flex;
+  gap: 10px;
+}
+
+.pl {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition:
+    background var(--tr),
+    color var(--tr),
+    border-color var(--tr);
+}
+
+.pl svg {
+  width: 14px;
+  height: 14px;
+}
+
+.pl1 {
+  background: var(--a1d);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  color: var(--a1);
+}
+
+.pl1:hover {
+  background: var(--a1);
+  color: #fff;
+  border-color: var(--a1);
+}
+
+.pl2 {
+  background: var(--glass);
+  border: 1px solid var(--gb);
+  color: var(--t2);
+}
+
+.pl2:hover {
+  background: var(--glass-hover);
+  color: var(--t1);
+}

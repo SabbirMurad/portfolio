@@ -10,6 +10,10 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             web::get().to(Markup::home)
         )
         .route(
+            "/about",
+            web::get().to(Markup::about)
+        )
+        .route(
             "/hire",
             web::get().to(Markup::hire)
         )

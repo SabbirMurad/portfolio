@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 pub struct Documentation {
     pub uuid: String,
     pub name: String,
+    pub tags: Vec<String>,
+    pub description: String,
     pub view_count: i64,
     pub created_at: i64,
     pub created_by: String,

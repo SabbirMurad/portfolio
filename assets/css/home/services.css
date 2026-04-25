@@ -1,0 +1,147 @@
+/* ── SERVICES ── */
+#services {
+  padding-bottom: 240px;
+}
+
+.srv-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.srv-grid .srv-card:last-child:nth-child(3n + 1) {
+  grid-column: 2;
+}
+
+.srv-card {
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background var(--tr),
+    border-color var(--tr),
+    transform var(--tr);
+}
+
+.srv-card:hover {
+  transform: translateY(-4px);
+}
+
+.srv-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--srv-grad);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 350ms var(--ease);
+}
+
+.srv-card:hover::before {
+  transform: scaleX(1);
+}
+
+.srv-card::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: var(--srv-glow);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+  pointer-events: none;
+}
+
+.srv-card:hover::after {
+  opacity: 1;
+}
+
+.srv-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  background: var(--srv-icon-bg);
+  color: var(--srv-color);
+  flex-shrink: 0;
+  transition: transform 0.25s var(--ease);
+}
+
+.srv-card:hover .srv-icon-wrap {
+  transform: scale(1.1) rotate(-4deg);
+}
+
+.srv-icon-wrap svg {
+  width: 24px;
+  height: 24px;
+}
+
+.srv-title {
+  font-family: "Archivo", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--t1);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.srv-desc {
+  font-size: 0.875rem;
+  color: var(--t2);
+  line-height: 1.75;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.srv-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.srv-tag {
+  padding: 4px 10px;
+  background: var(--glass);
+  border: 1px solid var(--gb);
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--t3);
+  transition:
+    color var(--tr),
+    border-color var(--tr);
+}
+
+.srv-card:hover .srv-tag {
+  color: var(--srv-color);
+  border-color: var(--srv-color-dim);
+}
+
+@media (max-width: 1024px) {
+  .srv-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .srv-grid .srv-card:nth-child(4),
+  .srv-grid .srv-card:nth-child(5) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .srv-grid {
+    grid-template-columns: 1fr;
+  }
+}
