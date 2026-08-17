@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cargo check *)"
+      "Bash(cargo check *)",
+      "Bash(ffmpeg -version)",
+      "Read(//c/sabbir/portfolio_static/**)",
+      "Bash(taskkill //F //IM node.exe //FI \"WINDOWTITLE eq *\")",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell(git *)",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $i = [System.Drawing.Image]::FromFile\\(\"C:\\\\sabbir\\\\portfolio_static\\\\public\\\\hero_image.png\"\\); \"$\\($i.Width\\) x $\\($i.Height\\)\"; $i.Dispose\\(\\))"
     ]
   }
 }

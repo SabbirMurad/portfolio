@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sabbir Hassan — Fullstack Developer &amp; Designer</title>
+    <meta
+      name="description"
+      content="Sabbir Hassan — fullstack developer and designer. Rust backends, Flutter apps, C++ systems and pixel-perfect UI/UX."
+    />
+    <link rel="icon" href="data:," />
+
+    <!-- Fonts (replaces next/font) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    {% include "common/favicon.html" %}
+
+    <!-- Tailwind v4 browser build (replaces the PostCSS build; no node_modules) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        /* palette */
+        --color-bone: #f4f3f1;
+        --color-bone-2: #eceae7;
+        --color-paper: #ffffff;
+        --color-ink: #0b0b0b;
+        --color-ink-2: #141414;
+        --color-ink-3: #1d1d1d;
+        --color-vermilion: #de4520;
+        --color-vermilion-2: #c93b19;
+        --color-muted: #9a9a9a;
+        --color-muted-2: #6e6e6e;
+        --color-line: rgba(11, 11, 11, 0.1);
+        --color-line-dark: rgba(255, 255, 255, 0.12);
+
+        /* type */
+        --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+        --font-body: "Inter", system-ui, sans-serif;
+
+        /* motion */
+        --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+        /* layout */
+        --nav-h: 72px;
+      }
+    </style>
+
+    <link rel="stylesheet" href="/assets/css/global.css" />
+  </head>
+
+  <body class="custom-cursor">
+    <div id="root"><div class="boot">Sabbir Hassan</div></div>
+
+    <!-- Runtime globals (regular scripts — ready before Babel runs the JSX) -->
+    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+    <!-- In-browser JSX (replaces the bundler) -->
+    <script src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"></script>
+
+    <!-- App: data + helpers first, then sections & chrome, then the entry that
+         mounts. Order = load/execution order; every global must be defined
+         before the script that references it. -->
+    <script type="text/babel" src="/assets/jsx/data.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/helpers.jsx"></script>
+
+    <script type="text/babel" src="/assets/jsx/sections/hero.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/stack.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/impact.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/services.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/projects.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/docs.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/process.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/journey.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/testimonials.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/faq.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sections/contact.jsx"></script>
+
+    <script type="text/babel" src="/assets/jsx/nav.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/footer.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/loader.jsx"></script>
+
+    <script type="text/babel" src="/assets/jsx/app.jsx"></script>
+  </body>
+</html>

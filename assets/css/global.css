@@ -1,0 +1,171 @@
+/* ───────────────────────────────────────────────────────────
+   Sabbir Hassan — Portfolio · global (non-utility) CSS
+   Design tokens live in the <style type="text/tailwindcss"> @theme
+   block in the page head (so the Tailwind browser build can read
+   them); this file is the plain reset, display type, and animation
+   layer that Tailwind utilities don't cover.
+   ─────────────────────────────────────────────────────────── */
+
+/* ── DESIGN TOKENS ──
+   Mirrored from the @theme block in the page head. Declared here too so the
+   boot screen and base type resolve immediately, before the Tailwind browser
+   build has injected its own :root copy (identical values, so no flash). */
+:root {
+  --color-bone: #f4f3f1;
+  --color-bone-2: #eceae7;
+  --color-paper: #ffffff;
+  --color-ink: #0b0b0b;
+  --color-ink-2: #141414;
+  --color-ink-3: #1d1d1d;
+  --color-vermilion: #de4520;
+  --color-vermilion-2: #c93b19;
+  --color-muted: #9a9a9a;
+  --color-muted-2: #6e6e6e;
+  --color-line: rgba(11, 11, 11, 0.1);
+  --color-line-dark: rgba(255, 255, 255, 0.12);
+
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --nav-h: 72px;
+}
+
+/* ── RESET / BASE ── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* ScrollTrigger/Lenis measure scroll against document.scrollingElement
+     (<html>); it must not be position: static. */
+  position: relative;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+
+body {
+  margin: 0;
+  background: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* Boot placeholder shown until React mounts. */
+#root .boot {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-ink);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+}
+
+/* ── Lenis smooth scroll ── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+::selection {
+  background: var(--color-vermilion);
+  color: #fff;
+}
+
+/* Scrollbar hidden — Lenis drives the scroll and there is no visible track. */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* ── DISPLAY TYPE ── */
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+}
+.display-tight {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+}
+.text-display-xl {
+  font-size: clamp(3.5rem, 13vw, 12rem);
+}
+.text-display-lg {
+  font-size: clamp(2.5rem, 6.5vw, 6rem);
+}
+.text-display-md {
+  font-size: clamp(2rem, 4.6vw, 4rem);
+}
+.text-display-sm {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* Small uppercase meta text */
+.meta {
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* ── MARQUEE ── */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee-x var(--marquee-duration, 40s) linear infinite;
+}
+.marquee-paused:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* ── HIDE NATIVE CURSOR (custom cursor takes over on fine pointers) ── */
+@media (pointer: fine) {
+  body.custom-cursor,
+  body.custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* ── FOCUS ── */
+:focus-visible {
+  outline: 2px solid var(--color-vermilion);
+  outline-offset: 3px;
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
