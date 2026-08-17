@@ -180,6 +180,62 @@ const docs = [
   },
 ];
 
+/* The YouTube section renders this until /api/youtube/feed answers (and instead
+   of it, if the feed is unavailable). Counts are left as em dashes rather than
+   invented, and `video_id: null` marks an entry the player can't embed — those
+   cards link out to the channel instead. */
+const youtube = {
+  channel: {
+    name: "Compile Time",
+    handle: "@itscompiletime",
+    description:
+      "Tutorials on Rust, Flutter, and vanilla JS. Deep-dives into system design, UI/UX teardowns, and the occasional competitive programming walkthrough.",
+    subscribers: "—",
+    video_count: "—",
+    total_views: "—",
+    since: "—",
+    avatar_url: "",
+  },
+  videos: [
+    {
+      video_id: null,
+      label: "Rust",
+      title: "Building a REST API in Rust with Actix-Web from scratch",
+      thumbnail: "",
+      views: "",
+      duration: "",
+      published_at: "",
+    },
+    {
+      video_id: null,
+      label: "Flutter",
+      title: "Riverpod — state management that actually makes sense",
+      thumbnail: "",
+      views: "",
+      duration: "",
+      published_at: "",
+    },
+    {
+      video_id: null,
+      label: "Vanilla JS",
+      title: "Custom JS components with zero dependencies, the right way",
+      thumbnail: "",
+      views: "",
+      duration: "",
+      published_at: "",
+    },
+    {
+      video_id: null,
+      label: "C++",
+      title: "Competitive programming patterns worth memorising",
+      thumbnail: "",
+      views: "",
+      duration: "",
+      published_at: "",
+    },
+  ],
+};
+
 const process = [
   {
     num: "01",

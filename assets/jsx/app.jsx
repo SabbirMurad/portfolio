@@ -1,6 +1,7 @@
 /* global React, ReactDOM, gsap, ScrollTrigger, Lenis,
    Loader, Cursor, Nav, Footer, StackSection,
-   Hero, Stack, Impact, Services, Projects, Docs, Process, Journey, Testimonials, Faq, Contact */
+   Hero, Stack, Impact, Services, Projects, Docs, Youtube, Process, Journey, Testimonials,
+   Faq, Contact */
 /*
  * Entry — boots the scroll stack (GSAP + ScrollTrigger + Lenis, all CDN
  * globals) and mounts the composed app into #root. Loaded last, after data,
@@ -43,6 +44,7 @@ const sections = [
   { id: "services", C: Services },
   { id: "projects", C: Projects },
   { id: "docs", C: Docs },
+  { id: "youtube", C: Youtube },
   { id: "process", C: Process },
   { id: "journey", C: Journey },
   { id: "testimonials", C: Testimonials },
