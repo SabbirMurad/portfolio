@@ -147,7 +147,7 @@ function Hero() {
         className="pointer-events-none absolute bottom-0 left-1/2 h-[96%] -translate-x-1/2 will-change-transform"
       >
         <img
-          src="/assets/image/hero_image.png"
+          src="/assets/image/hero_image.webp"
           alt={profile.fullName}
           width={1323}
           height={1189}
@@ -208,7 +208,7 @@ function Hero() {
             >
               <span className="relative block w-[92px] shrink-0 overflow-hidden rounded-lg bg-vermilion">
                 <img
-                  src="/assets/image/hero_image.png"
+                  src="/assets/image/hero_image.webp"
                   alt=""
                   className="absolute inset-0 h-full w-full object-cover object-top"
                 />
