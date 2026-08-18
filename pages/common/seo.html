@@ -1,0 +1,115 @@
+{# ── Shared SEO head ───────────────────────────────────────────────────────────
+   Include inside <head>. Every value falls back to the site-wide default, so a
+   page can include it bare; override what differs with `set` tags directly above
+   the include, e.g. seo_title / seo_path / seo_og_type.
+
+   Overridable: seo_title, seo_description, seo_keywords, seo_robots, seo_path,
+   seo_og_type, seo_og_title, seo_og_description, seo_twitter_description,
+   seo_image_path, seo_image_type, seo_image_width, seo_image_height,
+   seo_image_alt.
+
+   Two Tera details this file depends on — change with care:
+
+   1. Defaults are resolved in `set` tags, never inline in {{ }}. `set` skips
+      autoescaping, but an inline `default(value="…")` on an undefined variable
+      gets escaped once when the fallback is evaluated and again on output, so
+      "A & B" would render as "A &amp;amp; B".
+   2. URL outputs and the JSON-LD interpolations are marked `safe`. Script
+      content is raw text rather than entity-decoded, so an escaped "/" would
+      sit in the JSON as a literal "&#x2F;"; in the meta tags it just makes the
+      URLs needlessly fragile for third-party scrapers. Only site-controlled
+      values go through them.
+
+   The JSON-LD describes the person and the site as a whole — identical on every
+   page by design. Only the canonical URL varies.
+#}
+{% set site_url = "https://sabbirhassan.com" %}
+{% set _title = seo_title | default(value="Sabbir Hassan — Fullstack Developer & Designer") %}
+{% set _desc = seo_description | default(value="Sabbir Hassan is a fullstack developer and designer specializing in Rust backends, Flutter mobile apps, C++ systems, and pixel-perfect UI/UX. Available for freelance.") %}
+{% set _keywords = seo_keywords | default(value="Sabbir Hassan, fullstack developer, UI UX designer, Rust developer, Flutter developer, C++ programmer, web developer, mobile app developer, freelance developer, software engineer") %}
+{% set _robots = seo_robots | default(value="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1") %}
+{% set _path = seo_path | default(value="/") %}
+{% set _canonical = site_url ~ _path %}
+{% set _og_type = seo_og_type | default(value="profile") %}
+{% set _og_title = seo_og_title | default(value=_title) %}
+{% set _og_desc = seo_og_description | default(value="Sabbir Hassan is a fullstack developer and designer specializing in Rust, Flutter, C++ and modern web. Crafting fast, beautiful, purposeful software.") %}
+{% set _tw_desc = seo_twitter_description | default(value="Fullstack developer and designer. Rust · Flutter · C++ · UI/UX. Building fast, beautiful, purposeful software.") %}
+{% set _image_path = seo_image_path | default(value="/assets/image/hero_image.webp") %}
+{% set _image = site_url ~ _image_path %}
+{% set _image_type = seo_image_type | default(value="image/webp") %}
+{% set _image_w = seo_image_width | default(value="1323") %}
+{% set _image_h = seo_image_height | default(value="1189") %}
+{% set _image_alt = seo_image_alt | default(value="Sabbir Hassan — Fullstack Developer & Designer") %}
+    <!-- ── PRIMARY SEO ── -->
+    <title>{{ _title }}</title>
+    <meta name="description" content="{{ _desc }}" />
+    <meta name="keywords" content="{{ _keywords }}" />
+    <meta name="author" content="Sabbir Hassan" />
+    <meta name="robots" content="{{ _robots }}" />
+    <link rel="canonical" href="{{ _canonical | safe }}" />
+
+    <!-- ── OPEN GRAPH ── -->
+    <meta property="og:type" content="{{ _og_type }}" />
+    <meta property="og:title" content="{{ _og_title }}" />
+    <meta property="og:description" content="{{ _og_desc }}" />
+    <meta property="og:url" content="{{ _canonical | safe }}" />
+    <meta property="og:site_name" content="Sabbir Hassan" />
+    <meta property="og:image" content="{{ _image | safe }}" />
+    <meta property="og:image:type" content="{{ _image_type | safe }}" />
+    <meta property="og:image:width" content="{{ _image_w }}" />
+    <meta property="og:image:height" content="{{ _image_h }}" />
+    <meta property="og:image:alt" content="{{ _image_alt }}" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="profile:first_name" content="Sabbir" />
+    <meta property="profile:last_name" content="Hassan" />
+    <meta property="profile:username" content="sabbirhassan" />
+
+    <!-- ── TWITTER CARD ── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ _og_title }}" />
+    <meta name="twitter:description" content="{{ _tw_desc }}" />
+    <meta name="twitter:image" content="{{ _image | safe }}" />
+    <meta name="twitter:image:alt" content="{{ _image_alt }}" />
+    <meta name="twitter:creator" content="@sabbirhassan" />
+    <meta name="twitter:site" content="@sabbirhassan" />
+
+    <!-- ── SCHEMA.ORG JSON-LD ── -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Sabbir Hassan",
+        "alternateName": "Sabbir Ahmed Hassan",
+        "url": "{{ site_url | safe }}/",
+        "image": "{{ _image | safe }}",
+        "jobTitle": "Fullstack Developer & Designer",
+        "description": "Sabbir Hassan is a fullstack developer and designer specializing in Rust backends, Flutter mobile apps, C++ competitive programming, and UI/UX design.",
+        "email": "sbbir0087@gmail.com",
+        "knowsAbout": ["Rust", "C++", "Flutter", "Dart", "JavaScript", "UI/UX Design", "Figma", "Adobe XD", "MySQL", "MongoDB", "ScyllaDB", "SQLite", "Redis"],
+        "sameAs": [
+          "https://github.com/sabbirmurad",
+          "https://www.fiverr.com/sabbirhassan",
+          "https://www.upwork.com/freelancers/sabbirhassan",
+          "https://www.youtube.com/@itscompiletime"
+        ],
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "{{ _canonical | safe }}"
+        }
+      }
+    </script>
+
+    <!-- ── WEBSITE SCHEMA ── -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Sabbir Hassan",
+        "url": "{{ site_url | safe }}/",
+        "description": "Personal portfolio of Sabbir Hassan — fullstack developer and designer.",
+        "author": {
+          "@type": "Person",
+          "name": "Sabbir Hassan"
+        }
+      }
+    </script>
