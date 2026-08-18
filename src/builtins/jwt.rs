@@ -140,6 +140,34 @@ pub mod refresh_token {
     token
   }
 
+  /// Decode a refresh token's `sub` (the user_id it was issued for) without
+  /// looking it up in sqlite. Used by the /auth/refresh handler to resolve
+  /// whose access token to re-mint from a cookie-borne refresh token.
+  ///
+  /// Refresh token Claims carry no `exp` — validity here is tracked in sqlite
+  /// via Active/Blocked status, not JWT expiry — so this skips jsonwebtoken's
+  /// default requirement that an `exp` claim be present.
+  #[allow(dead_code)]
+  pub fn subject(token: &str) -> Result<String, String> {
+    let key = env::var("JWT_LOCAL_REFRESH_KEY")
+    .expect("JWT_LOCAL_REFRESH_KEY must be set on .env file");
+
+    let mut validation = Validation::default();
+    validation.validate_exp = false;
+    validation.required_spec_claims.clear();
+
+    let token_data = decode::<Claims>(
+      token,
+      &DecodingKey::from_secret(key.as_ref()),
+      &validation
+    );
+
+    match token_data {
+      Ok(data) => Ok(data.claims.sub),
+      Err(error) => Err(format!("{:?}", error.kind()))
+    }
+  }
+
   #[allow(dead_code)]
   pub fn new(issuer: &str) -> Result<String, String> {
     let db_conn = BuiltIns::sqlite::connect(

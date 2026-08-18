@@ -8,7 +8,9 @@ use std::path::Path;
 use crate::BuiltIns::mongo::MongoDB;
 use crate::utils::response::Response;
 use serde::{ Serialize, Deserialize };
-use actix_web::{web, Error, HttpResponse, Result};
+use crate::Model::Account::AccountRole;
+use crate::Middleware::Auth::{require_access, AccessRequirement};
+use actix_web::{web, Error, HttpRequest, HttpResponse, Result};
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -26,7 +28,28 @@ struct ResponseBody {
 }
 
 
-pub async fn task(form_data: web::Json<RequestBody>) -> Result<HttpResponse, Error> {
+pub async fn task(
+    req: HttpRequest,
+    form_data: web::Json<RequestBody>,
+) -> Result<HttpResponse, Error> {
+    // Same middleware every authenticated API route uses (src/middleware/auth.rs),
+    // reading the access_token cookie the dashboard sets at sign-in. Without this,
+    // anyone could create documentation entries — there is no other access control.
+    require_access(&req, AccessRequirement::Role(AccountRole::Administrator))?;
+
+    let doc_name = form_data.name.trim().to_string();
+    let description = form_data.description.trim().to_string();
+
+    if doc_name.is_empty() {
+        return Ok(Response::bad_request("Title is required"));
+    }
+    if description.is_empty() {
+        return Ok(Response::bad_request("Description is required"));
+    }
+    if form_data.file.is_empty() {
+        return Ok(Response::bad_request("Zip file is required"));
+    }
+
     /* DATABASE ACID SESSION INIT */
     let (db, mut session) = MongoDB.connect_acid().await;
     if let Err(error) = session.start_transaction().await {
@@ -36,7 +59,6 @@ pub async fn task(form_data: web::Json<RequestBody>) -> Result<HttpResponse, Err
 
     //Checking if the document name already exist
     let doc_id = Uuid::now_v7().to_string();
-    let doc_name = form_data.name.trim().to_string();
     let now = Utc::now().timestamp_millis();
 
     let collection = db.collection::
@@ -61,8 +83,9 @@ pub async fn task(form_data: web::Json<RequestBody>) -> Result<HttpResponse, Err
     let document = Model::Documentation::Documentation {
         uuid: doc_id.clone(),
         name: doc_name.clone(),
-        description: form_data.description.clone(),
+        description: description.clone(),
         tags: form_data.tags.clone(),
+        featured: false,
         view_count: 0,
         created_at: now,
         created_by: "admin".to_string(),
@@ -77,11 +100,13 @@ pub async fn task(form_data: web::Json<RequestBody>) -> Result<HttpResponse, Err
         return Ok(Response::internal_server_error(&error.to_string()));
     }
 
-    // Writing the file to the machine
-    let temp_path = "/tmp/doc.zip";
+    // Writing the file to the machine. std::env::temp_dir() (not a hardcoded
+    // /tmp) so this works on Windows dev machines too, and the doc_id keeps
+    // concurrent uploads from colliding on the same file.
+    let temp_path = std::env::temp_dir().join(format!("doc-upload-{}.zip", doc_id));
 
     let result = fs::write(
-        temp_path,
+        &temp_path,
         form_data.file.clone()
     );
     

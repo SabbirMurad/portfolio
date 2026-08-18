@@ -64,6 +64,9 @@ imagesize = "0.12.0"
 # Image Processing Library
 image = "0.24.6"
 
+# Convert image to webp
+webp = "0.3.1"
+
 # Watch dev code changes
 listenfd = "0.5"
 

@@ -3,12 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- An admin login must never be indexed, and it has no business in a
-         social preview either — everything else falls back to the site-wide
-         defaults in pages/common/seo.html. -->
-    {% set seo_title = "Sign in — Sabbir Hassan" %}
+    <!-- Same reasoning as sign_in_v2.html: an admin-only account creation form
+         must never be indexed and gets no social preview either. -->
+    {% set seo_title = "Sign up — Sabbir Hassan" %}
     {% set seo_description = "Admin portal for sabbirhassan.com." %}
-    {% set seo_path = "/admin/sign-in" %}
+    {% set seo_path = "/admin/sign-up" %}
     {% set seo_robots = "noindex, nofollow" %}
     {% set seo_og_type = "website" %}
     {% include "common/seo.html" %}
@@ -72,6 +71,6 @@
 
     <script type="text/babel" src="/assets/jsx/data.jsx"></script>
     <script type="text/babel" src="/assets/jsx/helpers.jsx"></script>
-    <script type="text/babel" src="/assets/jsx/sign_in.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/sign_up.jsx"></script>
   </body>
 </html>

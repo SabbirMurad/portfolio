@@ -1,21 +1,21 @@
-/* global React, ReactDOM, gsap, Cursor, Ripple, reducedMotion, profile */
+/* global React, ReactDOM, gsap, Cursor, Ripple, reducedMotion, profile, Fetcher */
 /*
  * Admin sign-in — the new design language applied to the one page behind the
  * portfolio. Same two-panel card as the home page's contact section: form on
  * the left, vermilion gradient panel on the right, same field and button
  * styling, same cursor and click ripple.
  *
- * The POST goes to /api/auth/sign-in directly rather than through
- * assets/js/fetcher.js. Fetcher reads `result.error` off a failed response,
- * but src/utils/response.rs sends `{ "message": ... }`, so every server error
- * would surface as the generic "Response Not Okay" instead of "Incorrect
- * password". Reading the response here keeps the real message.
+ * The POST goes through assets/js/fetcher.js (loaded in sign_in_v2.html
+ * before this script) with showError: false — errors are read from the
+ * returned FetchResult and shown inline instead of via the toast component
+ * this page doesn't load. Fetcher now checks `result.message` before
+ * `result.error`, matching src/utils/response.rs's `{ "message": ... }`
+ * shape, so the real message ("Incorrect password", etc.) comes through.
  */
 
-/* Where a signed-in admin lands. There is no admin dashboard route yet
-   (src/routes/pages.rs only serves /admin/sign-in), so this is the site root
-   until one exists. */
-const AFTER_SIGN_IN = "/";
+/* Where a signed-in admin lands — src/markup.rs `dashboard` re-checks the
+   session server-side before rendering it, so this isn't the only guard. */
+const AFTER_SIGN_IN = "/admin/dashboard";
 
 /* The shared Reveal/RevealLayer helpers hang their tween on a ScrollTrigger,
    which never fires here: this page is one screen and never scrolls, so the
@@ -55,13 +55,27 @@ const FIELD =
   "w-full rounded-sm border border-line bg-bone px-4 py-3.5 text-[14px] outline-none transition-colors duration-300 placeholder:text-muted focus:border-ink";
 
 function SignIn() {
-  const { useState } = React;
+  const { useState, useEffect } = React;
   const [form, setForm] = useState({ identity: "", password: "" });
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState(null);
   const [notice, setNotice] = useState(null);
   const [status, setStatus] = useState("idle"); // idle | pending | done
   const [showPassword, setShowPassword] = useState(false);
+
+  /* No visible "Create account" link anywhere on this page by design — this
+     mirrors the Ctrl+Alt+L shortcut in assets/jsx/nav.jsx that gets you here
+     in the first place. */
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "n") {
+        e.preventDefault();
+        window.location.assign("/admin/sign-up");
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const set = (k) => (e) => {
     const v = e.target.value;
@@ -84,35 +98,22 @@ function SignIn() {
 
     setStatus("pending");
 
-    let res;
-    try {
-      res = await fetch("/api/auth/sign-in", {
-        method: "POST",
-        credentials: "same-origin",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          email_or_username: form.identity.trim(),
-          password: form.password,
-        }),
-      });
-    } catch (err) {
+    const result = await Fetcher.post({
+      endpoint: "/auth/sign-in",
+      body: {
+        email_or_username: form.identity.trim(),
+        password: form.password,
+      },
+      showError: false,
+    });
+
+    if (!result.ok) {
       setStatus("idle");
-      setFormError("Could not reach the server. Check your connection and try again.");
+      setFormError(result.error || "Sign in failed (" + result.status + ")");
       return;
     }
 
-    let payload = null;
-    try {
-      payload = await res.json();
-    } catch (err) {
-      payload = null;
-    }
-
-    if (!res.ok) {
-      setStatus("idle");
-      setFormError((payload && payload.message) || "Sign in failed (" + res.status + ")");
-      return;
-    }
+    const payload = result.data;
 
     /* The handler emails a six-digit code when the account has 2FA on. There is
        no route to submit that code yet — and src/handler/auth/sign_in.rs sends

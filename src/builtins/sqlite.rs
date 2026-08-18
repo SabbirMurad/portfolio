@@ -27,17 +27,15 @@ pub fn create_initial_tables() -> Result<(), Error> {
     let db_path = env::var("SQLITE_IMG_PATH")
         .expect("SQLITE_IMG_PATH must be set on .env file");
 
+    // Blobs only — matches velora_backend's schema (src/builtins/sqlite.rs
+    // there). Metadata (dimensions, type, used_at, ...) now lives in Mongo's
+    // `image` collection as Model::ImageStruct instead of sqlite columns.
     let db_conn = Connection::open(db_path)?;
     let _result = db_conn.execute(
         "CREATE TABLE IF NOT EXISTS image (
             uuid          TEXT PRIMARY KEY,
-            type          TEXT NOT NULL,
-            data          BLOB NOT NULL,
-            height        INTEGER NOT NULL,
-            width         INTEGER NOT NULL,
-            size          INTEGER NOT NULL,
-            created_at    INTEGER NOT NULL,
-            used_at       TEXT NOT NULL
+            original      BLOB NOT NULL,
+            webp          BLOB NOT NULL
         );", ()
     )?;
 

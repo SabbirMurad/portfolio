@@ -43,7 +43,13 @@ function Nav() {
   }, [open]);
 
   useEffect(() => {
-    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpen(false);
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "l") {
+        e.preventDefault();
+        window.location.assign("/admin/sign-in");
+      }
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -85,7 +91,7 @@ function Nav() {
               <a
                 key={l.href}
                 href={l.href}
-                className="group relative whitespace-nowrap text-[16px] font-medium"
+                className="group relative whitespace-nowrap text-[13px] font-normal"
               >
                 {l.label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-vermilion transition-all duration-400 group-hover:w-full" />

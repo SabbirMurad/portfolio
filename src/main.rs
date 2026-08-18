@@ -192,7 +192,12 @@ async fn main() -> io::Result<()> {
             .cookie_secure(false)
             .cookie_http_only(true)
             .cookie_name("um-sid-otakuhub".to_owned())
-            .cookie_same_site(SameSite::None)
+            // SameSite=None requires the Secure attribute or browsers drop the
+            // cookie outright — with cookie_secure(false) above that silently
+            // broke every session (sign-in "succeeded" but nothing persisted).
+            // Lax is correct here anyway: this is a same-origin admin panel,
+            // nothing needs the cookie sent cross-site.
+            .cookie_same_site(SameSite::Lax)
             .cookie_content_security(CookieContentSecurity::Signed)
             .session_lifecycle(
               PersistentSession::default()
@@ -260,6 +265,8 @@ async fn main() -> io::Result<()> {
         .configure(Routes::Contact::router)
         .configure(Routes::Youtube::router)
         .configure(Routes::Documentation::router)
+        .configure(Routes::Image::router)
+        .configure(Routes::Project::router)
         .configure(Routes::Auth::router)
         .configure(Routes::Pages::router)
     });

@@ -30,6 +30,14 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             web::get().to(Markup::sign_in)
         )
         .route(
+            "/admin/sign-up",
+            web::get().to(Markup::sign_up)
+        )
+        .route(
+            "/admin/dashboard",
+            web::get().to(Markup::dashboard)
+        )
+        .route(
             "/sitemap.xml",
             web::get().to(sitemap::handler)
         )

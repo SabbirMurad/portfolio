@@ -15,3 +15,9 @@ pub use contact as Contact;
 
 pub mod youtube;
 pub use youtube as Youtube;
+
+pub mod image;
+pub use image as Image;
+
+pub mod project;
+pub use project as Project;

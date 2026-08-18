@@ -1,9 +1,8 @@
-use rand::Rng;
+use std::env;
 use uuid::Uuid;
 use chrono::Utc;
 use mongodb::bson::doc;
 use crate::Model::Account;
-use crate::Integrations::Smtp;
 use crate::BuiltIns::mongo::MongoDB;
 use serde::{ Serialize, Deserialize };
 use mongodb::{ClientSession, Database};
@@ -12,9 +11,6 @@ use crate::utils::response::Response;
 use crate::utils::validation::{validate_email, validate_full_name, validate_password, validate_username};
 
 
-//in minutes
-const CODE_EXPIRE_TIME: i64 = 15;
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PostData {
     full_name: String,
@@ -22,6 +18,7 @@ pub struct PostData {
     email_address: String,
     password: String,
     confirm_password: String,
+    secret_key: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -51,6 +48,10 @@ pub async fn task(form_data: web::Json<PostData>) -> Result<HttpResponse, Error>
         return Ok(Response::bad_request(&res));
     }
 
+    if let Err(res) = validate_secret_key(&post_data.secret_key) {
+        return Ok(Response::forbidden(&res));
+    }
+
     /* DATABASE ACID SESSION INIT */
 
     let (db, mut session) = MongoDB.connect_acid().await;
@@ -77,10 +78,11 @@ pub async fn task(form_data: web::Json<PostData>) -> Result<HttpResponse, Error>
         uuid: user_id.clone(),
         email_address: post_data.email_address.clone(),
         password: post_data.password.clone(),
-        email_verified: false,
+        // verified via the secret key check above instead of an email code
+        email_verified: true,
         two_a_factor_auth_enabled: false,
         two_a_factor_auth_updated: None,
-        role: Account::AccountRole::User,
+        role: Account::AccountRole::Administrator,
         suspended_at: None,
         suspended_by: None,
         created_at: now,
@@ -122,40 +124,6 @@ pub async fn task(form_data: web::Json<PostData>) -> Result<HttpResponse, Error>
         log::error!("{:?}", error);
         session.abort_transaction().await.ok().unwrap();
         return Ok(Response::internal_server_error(&error.to_string()));
-    }
-  
-
-    //creating validation request
-    let mut rng = rand::rng();
-    let validation_code: u32 = rng.random_range(100000..999999);
-    let request = Account::AccountVerificationRequest {
-        uuid: Uuid::now_v7().to_string(),
-        user_id: user_id.clone(),
-        validation_code: validation_code.to_string(),
-        expires_at: now + CODE_EXPIRE_TIME * 60 * 1000,
-    };
-    
-    let collection = db.collection::
-    <Account::AccountVerificationRequest>("account_verification_request");
-    let result = collection.insert_one(
-        request,
-    ).await;
-
-    if let Err(error) = result {
-        log::error!("{:?}", error);
-        session.abort_transaction().await.ok().unwrap();
-        return Ok(Response::internal_server_error(&error.to_string()));
-    }
-
-    let message = Smtp::sign_up_verification_code_template(
-        &post_data.email_address,
-        &validation_code.to_string()
-    );
-
-    let result = Smtp::send_email(message);
-    if let Err(_) = result {
-        session.abort_transaction().await.ok().unwrap();
-        return Ok(Response::internal_server_error("Failed to send email"));
     }
 
     /* DATABASE ACID COMMIT */
@@ -308,7 +276,8 @@ fn sanitize(form_data: &PostData) -> PostData {
     form.full_name = form.full_name.trim().to_string();
     form.username = form.username.trim().to_string().to_lowercase();
     form.confirm_password = form.confirm_password.trim().to_string();
-    
+    form.secret_key = form.secret_key.trim().to_string();
+
     form
 }
 
@@ -322,7 +291,24 @@ fn check_empty_fields(form_data: &PostData) -> Result<(), String> {
     else if form_data.email_address.len() == 0 {
         Err("Email is required".to_string())
     }
+    else if form_data.secret_key.len() == 0 {
+        Err("Secret key is required".to_string())
+    }
     else {
         Ok(())
     }
+}
+
+// Gates sign-up behind a shared secret from the env file instead of an
+// email verification code — accounts created this way come out pre-verified.
+fn validate_secret_key(secret_key: &str) -> Result<(), String> {
+    let expected = env::var("SIGN_UP_SECRET_KEY")
+        .expect("SIGN_UP_SECRET_KEY must be set on .env file");
+
+    // constant-time comparison so response timing can't leak the key
+    let matches = expected.len() == secret_key.len()
+        && expected.bytes().zip(secret_key.bytes())
+            .fold(0u8, |acc, (a, b)| acc | (a ^ b)) == 0;
+
+    if matches { Ok(()) } else { Err("Invalid secret key".to_string()) }
 }

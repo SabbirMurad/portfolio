@@ -61,6 +61,10 @@ fn relative_time(published_at: &str) -> String {
 
 async fn fetch_from_youtube(
     api_key: &str,
+    // Set when the dashboard has picked specific videos (src/handler/youtube/
+    // set_featured.rs) — [primary, ...secondary], in the exact order they
+    // should render in. None falls back to the channel's most-recent-4.
+    override_ids: Option<Vec<String>>,
 ) -> Result<(Youtube::ChannelInfo, Vec<Youtube::VideoInfo>), String> {
     let client = Client::new();
 
@@ -110,23 +114,30 @@ async fn fetch_from_youtube(
         avatar_url: avatar,
     };
 
-    // ── 2. Recent videos (search) ─────────────────────────────────────────────
-    let search_url = format!(
-        "https://www.googleapis.com/youtube/v3/search\
-         ?part=snippet&channelId={}&order=date&maxResults=4&type=video&key={}",
-        ch_id, api_key
-    );
-    let search_json: Value = serde_json::from_str(
-        &client.get(&search_url).send().await.map_err(|e| e.to_string())?
-            .text().await.map_err(|e| e.to_string())?
-    ).map_err(|e| e.to_string())?;
+    // ── 2. Which videos ────────────────────────────────────────────────────────
+    // A dashboard pick skips the search entirely; otherwise fall back to the
+    // channel's most-recent-4, same as before.
+    let ids: Vec<String> = match override_ids.filter(|ids| !ids.is_empty()) {
+        Some(ids) => ids,
+        None => {
+            let search_url = format!(
+                "https://www.googleapis.com/youtube/v3/search\
+                 ?part=snippet&channelId={}&order=date&maxResults=4&type=video&key={}",
+                ch_id, api_key
+            );
+            let search_json: Value = serde_json::from_str(
+                &client.get(&search_url).send().await.map_err(|e| e.to_string())?
+                    .text().await.map_err(|e| e.to_string())?
+            ).map_err(|e| e.to_string())?;
 
-    let ids: Vec<String> = search_json["items"]
-        .as_array()
-        .map(|arr| arr.iter()
-            .filter_map(|i| i["id"]["videoId"].as_str().map(|s| s.to_string()))
-            .collect())
-        .unwrap_or_default();
+            search_json["items"]
+                .as_array()
+                .map(|arr| arr.iter()
+                    .filter_map(|i| i["id"]["videoId"].as_str().map(|s| s.to_string()))
+                    .collect())
+                .unwrap_or_default()
+        }
+    };
 
     if ids.is_empty() {
         return Ok((channel, vec![]));
@@ -143,7 +154,7 @@ async fn fetch_from_youtube(
             .text().await.map_err(|e| e.to_string())?
     ).map_err(|e| e.to_string())?;
 
-    let videos: Vec<Youtube::VideoInfo> = details_json["items"]
+    let mut by_id: std::collections::HashMap<String, Youtube::VideoInfo> = details_json["items"]
         .as_array()
         .unwrap_or(&vec![])
         .iter()
@@ -156,16 +167,25 @@ async fn fetch_from_youtube(
             let thumbnail = snip["thumbnails"]["maxres"]["url"].as_str()
                 .or_else(|| snip["thumbnails"]["high"]["url"].as_str())
                 .unwrap_or("").to_string();
+            let video_id = v["id"].as_str().unwrap_or("").to_string();
 
-            Youtube::VideoInfo {
-                video_id:     v["id"].as_str().unwrap_or("").to_string(),
+            (video_id.clone(), Youtube::VideoInfo {
+                video_id,
                 title:        snip["title"].as_str().unwrap_or("").to_string(),
                 thumbnail,
                 views:        format_count(views),
                 duration:     parse_duration(content["duration"].as_str().unwrap_or("PT0S")),
                 published_at: relative_time(snip["publishedAt"].as_str().unwrap_or("")),
-            }
+            })
         })
+        .collect();
+
+    // The /videos endpoint doesn't promise it echoes `id=` back in the same
+    // order — reassemble against `ids` explicitly so a dashboard pick's
+    // [primary, sub1, sub2, sub3] order actually holds. Silently drops any
+    // id the API had nothing for (deleted/private video).
+    let videos: Vec<Youtube::VideoInfo> = ids.iter()
+        .filter_map(|id| by_id.remove(id))
         .collect();
 
     Ok((channel, videos))
@@ -189,8 +209,20 @@ pub async fn task() -> Result<HttpResponse, Error> {
         }
     }
 
+    // ── Dashboard pick, if any (src/handler/youtube/set_featured.rs) ─────────
+    let featured_collection = db.collection::<Youtube::FeaturedVideos>("youtube_featured");
+    let featured = featured_collection.find_one(doc! { "key": "featured" }).await.ok().flatten();
+
+    let override_ids = featured.and_then(|f| {
+        f.primary_video_id.map(|primary| {
+            let mut ids = vec![primary];
+            ids.extend(f.secondary_video_ids);
+            ids
+        })
+    });
+
     // ── Fetch fresh from YouTube ──────────────────────────────────────────────
-    let (channel, videos) = fetch_from_youtube(&api_key).await.map_err(|e| {
+    let (channel, videos) = fetch_from_youtube(&api_key, override_ids).await.map_err(|e| {
         log::error!("YouTube API error: {}", e);
         actix_web::error::ErrorInternalServerError(e)
     })?;

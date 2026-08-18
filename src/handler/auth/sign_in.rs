@@ -10,6 +10,7 @@ use crate::utils::response::Response;
 use serde::{ Serialize, Deserialize };
 use mongodb::{ClientSession, Database};
 use actix_web::{ web, Error, HttpResponse};
+use super::{auth_access_cookie, auth_refresh_cookie};
 
 //in minutes
 const CODE_EXPIRE_TIME: i64 = 15;
@@ -131,6 +132,12 @@ pub async fn task(form_data: web::Json<PostData>, actix_session: Session) -> Res
     actix_session.insert("user_id", &account_core.uuid).unwrap();
     actix_session.insert("role", account_core.role.to_string()).unwrap();
 
+    // httpOnly cookies for the API auth middleware (src/middleware/auth.rs
+    // `require_access`) — the session values above are what the dashboard
+    // *pages* gate on (src/markup.rs); these are what API calls gate on.
+    let access_cookie = auth_access_cookie(access_token.clone());
+    let refresh_cookie = auth_refresh_cookie(refresh_token.clone());
+
     let data = AuthPayload {
         access_token,
         refresh_token,
@@ -142,8 +149,14 @@ pub async fn task(form_data: web::Json<PostData>, actix_session: Session) -> Res
         two_afa_enabled: false,
         auth_payload: Some(data)
     };
-  
-    Ok(HttpResponse::Ok().content_type("application/json").json(payload))
+
+    Ok(
+        HttpResponse::Ok()
+        .cookie(access_cookie)
+        .cookie(refresh_cookie)
+        .content_type("application/json")
+        .json(payload)
+    )
 }
 
 // helper functions
