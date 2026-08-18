@@ -313,9 +313,9 @@ function Youtube() {
                   <p className="mt-6 text-[13.5px] leading-[1.7] text-white/55">{ch.description}</p>
                 </RevealLayer>
 
-                <div className="mt-7 grid grid-cols-2 gap-px overflow-hidden rounded-sm bg-line-dark">
+                <div className="mt-7 grid flex-1 grid-cols-2 grid-rows-2 gap-px overflow-hidden rounded-sm bg-line-dark">
                   {channelStats.map((s, i) => (
-                    <div key={s.l} className="bg-ink-2 px-5 py-6">
+                    <div key={s.l} className="flex flex-col justify-center bg-ink-2 px-5 py-6">
                       <RevealLayer delay={0.14 + i * 0.08} distance={16}>
                         <p className="display-tight text-3xl font-bold sm:text-4xl">{s.n}</p>
                         <p className="meta mt-2 text-white/45">{s.l}</p>
@@ -324,7 +324,7 @@ function Youtube() {
                   ))}
                 </div>
 
-                <div className="mt-auto pt-8">
+                <div className="pt-8">
                   <a
                     href={`${YT_URL}?sub_confirmation=1`}
                     target="_blank"
