@@ -6,7 +6,7 @@
  * client-side auth check to duplicate here.
  *
  * `full_name` is looked up from account_profile by the server and handed
- * over as a data attribute on <body> (see pages/dashboard_v2.html) rather
+ * over as a data attribute on <body> (see pages/dashboard.html) rather
  * than fetched again client-side.
  *
  * Sidebar + tab layout: one page, tabs switch content client-side (no

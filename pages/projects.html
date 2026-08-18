@@ -1,15 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Same reasoning as sign_in_v2.html: an admin-only account creation form
-         must never be indexed and gets no social preview either. -->
-    {% set seo_title = "Sign up — Sabbir Hassan" %}
-    {% set seo_description = "Admin portal for sabbirhassan.com." %}
-    {% set seo_path = "/admin/sign-up" %}
-    {% set seo_robots = "noindex, nofollow" %}
+    <!-- Canonical is /projects, matching the route in src/routes/pages.rs.
+         The CollectionPage JSON-LD is built at runtime in
+         assets/jsx/projects.jsx so it stays in step with the projects data. -->
+    {% set seo_title = "Projects — Sabbir Hassan" %}
+    {% set seo_description = "Selected work by Sabbir Hassan spanning systems programming, mobile apps and the web — each built end to end, from architecture through interface." %}
+    {% set seo_keywords = "Sabbir Hassan, projects, portfolio, Rust project, Flutter app, JavaScript project, systems programming, software portfolio" %}
+    {% set seo_path = "/projects" %}
     {% set seo_og_type = "website" %}
+    {% set seo_og_title = "Projects — Sabbir Hassan" %}
+    {% set seo_og_description = "A selection of work spanning systems programming, mobile apps and the web, built end to end by Sabbir Hassan." %}
+    {% set seo_twitter_description = "Selected work — Rust · Flutter · JavaScript · Systems Programming." %}
+    {% set seo_image_alt = "Sabbir Hassan — Projects" %}
     {% include "common/seo.html" %}
 
     <!-- Fonts (replaces next/font) -->
@@ -58,19 +63,18 @@
   <body class="custom-cursor">
     <div id="root"><div class="boot">Sabbir Hassan</div></div>
 
-    <!-- Runtime globals (regular scripts — ready before Babel runs the JSX).
-         The page is one screen and never scrolls, so neither Lenis nor
-         ScrollTrigger is loaded; GSAP alone drives the cursor and the entrance. -->
+    <!-- Runtime globals (regular scripts — ready before Babel runs the JSX) -->
     <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="/assets/js/fetcher.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
 
     <!-- In-browser JSX (replaces the bundler) -->
     <script src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"></script>
 
     <script type="text/babel" src="/assets/jsx/data.jsx"></script>
     <script type="text/babel" src="/assets/jsx/helpers.jsx"></script>
-    <script type="text/babel" src="/assets/jsx/sign_up.jsx"></script>
+    <script type="text/babel" src="/assets/jsx/projects.jsx"></script>
   </body>
 </html>

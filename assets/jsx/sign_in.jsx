@@ -5,7 +5,7 @@
  * the left, vermilion gradient panel on the right, same field and button
  * styling, same cursor and click ripple.
  *
- * The POST goes through assets/js/fetcher.js (loaded in sign_in_v2.html
+ * The POST goes through assets/js/fetcher.js (loaded in sign_in.html
  * before this script) with showError: false — errors are read from the
  * returned FetchResult and shown inline instead of via the toast component
  * this page doesn't load. Fetcher now checks `result.message` before

@@ -12,11 +12,18 @@ function Docs() {
             />
           </div>
 
-          <Reveal from="right" delay={0.1}>
+          <Reveal from="right" delay={0.1} className="flex flex-col items-end gap-4">
             <p className="max-w-sm text-[14px] leading-[1.75] text-muted-2">
               Reference material, architecture notes and guides — written to be read by whoever
               picks the project up next.
             </p>
+            <a
+              href="/documentations"
+              className="meta group inline-flex items-center gap-2 text-muted-2 transition-colors duration-300 hover:text-vermilion"
+            >
+              View all documentation
+              <span className="transition-transform duration-400 group-hover:translate-x-1">→</span>
+            </a>
           </Reveal>
         </div>
 

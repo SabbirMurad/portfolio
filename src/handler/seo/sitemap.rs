@@ -25,6 +25,12 @@ pub async fn handler() -> impl Responder {
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://sabbirhassan.com/projects</loc>
+    <lastmod>{date}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>"#,
         date = today
     );

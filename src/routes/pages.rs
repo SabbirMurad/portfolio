@@ -18,6 +18,10 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             web::get().to(Markup::documentations)
         )
         .route(
+            "/projects",
+            web::get().to(Markup::projects)
+        )
+        .route(
             "/hire",
             web::get().to(Markup::hire)
         )

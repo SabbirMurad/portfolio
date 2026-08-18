@@ -29,6 +29,18 @@ function Impact() {
                     invisible — it gets out of the way and just works.
                   </p>
                 </RevealLayer>
+
+                <RevealLayer delay={0.22} distance={18} from="right">
+                  <a
+                    href="/about"
+                    className="meta group mt-6 inline-flex items-center gap-2 text-muted-2 transition-colors duration-300 hover:text-vermilion"
+                  >
+                    Read the full story
+                    <span className="transition-transform duration-400 group-hover:translate-x-1">
+                      →
+                    </span>
+                  </a>
+                </RevealLayer>
               </div>
             </Reveal>
           </Parallax>

@@ -8,11 +8,18 @@ function Projects() {
             <SplitHeading as="h2" text="My projects." className="display text-display-lg" />
           </div>
 
-          <Reveal from="right" delay={0.1}>
+          <Reveal from="right" delay={0.1} className="flex flex-col items-end gap-4">
             <p className="max-w-sm text-[14px] leading-[1.75] text-muted-2">
               A selection of work spanning systems programming, mobile apps, and the web — each
               built end to end, from architecture through interface.
             </p>
+            <a
+              href="/projects"
+              className="meta group inline-flex items-center gap-2 text-muted-2 transition-colors duration-300 hover:text-vermilion"
+            >
+              View all projects
+              <span className="transition-transform duration-400 group-hover:translate-x-1">→</span>
+            </a>
           </Reveal>
         </div>
 
