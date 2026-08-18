@@ -104,14 +104,16 @@ const projects = [
     accent: "#DE4520",
   },
   {
-    name: "Finora",
-    kind: "Personal Finance App",
-    year: "2025",
+    name: "Bento",
+    kind: "Custom Chrome Theme",
+    year: "2026",
     blurb:
-      "Cross-platform finance tracker in Flutter. Real-time spending analytics, custom chart widgets, biometric auth, and local-first Hive storage.",
-    tags: ["Flutter", "Dart", "Hive", "Riverpod"],
-    href: "https://github.com/sabbirmurad",
-    accent: "#54C5F8",
+      "A Chrome new tab page you arrange yourself. Clock, bookmarks, shortcuts, search and Google links are pieces you move, restyle, reorder or switch off.",
+    tags: ["JavaScript", "Manifest V3", "Chrome API", "Zero-dep"],
+    href: "https://chromewebstore.google.com/detail/bento-new-tab/mgnhpoioecgjficdbkghpnplklmohhpl",
+    accent: "#1ABC9C",
+    // Optional: a real banner. Cards without one fall back to the accent gradient.
+    image: "/assets/image/projects/bento.webp",
   },
   {
     name: "Pixel",

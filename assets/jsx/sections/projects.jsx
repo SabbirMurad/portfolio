@@ -35,25 +35,48 @@ function Projects() {
               >
                 <RevealLayer scaleFrom={1.14} distance={0} className="overflow-hidden rounded-sm">
                   <div className="relative h-[200px] overflow-hidden sm:h-[240px] lg:h-[280px]">
-                    <Parallax amount={22} className="absolute inset-x-0 -inset-y-[14%]">
-                      <div
-                        className="h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                        style={{
-                          background: `linear-gradient(145deg, ${p.accent}, ${p.accent}bb 45%, #0b0b0b)`,
-                        }}
-                      />
-                    </Parallax>
+                    {p.image ? (
+                      /* A real banner sits still rather than parallaxing, so
+                         nothing of the artwork slides out of frame. At the full
+                         desktop card size the box and a 2.6:1 banner are the
+                         same shape, so it fills exactly; narrower cards crop
+                         from the right, which is why the anchor is `object-left`
+                         — these banners carry their title bottom-left. */
+                      <div className="absolute inset-0 bg-ink">
+                        <img
+                          src={p.image}
+                          alt=""
+                          decoding="async"
+                          className="h-full w-full object-cover object-left transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                        />
+                      </div>
+                    ) : (
+                      <React.Fragment>
+                        <Parallax amount={22} className="absolute inset-x-0 -inset-y-[14%]">
+                          <div
+                            className="h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                            style={{
+                              background: `linear-gradient(145deg, ${p.accent}, ${p.accent}bb 45%, #0b0b0b)`,
+                            }}
+                          />
+                        </Parallax>
 
-                    <Parallax
-                      amount={-14}
-                      className="pointer-events-none absolute inset-0 flex items-center justify-center"
-                    >
-                      <span className="display text-[clamp(2rem,4.5vw,3.75rem)] leading-none text-white/20">
-                        {p.name}
-                      </span>
-                    </Parallax>
+                        {/* The oversized name is the stand-in for cards with no
+                            banner of their own. */}
+                        <Parallax
+                          amount={-14}
+                          className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                        >
+                          <span className="display text-[clamp(2rem,4.5vw,3.75rem)] leading-none text-white/20">
+                            {p.name}
+                          </span>
+                        </Parallax>
+                      </React.Fragment>
+                    )}
 
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+                    {p.image ? null : (
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+                    )}
                   </div>
                 </RevealLayer>
 
