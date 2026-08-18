@@ -144,6 +144,45 @@ html.lenis body {
   animation-play-state: paused;
 }
 
+/* ── CLICK RIPPLE ──
+   Ported from the previous site: a disc spawned at the pointer that swells past
+   its own size and fades, 600ms. One fixed layer holds them; the tint is set
+   per-ripple so it stays visible on the dark sections. */
+.ripple-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* under the custom cursor (9999), over everything else */
+  z-index: 9998;
+}
+
+.ripple {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  margin: -50px 0 0 -50px;
+  border-radius: 50%;
+  background: var(--ripple-tint, rgba(222, 69, 32, 0.16));
+  transform: scale(0);
+  animation: ripple-bounce 0.6s ease-out forwards;
+}
+
+@keyframes ripple-bounce {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
 /* ── HIDE NATIVE CURSOR (custom cursor takes over on fine pointers) ── */
 @media (pointer: fine) {
   body.custom-cursor,

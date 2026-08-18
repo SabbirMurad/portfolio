@@ -368,6 +368,40 @@ function Cursor() {
   );
 }
 
+/* ── Click ripple ──
+   The previous site's effect, kept: a disc blooms from the pointer on every
+   press. One persistent layer here rather than a wrapper per click, and each
+   disc removes itself on animationend instead of a matching timeout. The tint
+   follows the surface — vermilion on the light sections, white on the dark
+   ones — read from the same data-cursor-theme marker the cursor uses. */
+function Ripple() {
+  const layerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (reducedMotion()) return;
+    const onDown = (e) => {
+      const layer = layerRef.current;
+      if (!layer) return;
+      const t = e.target;
+      const onDark = !!(t && t.closest && t.closest('[data-cursor-theme="dark"]'));
+      const dot = document.createElement("span");
+      dot.className = "ripple";
+      dot.style.left = e.clientX + "px";
+      dot.style.top = e.clientY + "px";
+      dot.style.setProperty(
+        "--ripple-tint",
+        onDark ? "rgba(255,255,255,0.2)" : "rgba(222,69,32,0.16)",
+      );
+      dot.addEventListener("animationend", () => dot.remove());
+      layer.appendChild(dot);
+    };
+    window.addEventListener("pointerdown", onDown, { passive: true });
+    return () => window.removeEventListener("pointerdown", onDown);
+  }, []);
+
+  return <div ref={layerRef} className="ripple-layer" aria-hidden />;
+}
+
 /* ── Social brand marks (was SocialIcon.tsx) ── */
 const SOCIAL_MARKS = {
   GitHub: {

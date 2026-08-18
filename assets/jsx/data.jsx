@@ -43,18 +43,18 @@ const stats = [
 ];
 
 const stack = [
-  { name: "Rust", icon: "/assets/icons/rust.svg" },
-  { name: "C++", icon: "/assets/icons/c_plus_plsu.svg" },
-  { name: "Flutter", icon: "/assets/icons/flutter.svg" },
-  { name: "Tauri", icon: "/assets/icons/tauri.svg" },
-  { name: "MongoDB", icon: "/assets/icons/mongodb.svg" },
-  { name: "MySQL", icon: "/assets/icons/mysql.svg" },
-  { name: "Redis", icon: "/assets/icons/redis.svg" },
-  { name: "ScyllaDB", icon: "/assets/icons/scylla.svg" },
-  { name: "SQLite", icon: "/assets/icons/sqlite.svg" },
-  { name: "Figma", icon: "/assets/icons/figma.svg" },
-  { name: "Adobe XD", icon: "/assets/icons/adobe_xd.svg" },
-  { name: "MkDocs", icon: "/assets/icons/mkdocs.svg" },
+  { name: "Rust", icon: "/assets/icon/rust.svg" },
+  { name: "C++", icon: "/assets/icon/c_plus_plsu.svg" },
+  { name: "Flutter", icon: "/assets/icon/flutter.svg" },
+  { name: "Tauri", icon: "/assets/icon/tauri.svg" },
+  { name: "MongoDB", icon: "/assets/icon/mongodb.svg" },
+  { name: "MySQL", icon: "/assets/icon/mysql.svg" },
+  { name: "Redis", icon: "/assets/icon/redis.svg" },
+  { name: "ScyllaDB", icon: "/assets/icon/scylla.svg" },
+  { name: "SQLite", icon: "/assets/icon/sqlite.svg" },
+  { name: "Figma", icon: "/assets/icon/figma.svg" },
+  { name: "Adobe XD", icon: "/assets/icon/adobe_xd.svg" },
+  { name: "MkDocs", icon: "/assets/icon/mkdocs.svg" },
 ];
 
 const services = [
@@ -233,6 +233,37 @@ const youtube = {
       duration: "",
       published_at: "",
     },
+  ],
+};
+
+/* Competitive programming. The solved counts are filled in at runtime from the
+   LeetCode stats endpoint below — the same one the previous site used. Leave the
+   fallbacks null rather than inventing figures: the section renders em dashes and
+   a flat track until real numbers arrive. Add a href to a platform once you have
+   the profile URL; without one it renders as plain text instead of a dead link. */
+const competitive = {
+  leetcodeUser: "sabbir0087",
+  endpoint: "https://alfa-leetcode-api.onrender.com/sabbir0087/solved",
+  solved: { easy: null, medium: null, hard: null },
+  difficulties: [
+    { key: "easy", label: "Easy", tone: "#22C55E" },
+    { key: "medium", label: "Medium", tone: "#E0A32E" },
+    { key: "hard", label: "Hard", tone: "#DE4520" },
+  ],
+  platforms: [
+    { name: "LeetCode", handle: "sabbir0087", href: "https://leetcode.com/u/sabbir0087/", tone: "#FFA116" },
+    { name: "Codeforces", handle: "", href: "", tone: "#1F8ACB" },
+    { name: "AtCoder", handle: "", href: "", tone: "#3F7F5F" },
+  ],
+  topics: [
+    "C++",
+    "STL",
+    "Dynamic Programming",
+    "Graph Theory",
+    "Segment Trees",
+    "Binary Search",
+    "Greedy",
+    "Number Theory",
   ],
 };
 
