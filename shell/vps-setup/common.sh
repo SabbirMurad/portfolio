@@ -23,8 +23,15 @@ save_var() {
     echo "${name}=\"${value}\"" >> "$VARS_FILE"
 }
 
+# Populated when running non-interactively (e.g. invoked via the API) and
+# a required value wasn't already provided. Checked by require_no_missing_vars.
+declare -a MISSING_VARS=()
+
 # prompt_if_unset VAR_NAME "Prompt text" [-s for silent/password input]
 # Only asks if the variable isn't already known from a previous step/run.
+# If there's no TTY attached (e.g. invoked over the API), it never blocks
+# on read -- it records the variable as missing instead, so the caller
+# gets a clear, complete list rather than a hang or a silently-empty value.
 prompt_if_unset() {
     local var_name="$1"
     local prompt_text="$2"
@@ -32,6 +39,11 @@ prompt_if_unset() {
     local current_value="${!var_name}"
 
     if [[ -n "$current_value" ]]; then
+        return
+    fi
+
+    if [[ ! -t 0 ]]; then
+        MISSING_VARS+=("$var_name")
         return
     fi
 
@@ -45,6 +57,19 @@ prompt_if_unset() {
 
     printf -v "$var_name" '%s' "$input_value"
     save_var "$var_name" "$input_value"
+}
+
+# Call after all prompt_if_unset calls for a run. Exits with a parseable
+# "MISSING_VARS:a,b,c" line on stderr if anything couldn't be collected
+# non-interactively, so an API wrapper can report exactly what's needed.
+require_no_missing_vars() {
+    if [[ ${#MISSING_VARS[@]} -gt 0 ]]; then
+        local joined
+        joined=$(IFS=,; echo "${MISSING_VARS[*]}")
+        echo "MISSING_VARS:${joined}" >&2
+        echo "ERROR: missing required values for non-interactive run: ${joined}" >&2
+        exit 1
+    fi
 }
 
 step_start() {
