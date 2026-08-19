@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Md. Sabbir Hassan — CV</title>
+
+    <!--
+      Print-first CV, in the portfolio's own design language (Archivo display +
+      Inter body, ink/bone/vermilion). Open in a browser and print to PDF:
+      Ctrl/Cmd+P -> Save as PDF, margins "Default", background graphics ON.
+
+      Two pages by design. The old one ran to four because every skill got its
+      own icon card; here the same information is set as dense lists so the
+      experience — the part that gets read — starts on page one.
+
+      TO SWAP THE PHOTO: replace the src on <img class="photo"> below. It points
+      at the hero image as a placeholder.
+    -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --ink: #0b0b0b;
+        --ink-soft: #2b2b2b;
+        --muted: #6e6e6e;
+        --faint: #9a9a9a;
+        --line: #e2e0dd;
+        --bone: #f4f3f1;
+        --vermilion: #de4520;
+        --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+        --body: "Inter", system-ui, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { -webkit-font-smoothing: antialiased; }
+
+      body {
+        margin: 0;
+        background: #8a8a8a;
+        color: var(--ink);
+        font-family: var(--body);
+        font-size: 10pt;
+        line-height: 1.5;
+      }
+
+      /* A4 sheet. The old CV printed decorative grey blobs behind body text;
+         nothing here sits under type, so it stays legible on paper and in
+         greyscale. */
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        padding: 14mm 15mm;
+        margin: 8mm auto;
+        background: #fff;
+        box-shadow: 0 2mm 8mm rgba(0, 0, 0, 0.25);
+      }
+
+      /* ── header ── */
+      .head {
+        display: grid;
+        grid-template-columns: 26mm 1fr;
+        gap: 8mm;
+        align-items: center;
+        padding-bottom: 6mm;
+        border-bottom: 1.5px solid var(--ink);
+      }
+
+      .photo {
+        width: 26mm;
+        height: 26mm;
+        border-radius: 50%;
+        object-fit: cover;
+        background: var(--bone);
+        display: block;
+      }
+
+      h1 {
+        font-family: var(--display);
+        font-size: 22pt;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        margin: 0;
+      }
+      h1 span { font-weight: 600; }
+
+      .role {
+        font-size: 10.5pt;
+        font-weight: 600;
+        color: var(--vermilion);
+        margin: 1.5mm 0 0;
+        letter-spacing: 0.01em;
+      }
+
+      .contact {
+        margin: 3mm 0 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1mm 5mm;
+        font-size: 8.8pt;
+        color: var(--ink-soft);
+      }
+      .contact a { color: inherit; text-decoration: none; }
+      .contact li::before {
+        content: "";
+        display: inline-block;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: var(--vermilion);
+        vertical-align: 2px;
+        margin-right: 2mm;
+      }
+
+      /* ── sections ── */
+      section { margin-top: 7mm; }
+
+      h2 {
+        font-family: var(--display);
+        font-size: 11pt;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        margin: 0 0 3.5mm;
+        padding-bottom: 1.5mm;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .summary { margin: 0; color: var(--ink-soft); max-width: 165mm; }
+
+      /* ── experience ── */
+      .role-block { margin-bottom: 5mm; break-inside: avoid; }
+      .role-block:last-child { margin-bottom: 0; }
+
+      .role-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 6mm;
+      }
+
+      .role-title {
+        font-family: var(--display);
+        font-size: 11pt;
+        font-weight: 700;
+        margin: 0;
+      }
+      .role-title em {
+        font-style: normal;
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      .dates {
+        font-size: 8.5pt;
+        font-weight: 500;
+        color: var(--muted);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .role-block ul {
+        margin: 1.5mm 0 0;
+        padding-left: 4.5mm;
+        color: var(--ink-soft);
+      }
+      .role-block li { margin-bottom: 0.8mm; }
+      .role-block li::marker { color: var(--vermilion); }
+
+      /* ── work grid ── */
+      .work {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5mm 8mm;
+      }
+      .work div { break-inside: avoid; }
+      .work a { color: inherit; text-decoration: none; display: block; }
+      .work b { font-weight: 600; }
+      .work span {
+        display: block;
+        font-size: 8.5pt;
+        color: var(--muted);
+        word-break: break-all;
+      }
+
+      /* ── skills ──
+         Four grouped blocks, two up. An inline dot-separated run reads as a
+         wall; here each tool gets its own line with the years right-aligned in
+         tabular figures, so the numbers form a column the eye can run down
+         instead of hunting for them mid-sentence.
+
+         Ordered strongest-first within each group, and the lead tool carries
+         a vermilion rule — the CV should answer "what is he actually best at"
+         before it answers "what has he touched". */
+      .skills {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5mm 10mm;
+      }
+
+      .skill-group { break-inside: avoid; }
+
+      .skill-group h3 {
+        font-family: var(--display);
+        font-size: 8.5pt;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin: 0 0 2mm;
+        padding-bottom: 1mm;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .skill {
+        display: flex;
+        align-items: baseline;
+        gap: 3mm;
+        padding: 0.7mm 0;
+      }
+
+      .skill .name {
+        font-size: 9.5pt;
+        color: var(--ink-soft);
+        white-space: nowrap;
+      }
+
+      /* The one thing in each group worth reading if you read nothing else. */
+      .skill.lead .name {
+        font-weight: 600;
+        color: var(--ink);
+        border-bottom: 1.5px solid var(--vermilion);
+        padding-bottom: 0.3mm;
+      }
+
+      /* Dotted leader: keeps the eye on the right row across the gap without
+         drawing a heavy rule. */
+      .skill .fill {
+        flex: 1;
+        border-bottom: 1px dotted #d5d2ce;
+        transform: translateY(-1mm);
+      }
+
+      .skill .yrs {
+        font-size: 8.5pt;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      .note {
+        margin: 2mm 0 0;
+        font-size: 8.8pt;
+        color: var(--muted);
+        border-left: 2px solid var(--line);
+        padding-left: 3mm;
+      }
+
+      /* ── two-up ── */
+      .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+      .cols h3, .stack h3 {
+        font-family: var(--display);
+        font-size: 9.5pt;
+        font-weight: 700;
+        margin: 0 0 1.5mm;
+      }
+      .cols ul { margin: 0; padding-left: 4.5mm; color: var(--ink-soft); }
+      .cols li::marker { color: var(--vermilion); }
+
+      .edu { margin-bottom: 3.5mm; break-inside: avoid; }
+      .edu:last-child { margin-bottom: 0; }
+      .edu b { font-weight: 600; }
+      .edu span { display: block; font-size: 8.8pt; color: var(--muted); }
+
+      .foot {
+        margin-top: 8mm;
+        padding-top: 3mm;
+        border-top: 1px solid var(--line);
+        font-size: 8.5pt;
+        color: var(--faint);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      @media print {
+        body { background: #fff; }
+        .page {
+          margin: 0;
+          box-shadow: none;
+          width: auto;
+          min-height: 0;
+          padding: 0;
+        }
+        .page + .page { break-before: page; }
+        @page { size: A4; margin: 14mm 15mm; }
+        a { color: inherit; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ══════════════════ PAGE 1 ══════════════════ -->
+    <div class="page">
+      <header class="head">
+        <!-- SWAP THIS: your own headshot. Square crops best; it is masked to a
+             circle. Placeholder is the site's hero image. -->
+        <img class="photo" src="../image/hero_image.webp" alt="" />
+
+        <div>
+          <h1>Md. Sabbir <span>Hassan</span></h1>
+          <p class="role">Fullstack Developer &amp; Designer</p>
+          <ul class="contact">
+            <li><a href="mailto:sbbir0087@gmail.com">sbbir0087@gmail.com</a></li>
+            <li><a href="tel:+8801705738128">+880 1705 738128</a></li>
+            <li><a href="https://sabbirhassan.com">sabbirhassan.com</a></li>
+            <li><a href="https://github.com/sabbirmurad">github.com/sabbirmurad</a></li>
+            <li>Bogura, Bangladesh</li>
+          </ul>
+        </div>
+      </header>
+
+      <section>
+        <h2>Profile</h2>
+        <p class="summary">
+          Self-taught developer and designer, building since 2019. I work across the stack —
+          systems-level Rust and C++ on the backend, Flutter and Tauri on the client, and the
+          interface design in between. Five years at a startup took me from building the
+          products to running the teams that ship them: now in operations across three
+          teams, after leading a group of twenty.
+        </p>
+      </section>
+      <section>
+        <h2>Experience</h2>
+
+        <div class="role-block">
+          <div class="role-head">
+            <p class="role-title">Assistant Manager, Operation <em>— JoinVentureAI</em></p>
+            <span class="dates">Mar 2026 — Present</span>
+          </div>
+          <ul>
+            <li>Running operations across three teams.</li>
+          </ul>
+        </div>
+
+        <div class="role-block">
+          <div class="role-head">
+            <p class="role-title">Team Leader <em>— JoinVentureAI</em></p>
+            <span class="dates">May 2025 — Feb 2026</span>
+          </div>
+          <ul>
+            <li>Led a team of roughly 20 people over 9 months.</li>
+          </ul>
+        </div>
+
+        <div class="role-block">
+          <div class="role-head">
+            <p class="role-title">Fullstack Developer &amp; Project Manager <em>— Bitlaab</em></p>
+            <span class="dates">2021 — Apr 2025</span>
+          </div>
+          <ul>
+            <li>
+              Built and shipped client products end to end — backend, client applications and
+              interface design — while managing delivery as project manager on most of them.
+            </li>
+            <li>
+              Worked across the stack the company used: Rust and Node on the server, Flutter and
+              vanilla web on the client, MongoDB and SQLite for storage.
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section>
+        <h2>Technical Skills</h2>
+        <div class="skills">
+          <div class="skill-group">
+            <h3>Backend &amp; Systems</h3>
+            <div class="skill lead">
+              <span class="name">Rust</span><span class="fill"></span
+              ><span class="yrs">4 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">C++</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Zig</span><span class="fill"></span
+              ><span class="yrs">2.5 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Node.js</span><span class="fill"></span
+              ><span class="yrs">1.5 yrs</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <h3>Client</h3>
+            <div class="skill lead">
+              <span class="name">Flutter / Dart</span><span class="fill"></span
+              ><span class="yrs">4 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Vanilla JS, HTML, CSS</span><span class="fill"></span
+              ><span class="yrs">6 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Tauri</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <h3>Data</h3>
+            <div class="skill lead">
+              <span class="name">MongoDB</span><span class="fill"></span
+              ><span class="yrs">4 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">SQLite</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Redis</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">MySQL</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">ScyllaDB</span><span class="fill"></span
+              ><span class="yrs">learning</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <h3>Design</h3>
+            <div class="skill lead">
+              <span class="name">Figma</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Adobe XD</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Photoshop</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Illustrator</span><span class="fill"></span
+              ><span class="yrs">1.5 yrs</span>
+            </div>
+          </div>
+        </div>
+        <p class="note">
+          Rust is where I do my best work — I reach for it over higher-level runtimes whenever
+          the problem allows. On the client I prefer vanilla web components and Flutter to
+          heavier frameworks.
+        </p>
+      </section>
+    </div>
+
+    <!-- ══════════════════ PAGE 2 ══════════════════ -->
+    <div class="page">
+      <section style="margin-top: 0">
+        <h2>Selected Work</h2>
+        <!-- Anchored so the links work in the exported PDF, but labelled
+             short: the Chrome Web Store and Play Store URLs are long enough to
+             wrap across the column and wreck the grid. -->
+        <div class="work">
+          <div>
+            <a href="https://chromewebstore.google.com/detail/bento-new-tab/mgnhpoioecgjficdbkghpnplklmohhpl">
+              <b>Bento</b><span>Chrome extension — Web Store</span>
+            </a>
+          </div>
+          <div>
+            <a href="https://healthmasterbd.com"
+              ><b>Health Master BD</b><span>healthmasterbd.com</span></a
+            >
+          </div>
+          <div>
+            <a href="https://play.google.com/store/apps/details?id=com.fahimshahariar.romatoo"
+              ><b>Romatoo</b><span>Android — Google Play</span></a
+            >
+          </div>
+          <div>
+            <a href="https://heartsmedistudy.com"
+              ><b>Hearts Medi Study</b><span>heartsmedistudy.com</span></a
+            >
+          </div>
+          <div>
+            <a href="https://play.google.com/store/apps/details?id=com.heartsmedistudy.master_the_ward"
+              ><b>Master The Ward</b><span>Android — Google Play</span></a
+            >
+          </div>
+          <div>
+            <a href="https://akmdcbanani.com"
+              ><b>AKMDC Banani</b><span>akmdcbanani.com</span></a
+            >
+          </div>
+        </div>
+        <p class="note">
+          Further client work is covered by confidentiality or is no longer in service.
+        </p>
+      </section>
+      <section>
+        <h2>Open Source</h2>
+        <div class="cols">
+          <div>
+            <h3>Fanari</h3>
+            <p class="summary">
+              A social media application built for the performance and efficiency of a
+              large-scale platform.
+              <span class="yrs">github.com/SabbirMurad/fanari_v2</span>
+            </p>
+          </div>
+          <div>
+            <h3>Frame Forge</h3>
+            <p class="summary">
+              A design tool that generates production frontend code from the design itself.
+              <span class="yrs">github.com/SabbirMurad/frame_forge</span>
+            </p>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Education</h2>
+        <div class="edu">
+          <b>B.Sc. in Computer Science &amp; Engineering</b>
+          <span>Pundra University of Science and Technology, Bogura — in progress</span>
+        </div>
+        <div class="edu">
+          <b>Higher Secondary Certificate</b>
+          <span>Government Shah Sultan College, Bogura — 2019, GPA 4.75</span>
+        </div>
+        <div class="edu">
+          <b>Secondary School Certificate</b>
+          <span>Cantonment Board High School, Jahangirabad, Bogura — 2017, GPA 5.00</span>
+        </div>
+      </section>
+      <section>
+        <h2>Languages</h2>
+        <div class="cols">
+          <div>
+            <h3>Spoken</h3>
+            <ul>
+              <li>Bangla — native</li>
+              <li>English — fluent</li>
+              <li>Hindi — fluent</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Written</h3>
+            <ul>
+              <li>Bangla — fluent</li>
+              <li>English — fluent</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Beyond Work</h2>
+        <p class="summary">
+          I write scripts and sketch. Reading manga is where the writing habit came from, and
+          working out a complicated story turns out to use the same patience as working out a
+          complicated algorithm — both reward staying calm in the middle of them.
+        </p>
+      </section>
+      <div class="foot">
+        <span>Md. Sabbir Hassan — CV</span>
+        <span>sabbirhassan.com</span>
+      </div>
+    </div>
+  </body>
+</html>
