@@ -1,4 +1,4 @@
-/* global React, ReactDOM, gsap, Cursor, Ripple, reducedMotion, profile, Fetcher */
+/* global React, ReactDOM, gsap, Cursor, Ripple, reducedMotion, profile, Fetcher, ImageUploader */
 /*
  * Admin dashboard — lands here after a successful /admin/sign-in. The route
  * itself is guarded server-side (src/markup.rs `dashboard`): no live session
@@ -377,50 +377,70 @@ function CreateDocumentation({ onCreated, onCancel }) {
   );
 }
 
-function DocRow({ doc, onToggle, toggling }) {
+function DocCard({ doc, onToggle, toggling }) {
   const date = new Date(doc.created_at).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
+  const href = "/documentation/" + doc.uuid + "/";
 
   return (
-    <div className="flex flex-col gap-4 border-b border-line py-5 sm:flex-row sm:items-center sm:justify-between">
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <a
-            href={"/documentation/" + doc.name + "/"}
-            target="_blank"
-            rel="noreferrer"
-            className="text-[15px] font-semibold text-ink transition-colors duration-300 hover:text-vermilion"
-          >
-            {doc.name}
-          </a>
-          <span className="meta text-muted">{date}</span>
-        </div>
-        <p className="mt-1 max-w-xl truncate text-[13px] text-muted-2">{doc.description}</p>
-        {doc.tags && doc.tags.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {doc.tags.map((t) => (
-              <span
-                key={t}
-                className="meta rounded-sm bg-bone px-2 py-1 text-muted-2"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-        )}
+    <div className="flex h-full flex-col rounded-md border border-line bg-paper p-5">
+      <div className="flex items-start justify-between gap-3">
+        <span className="meta text-muted">{date}</span>
+        {/* The card can't be one big link — it holds a switch — so the arrow
+            is the click target that opens the built site. */}
+        <a
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+          title={"Open " + doc.name}
+          aria-label={"Open " + doc.name}
+          className="group/open flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border border-line text-muted-2 transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-white"
+        >
+          <span className="inline-block text-[13px] leading-none transition-transform duration-300 group-hover/open:-translate-y-0.5 group-hover/open:translate-x-0.5">
+            ↗
+          </span>
+        </a>
       </div>
 
-      <div className="flex shrink-0 items-center gap-3 sm:pl-6">
-        <span className="meta text-muted-2">Shown on home</span>
-        <Switch
-          on={!!doc.featured}
-          disabled={toggling}
-          label={"Show " + doc.name + " on the home page"}
-          onToggle={() => onToggle(doc)}
-        />
+      <a
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        className="mt-3 text-[15px] font-semibold text-ink transition-colors duration-300 hover:text-vermilion"
+      >
+        {doc.name}
+      </a>
+
+      <p className="mt-1.5 line-clamp-2 text-[13px] leading-[1.6] text-muted-2">
+        {doc.description}
+      </p>
+
+      {doc.tags && doc.tags.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {doc.tags.map((t) => (
+            <span key={t} className="meta rounded-sm bg-bone px-2 py-1 text-muted-2">
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* mt-auto keeps the switch on the baseline across a row of cards whose
+          descriptions and tag counts differ. It sits on its own wrapper so it
+          doesn't collide with the spacing above the rule. */}
+      <div className="mt-auto pt-6">
+        <div className="flex items-center justify-between gap-3 border-t border-line pt-4">
+          <span className="meta text-muted-2">Shown on home</span>
+          <Switch
+            on={!!doc.featured}
+            disabled={toggling}
+            label={"Show " + doc.name + " on the home page"}
+            onToggle={() => onToggle(doc)}
+          />
+        </div>
       </div>
     </div>
   );
@@ -519,44 +539,50 @@ function DocumentationTab() {
         />
       </div>
 
-      <div className="mt-6 rounded-md border border-line bg-paper px-5 sm:px-6">
-        {loadState === "loading" && (
-          <p className="meta py-8 text-center text-muted-2">Loading…</p>
-        )}
+      {/* One card per doc in a grid rather than one full-width row each — a
+          doc entry is a few short fields and doesn't need the width. The
+          loading/empty/error states stay a single panel; there is nothing to
+          lay out in a grid yet. */}
+      {loadState !== "ready" || filtered.length === 0 ? (
+        <div className="mt-6 rounded-md border border-line bg-paper px-5 sm:px-6">
+          {loadState === "loading" && (
+            <p className="meta py-8 text-center text-muted-2">Loading…</p>
+          )}
 
-        {loadState === "error" && (
-          <p className="meta py-8 text-center text-vermilion">{loadError}</p>
-        )}
+          {loadState === "error" && (
+            <p className="meta py-8 text-center text-vermilion">{loadError}</p>
+          )}
 
-        {loadState === "ready" && filtered.length === 0 && (
-          <p className="meta py-8 text-center text-muted-2">
-            {docs.length === 0 ? "No documentation yet." : "Nothing matches that search."}
-          </p>
-        )}
-
-        {loadState === "ready" &&
-          filtered.map((doc) => (
-            <DocRow
+          {loadState === "ready" && filtered.length === 0 && (
+            <p className="meta py-8 text-center text-muted-2">
+              {docs.length === 0 ? "No documentation yet." : "Nothing matches that search."}
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {filtered.map((doc) => (
+            <DocCard
               key={doc.uuid}
               doc={doc}
               toggling={togglingUuid === doc.uuid}
               onToggle={onToggle}
             />
           ))}
-      </div>
+        </div>
+      )}
     </Enter>
   );
 }
 
 /* ── Projects tab ────────────────────────────────────────────────────── */
 
-// Mirrors MAX_ZIP_BYTES above — this one guards the thumbnail upload against
-// src/handler/image/upload.rs's own 8MB cap (MAX_FILE_BYTES there), so a
-// too-large image fails fast instead of after a slow upload.
-const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+// The thumbnail's limits live in assets/js/image-uploader.js, next to the
+// upload itself, so they can't drift from MAX_FILE_BYTES / AllowedImageType in
+// src/handler/image/upload.rs the way a second copy here would.
 
 function CreateProject({ onCreated, onCancel }) {
-  const { useState } = React;
+  const { useState, useEffect } = React;
   const [form, setForm] = useState({ title: "", subtitle: "", description: "", tags: "" });
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState(null);
@@ -566,6 +592,11 @@ function CreateProject({ onCreated, onCancel }) {
   const [imageId, setImageId] = useState(null);
   const [imageState, setImageState] = useState("idle"); // idle | uploading | done | error
   const [imageError, setImageError] = useState(null);
+  const [progress, setProgress] = useState(0); // 0..1, or -1 when unknown
+
+  // The preview is an object URL; without this it stays alive for the life of
+  // the document after the form closes.
+  useEffect(() => () => ImageUploader.revoke(previewUrl), [previewUrl]);
 
   const set = (k) => (e) => {
     const v = e.target.value;
@@ -580,29 +611,41 @@ function CreateProject({ onCreated, onCancel }) {
 
     setImageError(null);
     setImageId(null);
+    setProgress(0);
     setErrors((s) => ({ ...s, image: undefined }));
 
-    if (!file.type.startsWith("image/")) {
+    // Format and size are checked against the same limits the handler enforces
+    // (assets/js/image-uploader.js mirrors them), so a bad file fails here
+    // rather than after the bytes have gone up.
+    const pre = ImageUploader.check(file);
+    if (!pre.ok) {
       setImageState("error");
-      setImageError("That's not an image file.");
-      return;
-    }
-    if (file.size > MAX_IMAGE_BYTES) {
-      setImageState("error");
-      setImageError("Image is too large (max " + Math.floor(MAX_IMAGE_BYTES / (1024 * 1024)) + "MB)");
+      setImageError(pre.error);
       return;
     }
 
-    setPreviewUrl(URL.createObjectURL(file));
+    const probed = await ImageUploader.probe(file);
+    if (!probed.ok) {
+      setImageState("error");
+      setImageError(probed.error);
+      return;
+    }
+
+    setPreviewUrl((old) => {
+      ImageUploader.revoke(old);
+      return probed.previewUrl;
+    });
     setImageState("uploading");
 
-    const formData = new FormData();
-    formData.append("image", file);
-
-    const result = await Fetcher.upload({
-      endpoint: "/image/upload",
-      formData,
-      showError: false,
+    const result = await ImageUploader.upload({
+      file,
+      check: false, // already run above
+      // probe() above already decoded this file for the preview; handing its
+      // result back keeps upload() from decoding and re-hashing it.
+      meta: { width: probed.width, height: probed.height, blurHash: probed.blurHash },
+      usedAt: ImageUploader.USED_AT.ProjectThumbnail,
+      temporary: false,
+      onProgress: (p) => setProgress(p),
     });
 
     if (!result.ok) {
@@ -611,7 +654,9 @@ function CreateProject({ onCreated, onCancel }) {
       return;
     }
 
-    setImageId(result.data.uuid);
+    // The handler derives width/height/type from the bytes, so the record it
+    // returns — not what the browser guessed — is what the entry references.
+    setImageId(result.image.uuid);
     setImageState("done");
   };
 
@@ -702,13 +747,23 @@ function CreateProject({ onCreated, onCancel }) {
               <input
                 id="project-thumb"
                 type="file"
-                accept="image/*"
+                accept={ImageUploader.ACCEPT}
                 onChange={onImageFile}
                 disabled={pending}
                 className="meta block text-muted-2 file:mr-4 file:rounded-sm file:border-0 file:bg-ink file:px-4 file:py-2.5 file:text-[13px] file:font-semibold file:text-white file:transition-colors file:duration-300 hover:file:bg-vermilion"
               />
               {imageState === "uploading" && (
-                <p className="meta mt-2 text-muted-2">Uploading…</p>
+                <div className="mt-2">
+                  <p className="meta text-muted-2">
+                    {progress >= 0 ? "Uploading… " + Math.round(progress * 100) + "%" : "Uploading…"}
+                  </p>
+                  <div className="mt-1.5 h-1 w-40 overflow-hidden rounded-full bg-line">
+                    <div
+                      className="h-full bg-vermilion transition-[width] duration-200"
+                      style={{ width: (progress >= 0 ? progress * 100 : 100) + "%" }}
+                    />
+                  </div>
+                </div>
               )}
               {imageState === "done" && <p className="meta mt-2 text-muted-2">Uploaded ✓</p>}
               {imageState === "error" && (
@@ -808,7 +863,7 @@ function CreateProject({ onCreated, onCancel }) {
   );
 }
 
-function ProjectRow({ project, onToggle, toggling }) {
+function ProjectCard({ project, onToggle, toggling }) {
   const date = new Date(project.created_at).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -816,42 +871,49 @@ function ProjectRow({ project, onToggle, toggling }) {
   });
 
   return (
-    <div className="flex flex-col gap-4 border-b border-line py-5 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex min-w-0 gap-4">
-        <div className="h-16 w-24 shrink-0 overflow-hidden rounded-sm border border-line bg-bone">
-          <img
-            src={"/image/webp/" + project.image_id}
-            alt=""
-            className="h-full w-full object-cover"
-          />
-        </div>
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[15px] font-semibold text-ink">{project.title}</span>
-            <span className="meta text-muted-2">{project.subtitle}</span>
-            <span className="meta text-muted">{date}</span>
-          </div>
-          <p className="mt-1 max-w-xl truncate text-[13px] text-muted-2">{project.description}</p>
-          {project.tags && project.tags.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {project.tags.map((t) => (
-                <span key={t} className="meta rounded-sm bg-bone px-2 py-1 text-muted-2">
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
+    /* Same card as DocCard, with the thumbnail promoted to a header image —
+       there is no arrow because a project has no URL of its own to open the
+       way a doc has its built site. */
+    <div className="flex h-full flex-col overflow-hidden rounded-md border border-line bg-paper">
+      <div className="aspect-[16/9] w-full overflow-hidden border-b border-line bg-bone">
+        <img
+          src={"/image/webp/" + project.image_id}
+          alt=""
+          className="h-full w-full object-cover"
+        />
       </div>
 
-      <div className="flex shrink-0 items-center gap-3 sm:pl-6">
-        <span className="meta text-muted-2">Shown on home</span>
-        <Switch
-          on={!!project.featured}
-          disabled={toggling}
-          label={"Show " + project.title + " on the home page"}
-          onToggle={() => onToggle(project)}
-        />
+      <div className="flex flex-1 flex-col p-5">
+        <span className="meta text-muted">{date}</span>
+
+        <p className="mt-3 text-[15px] font-semibold text-ink">{project.title}</p>
+        {project.subtitle && <p className="meta mt-1 text-muted-2">{project.subtitle}</p>}
+
+        <p className="mt-1.5 line-clamp-2 text-[13px] leading-[1.6] text-muted-2">
+          {project.description}
+        </p>
+
+        {project.tags && project.tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {project.tags.map((t) => (
+              <span key={t} className="meta rounded-sm bg-bone px-2 py-1 text-muted-2">
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-auto pt-6">
+          <div className="flex items-center justify-between gap-3 border-t border-line pt-4">
+            <span className="meta text-muted-2">Shown on home</span>
+            <Switch
+              on={!!project.featured}
+              disabled={toggling}
+              label={"Show " + project.title + " on the home page"}
+              onToggle={() => onToggle(project)}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -955,31 +1017,36 @@ function ProjectsTab() {
         />
       </div>
 
-      <div className="mt-6 rounded-md border border-line bg-paper px-5 sm:px-6">
-        {loadState === "loading" && (
-          <p className="meta py-8 text-center text-muted-2">Loading…</p>
-        )}
+      {/* Grid of cards, matching the Documentation tab. The single panel is
+          kept for the states that have nothing to lay out. */}
+      {loadState !== "ready" || filtered.length === 0 ? (
+        <div className="mt-6 rounded-md border border-line bg-paper px-5 sm:px-6">
+          {loadState === "loading" && (
+            <p className="meta py-8 text-center text-muted-2">Loading…</p>
+          )}
 
-        {loadState === "error" && (
-          <p className="meta py-8 text-center text-vermilion">{loadError}</p>
-        )}
+          {loadState === "error" && (
+            <p className="meta py-8 text-center text-vermilion">{loadError}</p>
+          )}
 
-        {loadState === "ready" && filtered.length === 0 && (
-          <p className="meta py-8 text-center text-muted-2">
-            {projects.length === 0 ? "No projects yet." : "Nothing matches that search."}
-          </p>
-        )}
-
-        {loadState === "ready" &&
-          filtered.map((project) => (
-            <ProjectRow
+          {loadState === "ready" && filtered.length === 0 && (
+            <p className="meta py-8 text-center text-muted-2">
+              {projects.length === 0 ? "No projects yet." : "Nothing matches that search."}
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {filtered.map((project) => (
+            <ProjectCard
               key={project.uuid}
               project={project}
               toggling={togglingUuid === project.uuid}
               onToggle={onToggle}
             />
           ))}
-      </div>
+        </div>
+      )}
     </Enter>
   );
 }

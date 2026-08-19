@@ -28,6 +28,18 @@ class Fetcher {
     }
 
     /**
+     * Public passthrough to the refresh above, for code that has to issue its
+     * own request and so can't ride the 401 retry built into the methods here
+     * — assets/js/image-uploader.js needs XHR for upload progress. Going
+     * through this rather than POSTing /api/auth/refresh directly keeps every
+     * caller sharing the one in-flight refresh.
+     * @returns {Promise<boolean>}
+     */
+    static async refreshSession() {
+        return this.#refreshAccessToken();
+    }
+
+    /**
      * A multipart/form-data POST — for file uploads, where #commonMethods'
      * always-JSON body (JSON.stringify + Content-Type: application/json)
      * doesn't apply. No Content-Type is set here: the browser derives
