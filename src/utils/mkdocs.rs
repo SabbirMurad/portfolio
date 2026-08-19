@@ -27,14 +27,9 @@
  *      whatever theme.favicon in its mkdocs.yml happened to name.
  */
 use std::fs;
-use std::io::{Cursor, Read, Write};
+use std::io::Write;
 use std::path::{Component, Path, PathBuf};
-use zip::ZipArchive;
-
-/// A doc site is a few hundred files; well past that and something is wrong.
-const MAX_ENTRIES: usize = 5_000;
-/// Uncompressed ceiling — a zip bomb is a few KB on the wire.
-const MAX_TOTAL_BYTES: u64 = 250 * 1024 * 1024;
+use crate::utils::archive;
 
 /// Only text formats carry the baked-in `site_url`; rewriting minified JS/CSS
 /// would risk mangling unrelated strings for no gain.
@@ -53,67 +48,16 @@ const FAVICON_LINKS: &str = concat!(
 /// Unpack `zip_bytes` into `target_dir` (which must not already exist) and make
 /// the result servable at `/documentation/{uuid}/`.
 pub fn unpack(zip_bytes: &[u8], target_dir: &Path, uuid: &str) -> Result<(), String> {
-    let mut archive = ZipArchive::new(Cursor::new(zip_bytes))
-        .map_err(|e| format!("Not a readable zip file: {}", e))?;
-
-    if archive.len() > MAX_ENTRIES {
-        return Err(format!("Archive has too many files (max {})", MAX_ENTRIES));
-    }
-
-    let strip = common_root(&archive);
-
-    fs::create_dir_all(target_dir).map_err(|e| e.to_string())?;
-
-    let mut total: u64 = 0;
-    let mut wrote_any = false;
-
-    for i in 0..archive.len() {
-        let mut entry = archive.by_index(i).map_err(|e| e.to_string())?;
-
-        // `enclosed_name` is None for anything that would escape the target
-        // (absolute paths, `..` components) — those entries are dropped rather
-        // than sanitised, so a malicious archive can't write outside its dir.
-        let name = match entry.enclosed_name() {
-            Some(p) => p.to_path_buf(),
-            None => continue,
-        };
-
-        let rel = match &strip {
-            Some(root) => match name.strip_prefix(root) {
-                Ok(r) => r.to_path_buf(),
-                Err(_) => continue,
-            },
-            None => name,
-        };
-        if rel.as_os_str().is_empty() {
-            continue;
-        }
-
-        let out_path = target_dir.join(&rel);
-
-        if entry.is_dir() {
-            fs::create_dir_all(&out_path).map_err(|e| e.to_string())?;
-            continue;
-        }
-
-        total += entry.size();
-        if total > MAX_TOTAL_BYTES {
-            return Err("Archive is too large once unpacked".to_string());
-        }
-
-        if let Some(parent) = out_path.parent() {
-            fs::create_dir_all(parent).map_err(|e| e.to_string())?;
-        }
-
-        let mut buf = Vec::with_capacity(entry.size() as usize);
-        entry.read_to_end(&mut buf).map_err(|e| e.to_string())?;
-        fs::write(&out_path, &buf).map_err(|e| e.to_string())?;
-        wrote_any = true;
-    }
-
-    if !wrote_any {
-        return Err("Archive contained no files".to_string());
-    }
+    archive::unzip(
+        zip_bytes,
+        target_dir,
+        &archive::Limits {
+            // A doc site is a few hundred files; well past that and something
+            // is wrong.
+            max_entries: 5_000,
+            max_total_bytes: 250 * 1024 * 1024,
+        },
+    )?;
 
     let files = walk(target_dir)?;
     rebase(target_dir, &files, uuid)?;
@@ -121,32 +65,6 @@ pub fn unpack(zip_bytes: &[u8], target_dir: &Path, uuid: &str) -> Result<(), Str
     ensure_index(target_dir, &files)?;
 
     Ok(())
-}
-
-/// The single directory every entry sits under, if there is one — `mkdocs build`
-/// output zipped whole gives "site". Returns None when entries already sit at
-/// the archive root, so a zip made from *inside* `site/` works too.
-fn common_root(archive: &ZipArchive<Cursor<&[u8]>>) -> Option<PathBuf> {
-    let mut root: Option<String> = None;
-
-    for name in archive.file_names() {
-        let first = name.split('/').next().unwrap_or("");
-        if first.is_empty() {
-            return None;
-        }
-        // An entry with no separator after the first segment is a file at the
-        // archive root, so there is no common directory to strip.
-        if !name[first.len()..].starts_with('/') {
-            return None;
-        }
-        match &root {
-            None => root = Some(first.to_string()),
-            Some(r) if r == first => {}
-            Some(_) => return None,
-        }
-    }
-
-    root.map(PathBuf::from)
 }
 
 fn walk(dir: &Path) -> Result<Vec<PathBuf>, String> {

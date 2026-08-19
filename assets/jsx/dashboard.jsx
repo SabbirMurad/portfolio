@@ -22,6 +22,7 @@ const NAV_ITEMS = [
   { key: "writing", label: "Writing" },
   { key: "projects", label: "Projects" },
   { key: "youtube", label: "YouTube" },
+  { key: "shell", label: "Shell" },
 ];
 
 function Enter(props) {
@@ -1235,6 +1236,345 @@ function YoutubeTab() {
 
 /* ── Shell ───────────────────────────────────────────────────────────── */
 
+/* ── Shell tab ───────────────────────────────────────────────────────── */
+
+// Bundles are a handful of scripts; the JSON-encoded byte array runs several
+// times the raw size, and routes/shell.rs caps the body at 32MB.
+const MAX_BUNDLE_BYTES = 6 * 1024 * 1024;
+
+// Mirrors is_valid_bundle in src/handler/shell.rs. The name is the directory
+// on disk *and* the URL segment (/api/shell/{name}/run/...), which is why it
+// is this restricted.
+const BUNDLE_NAME = /^[a-z0-9_-]+$/;
+
+function CreateShellBundle({ onCreated, onCancel }) {
+  const { useState } = React;
+  const [form, setForm] = useState({ name: "", description: "" });
+  const [file, setFile] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState(null);
+  const [status, setStatus] = useState("idle"); // idle | pending
+
+  const set = (k) => (e) => {
+    const v = e.target.value;
+    setForm((f) => ({ ...f, [k]: v }));
+    setErrors((s) => ({ ...s, [k]: undefined }));
+    setFormError(null);
+  };
+
+  const onFile = (e) => {
+    const f = e.target.files && e.target.files[0];
+    setFile(f || null);
+    setErrors((s) => ({ ...s, file: undefined }));
+    setFormError(null);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (status === "pending") return;
+
+    const name = form.name.trim().toLowerCase();
+    const next = {};
+    if (!name) next.name = "Enter a name";
+    else if (!BUNDLE_NAME.test(name)) {
+      next.name = "Lowercase letters, digits, hyphens and underscores only";
+    }
+    if (!form.description.trim()) next.description = "Enter a description";
+    if (!file) next.file = "Choose a zip file";
+    else if (!file.name.toLowerCase().endsWith(".zip")) next.file = "Must be a .zip file";
+    else if (file.size > MAX_BUNDLE_BYTES) {
+      next.file = "Zip is too large (max " + Math.floor(MAX_BUNDLE_BYTES / (1024 * 1024)) + "MB)";
+    }
+    setErrors(next);
+    setFormError(null);
+    if (Object.keys(next).length) return;
+
+    setStatus("pending");
+
+    let bytes;
+    try {
+      const buffer = await file.arrayBuffer();
+      bytes = Array.from(new Uint8Array(buffer));
+    } catch (err) {
+      setStatus("idle");
+      setFormError("Could not read that file. Try picking it again.");
+      return;
+    }
+
+    const result = await Fetcher.post({
+      endpoint: "/shell",
+      body: { name, description: form.description.trim(), file: bytes },
+      showError: false,
+    });
+
+    if (!result.ok) {
+      setStatus("idle");
+      setFormError(result.error || "Failed to upload (" + result.status + ")");
+      return;
+    }
+
+    setStatus("idle");
+    onCreated(result.data);
+  };
+
+  const pending = status === "pending";
+  const slug = form.name.trim().toLowerCase();
+
+  return (
+    <div className="rounded-md border border-line bg-paper p-6 sm:p-8">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="meta text-vermilion">New bundle</p>
+          <h2 className="display-tight mt-2 text-xl font-bold">Upload shell scripts</h2>
+          <p className="mt-2 max-w-md text-[13px] leading-[1.7] text-muted-2">
+            A zip of a folder containing a main.sh and its steps. The name becomes the folder
+            on disk and the path the run API uses.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="meta shrink-0 text-muted-2 transition-colors duration-300 hover:text-ink"
+        >
+          Cancel
+        </button>
+      </div>
+
+      <form onSubmit={onSubmit} noValidate className="mt-6 space-y-4">
+        <div>
+          <label htmlFor="bundle-name" className="meta mb-2 block text-muted-2">
+            Name
+          </label>
+          <input
+            id="bundle-name"
+            value={form.name}
+            onChange={set("name")}
+            disabled={pending}
+            placeholder="vps-setup"
+            aria-invalid={!!errors.name}
+            className={FIELD}
+          />
+          {errors.name ? (
+            <p className="meta mt-2 text-vermilion">{errors.name}</p>
+          ) : (
+            <p className="meta mt-2 text-muted">
+              {"/api/shell/" + (slug || "<name>") + "/run/<target>"}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="bundle-description" className="meta mb-2 block text-muted-2">
+            Description
+          </label>
+          <textarea
+            id="bundle-description"
+            rows={3}
+            value={form.description}
+            onChange={set("description")}
+            disabled={pending}
+            placeholder="What these scripts do and when to run them"
+            aria-invalid={!!errors.description}
+            className={FIELD + " resize-none"}
+          />
+          {errors.description && <p className="meta mt-2 text-vermilion">{errors.description}</p>}
+        </div>
+
+        <div>
+          <label htmlFor="bundle-zip" className="meta mb-2 block text-muted-2">
+            Zip
+          </label>
+          <input
+            id="bundle-zip"
+            type="file"
+            accept=".zip,application/zip"
+            onChange={onFile}
+            disabled={pending}
+            className="meta block text-muted-2 file:mr-4 file:rounded-sm file:border-0 file:bg-ink file:px-4 file:py-2.5 file:text-[13px] file:font-semibold file:text-white file:transition-colors file:duration-300 hover:file:bg-vermilion"
+          />
+          {errors.file && <p className="meta mt-2 text-vermilion">{errors.file}</p>}
+        </div>
+
+        {formError && (
+          <p
+            role="alert"
+            className="meta rounded-sm border border-vermilion/30 bg-vermilion/5 px-4 py-3 text-vermilion"
+          >
+            {formError}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={pending}
+          className={
+            "group flex items-center justify-center gap-3 rounded-sm bg-ink px-6 py-3.5 text-white transition-colors duration-400 " +
+            (pending ? "cursor-default opacity-60" : "hover:bg-vermilion")
+          }
+        >
+          <span className="meta">{pending ? "Uploading…" : "Upload bundle"}</span>
+          <span className="inline-block transition-transform duration-400 group-hover:translate-x-1">
+            →
+          </span>
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function ShellCard({ bundle }) {
+  const date = new Date(bundle.created_at).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+  const targets = bundle.targets || [];
+
+  return (
+    <div className="flex h-full flex-col rounded-md border border-line bg-paper p-5">
+      <div className="flex items-start justify-between gap-3">
+        <span className="meta text-muted">{date}</span>
+        <span className="meta rounded-sm bg-bone px-2 py-1 text-muted-2">
+          {targets.length} {targets.length === 1 ? "target" : "targets"}
+        </span>
+      </div>
+
+      <p className="mt-3 text-[15px] font-semibold text-ink">{bundle.name}</p>
+      <p className="mt-1.5 line-clamp-2 text-[13px] leading-[1.6] text-muted-2">
+        {bundle.description}
+      </p>
+
+      {targets.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {targets.slice(0, 6).map((t) => (
+            <span key={t} className="meta rounded-sm bg-bone px-2 py-1 text-muted-2">
+              {t}
+            </span>
+          ))}
+          {targets.length > 6 && (
+            <span className="meta rounded-sm px-2 py-1 text-muted">
+              {"+" + (targets.length - 6)}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* No run button: starting a target executes root scripts on the host,
+          which wants its own deliberate flow (variables, confirmation, live
+          logs) rather than a one-click control sitting in a list. */}
+      <div className="mt-auto pt-6">
+        <div className="border-t border-line pt-4">
+          <p className="meta text-muted">{"/api/shell/" + bundle.name}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ShellTab() {
+  const { useState, useEffect, useMemo } = React;
+  const [bundles, setBundles] = useState([]);
+  const [loadState, setLoadState] = useState("loading"); // loading | ready | error
+  const [loadError, setLoadError] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showCreate, setShowCreate] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      const result = await Fetcher.get({ endpoint: "/shell", showError: false });
+      if (!alive) return;
+      if (!result.ok) {
+        setLoadState("error");
+        setLoadError(result.error || "Failed to load bundles");
+        return;
+      }
+      setBundles(result.data || []);
+      setLoadState("ready");
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return bundles;
+    return bundles.filter((b) =>
+      (b.name + " " + b.description + " " + (b.targets || []).join(" "))
+        .toLowerCase()
+        .indexOf(q) !== -1
+    );
+  }, [bundles, search]);
+
+  const onCreated = (bundle) => {
+    setBundles((list) => [bundle, ...list]);
+    setShowCreate(false);
+  };
+
+  return (
+    <Enter distance={20}>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="meta text-vermilion">Shell</p>
+          <h1 className="display-tight mt-2 text-3xl font-bold">Script bundles</h1>
+          <p className="mt-2 max-w-lg text-[14px] leading-[1.7] text-muted-2">
+            Provisioning scripts this server can run on its own host. Uploading one makes its
+            targets available under /api/shell.
+          </p>
+        </div>
+        {!showCreate && (
+          <button
+            type="button"
+            onClick={() => setShowCreate(true)}
+            className="group flex shrink-0 items-center gap-2 rounded-sm bg-ink px-5 py-3 text-white transition-colors duration-400 hover:bg-vermilion"
+          >
+            <span className="meta">New bundle</span>
+            <span className="transition-transform duration-300 group-hover:translate-x-1">+</span>
+          </button>
+        )}
+      </div>
+
+      {showCreate && (
+        <div className="mt-6">
+          <CreateShellBundle onCreated={onCreated} onCancel={() => setShowCreate(false)} />
+        </div>
+      )}
+
+      <div className="mt-6">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by name, description or target…"
+          className={FIELD + " max-w-md"}
+        />
+      </div>
+
+      {loadState !== "ready" || filtered.length === 0 ? (
+        <div className="mt-6 rounded-md border border-line bg-paper px-5 sm:px-6">
+          {loadState === "loading" && (
+            <p className="meta py-8 text-center text-muted-2">Loading…</p>
+          )}
+          {loadState === "error" && (
+            <p className="meta py-8 text-center text-vermilion">{loadError}</p>
+          )}
+          {loadState === "ready" && filtered.length === 0 && (
+            <p className="meta py-8 text-center text-muted-2">
+              {bundles.length === 0 ? "No bundles yet." : "Nothing matches that search."}
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {filtered.map((b) => (
+            <ShellCard key={b.uuid} bundle={b} />
+          ))}
+        </div>
+      )}
+    </Enter>
+  );
+}
+
 function Dashboard() {
   const { useState } = React;
   const [tab, setTab] = useState("overview");
@@ -1266,6 +1606,7 @@ function Dashboard() {
         )}
         {tab === "projects" && <ProjectsTab />}
         {tab === "youtube" && <YoutubeTab />}
+        {tab === "shell" && <ShellTab />}
       </main>
     </div>
   );

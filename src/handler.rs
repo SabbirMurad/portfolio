@@ -21,3 +21,6 @@ pub use image as Image;
 
 pub mod project;
 pub use project as Project;
+
+pub mod shell;
+pub use shell as Shell;

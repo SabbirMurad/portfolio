@@ -2,3 +2,9 @@
 /target
 /documentation
 status.log
+/logs
+
+# Shell bundles uploaded through the dashboard land beside the checked-in one
+# (see SHELL_ROOT in src/handler/shell.rs); only vps-setup belongs in git.
+/shell/*
+!/shell/vps-setup/

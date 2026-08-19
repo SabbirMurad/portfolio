@@ -15,6 +15,9 @@ pub use youtube as Youtube;
 pub mod project;
 pub use project as Project;
 
+pub mod shell;
+pub use shell as Shell;
+
 // Ported from velora_backend's src/model.rs — image metadata now lives here
 // in Mongo (ImageStruct below) instead of in sqlite columns, which is what
 // let builtins/image.rs go away: sqlite only holds the original/webp blobs.
