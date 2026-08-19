@@ -7,7 +7,11 @@
       "Bash(taskkill //F //IM node.exe //FI \"WINDOWTITLE eq *\")",
       "PowerShell(Get-NetTCPConnection *)",
       "PowerShell(git *)",
-      "PowerShell(Add-Type -AssemblyName System.Drawing; $i = [System.Drawing.Image]::FromFile\\(\"C:\\\\sabbir\\\\portfolio_static\\\\public\\\\hero_image.png\"\\); \"$\\($i.Width\\) x $\\($i.Height\\)\"; $i.Dispose\\(\\))"
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $i = [System.Drawing.Image]::FromFile\\(\"C:\\\\sabbir\\\\portfolio_static\\\\public\\\\hero_image.png\"\\); \"$\\($i.Width\\) x $\\($i.Height\\)\"; $i.Dispose\\(\\))",
+      "Bash(cargo test *)",
+      "Bash(PYTHONIOENCODING=utf-8 python -)",
+      "Bash(python -c ' *)",
+      "Bash(echo \"check exit=$?\")"
     ]
   }
 }
