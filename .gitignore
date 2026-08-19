@@ -4,7 +4,6 @@
 status.log
 /logs
 
-# Shell bundles uploaded through the dashboard land beside the checked-in one
-# (see SHELL_ROOT in src/handler/shell.rs); only vps-setup belongs in git.
-/shell/*
-!/shell/vps-setup/
+# Shell bundles arrive through the upload API and are unpacked into SHELL_ROOT
+# (src/handler/shell.rs) at runtime — none of them belong in git.
+/shell

@@ -18,6 +18,9 @@ rustls-pemfile = "1"
 
 # Random bytes generator
 rand = "0.9.0"
+# CLI tokens are stored as a hash, never in the clear (src/model/cli_token.rs)
+sha2 = "0.10"
+hex = "0.4"
 
 # Regular expression
 regex = "1.11.1"

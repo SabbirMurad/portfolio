@@ -21,9 +21,10 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             .route(web::post().to(Handler::Shell::Create::task))
             .route(web::get().to(Handler::Shell::List::task))
         )
-        // {name} is a bundle directory under SHELL_ROOT. Every route below is
-        // gated on an Administrator session inside the handlers
-        // (src/handler/shell.rs); these run root shell scripts on the host.
+        // {name} is an uploaded bundle directory under SHELL_ROOT. These run
+        // root shell scripts on the host, so unlike the two routes above they
+        // take a CLI token only — no session cookie, and nothing carrying
+        // browser fetch metadata (src/middleware/auth.rs::require_cli).
         .route(
             "/{name}/targets",
             web::get().to(Handler::Shell::targets)

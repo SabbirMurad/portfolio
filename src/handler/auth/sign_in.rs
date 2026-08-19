@@ -160,7 +160,10 @@ pub async fn task(form_data: web::Json<PostData>, actix_session: Session) -> Res
 }
 
 // helper functions
-async fn validate_login(
+
+/// Shared with handler/cli/login.rs so the terminal path checks credentials
+/// exactly the way the browser one does, rather than growing a second copy.
+pub async fn validate_login(
     db: &Database,
     session: &mut ClientSession,
     email_or_username: &str,

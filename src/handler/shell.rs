@@ -3,8 +3,8 @@
  * shell/vps-setup/api/server.js (now deleted) did in node, generalised from the
  * one hardcoded vps-setup directory to any bundle under SHELL_ROOT.
  *
- * A bundle is a directory of shell scripts with a `main.sh` exposing the CLI
- * that shell/vps-setup/main.sh does:
+ * A bundle is an uploaded directory of shell scripts (see shell/create.rs) with
+ * a `main.sh` exposing this CLI:
  *
  *   main.sh --list                 print the targets, in run order
  *   main.sh --describe <target>    print the variables that target needs
@@ -13,16 +13,21 @@
  *
  * and reading its collected variables from /etc/<bundle>/vars.env — that
  * convention is what lets the server write them without knowing anything about
- * a given bundle's internals. For the checked-in bundle that resolves to the
- * /etc/vps-setup/vars.env its common.sh already uses.
+ * a given bundle's internals. A bundle named vps-setup therefore reads the
+ * /etc/vps-setup/vars.env its own common.sh already uses.
  *
  * Every route here can install packages, create system users, rewrite
  * sshd_config and run root shell scripts on whatever machine this binary is
- * running on. That is the whole point of it, and it is also why every route
- * goes through require_access(Administrator) rather than the standalone
- * x-api-key the node version used: the dashboard session is already the
- * strongest credential this server has, and one gate is easier to reason about
- * than two.
+ * running on. That is why they go through `require_cli` rather than the
+ * `require_access` the rest of the API uses: a CLI token from
+ * /api/cli/login, presented as a bearer header, and nothing else. The
+ * dashboard's session cookie is not accepted, and a request carrying browser
+ * fetch metadata is refused — so no page on this origin can reach them, signed
+ * in as an administrator or not. See src/middleware/auth.rs for what that does
+ * and does not prove.
+ *
+ * Uploading and listing bundles (shell/create.rs, shell/list.rs) are ordinary
+ * dashboard operations and stay on require_access.
  *
  *   GET  /api/shell/{name}/targets            the step list, in run order
  *   GET  /api/shell/{name}/describe/{target}  variables a target needs,
@@ -49,7 +54,7 @@ use uuid::Uuid;
 
 use actix_web::{web, Error, HttpRequest, HttpResponse};
 
-use crate::Middleware::Auth::{require_access, AccessRequirement};
+use crate::Middleware::Auth::{require_cli, AccessRequirement};
 use crate::Model::Account::AccountRole;
 use crate::utils::response::Response;
 
@@ -59,8 +64,9 @@ pub use create as Create;
 pub mod list;
 pub use list as List;
 
-/// Where bundles live, relative to the process working directory. The
-/// checked-in shell/vps-setup is just the first one; uploads land beside it.
+/// Where uploaded bundles are unpacked, relative to the process working
+/// directory. Created on demand — nothing is checked in here, so on a fresh
+/// deploy it stays empty until the first upload.
 const SHELL_ROOT: &str = "./shell";
 /// Job logs, outside the bundle tree so a run doesn't dirty the working copy.
 const LOG_DIR: &str = "./logs/shell";
@@ -96,7 +102,7 @@ fn jobs() -> &'static Mutex<HashMap<String, Job>> {
 /* ── routes ── */
 
 pub async fn targets(req: HttpRequest, path: web::Path<String>) -> Result<HttpResponse, Error> {
-    require_access(&req, AccessRequirement::Role(AccountRole::Administrator))?;
+    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
 
     let bundle = path.into_inner();
     let dir = match bundle_dir(&bundle) {
@@ -118,7 +124,7 @@ pub async fn describe(
     req: HttpRequest,
     path: web::Path<(String, String)>,
 ) -> Result<HttpResponse, Error> {
-    require_access(&req, AccessRequirement::Role(AccountRole::Administrator))?;
+    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
 
     let (bundle, target) = path.into_inner();
     let dir = match bundle_dir(&bundle) {
@@ -152,7 +158,7 @@ pub async fn run(
     path: web::Path<(String, String)>,
     body: Option<web::Json<RunBody>>,
 ) -> Result<HttpResponse, Error> {
-    require_access(&req, AccessRequirement::Role(AccountRole::Administrator))?;
+    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
 
     let (bundle, target) = path.into_inner();
     let dir = match bundle_dir(&bundle) {
@@ -185,7 +191,7 @@ pub async fn job(
     req: HttpRequest,
     path: web::Path<(String, String)>,
 ) -> Result<HttpResponse, Error> {
-    require_access(&req, AccessRequirement::Role(AccountRole::Administrator))?;
+    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
 
     let (bundle, id) = path.into_inner();
     match lookup(&bundle, &id) {
@@ -198,7 +204,7 @@ pub async fn job_logs(
     req: HttpRequest,
     path: web::Path<(String, String)>,
 ) -> Result<HttpResponse, Error> {
-    require_access(&req, AccessRequirement::Role(AccountRole::Administrator))?;
+    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
 
     let (bundle, id) = path.into_inner();
     if lookup(&bundle, &id).is_none() {
@@ -523,13 +529,26 @@ mod tests {
         assert!(!is_valid_bundle("VpsSetup"));
     }
 
-    /// The one case that proves the path resolution actually works, rather
-    /// than only that bad names are refused.
+    /// Proves the path resolution actually works, rather than only that bad
+    /// names are refused. Builds its own bundle under SHELL_ROOT, since nothing
+    /// is checked in there — uploads are the only way one arrives.
     #[test]
-    fn the_checked_in_bundle_resolves() {
-        let dir = bundle_dir("vps-setup").expect("shell/vps-setup should resolve");
-        assert!(dir.join("main.sh").is_file());
-        assert!(dir.ends_with("vps-setup"));
+    fn a_bundle_on_disk_resolves() {
+        let name = "zz-test-bundle";
+        let dir = Path::new(SHELL_ROOT).join(name);
+        fs::create_dir_all(&dir).unwrap();
+        fs::write(dir.join("main.sh"), "#!/usr/bin/env bash
+").unwrap();
+
+        let resolved = bundle_dir(name).expect("a bundle with a main.sh should resolve");
+        assert!(resolved.join("main.sh").is_file());
+        assert!(resolved.ends_with(name));
+
+        // Without a main.sh it is not a bundle this API can drive.
+        fs::remove_file(dir.join("main.sh")).unwrap();
+        assert!(bundle_dir(name).is_err(), "a directory with no main.sh resolved");
+
+        fs::remove_dir_all(&dir).ok();
     }
 
     #[test]
@@ -583,8 +602,12 @@ mod route_tests {
         jwt::access_token::generate_default("test-admin", role)
     }
 
+    /// The execution routes take a CLI token and nothing else. These assert the
+    /// two refusals that happen *before* the token is looked up, so they need
+    /// no database — what happens past the gate is covered by the unit tests
+    /// above.
     #[actix_web::test]
-    async fn every_route_needs_an_admin_session() {
+    async fn execution_routes_refuse_callers_with_no_credential() {
         let app = test::init_service(App::new().configure(routes::shell::router)).await;
 
         let paths = [
@@ -595,94 +618,44 @@ mod route_tests {
         ];
 
         for path in paths {
-            let res = test::call_service(&app, test::TestRequest::get().uri(path).to_request()).await;
-            assert_eq!(res.status(), 401, "{} was reachable without a token", path);
+            let res =
+                test::call_service(&app, test::TestRequest::get().uri(path).to_request()).await;
+            assert_eq!(res.status(), 401, "{} was reachable with no credential", path);
         }
 
-        let res = test::call_service(
-            &app,
-            test::TestRequest::post().uri("/api/shell/vps-setup/run/--full").to_request(),
-        )
-        .await;
-        assert_eq!(res.status(), 401, "run was reachable without a token");
-
-        // A signed-in non-admin is not enough either.
-        let user = token(AccountRole::User);
         let res = test::call_service(
             &app,
             test::TestRequest::post()
                 .uri("/api/shell/vps-setup/run/--full")
-                .insert_header(("Authorization", format!("Bearer {}", user)))
                 .to_request(),
         )
         .await;
-        assert_eq!(res.status(), 403, "a non-admin could start a run");
+        assert_eq!(res.status(), 401, "run was reachable with no credential");
     }
 
+    /// Fetch metadata is set by the browser itself and page script cannot strip
+    /// it, so its presence is refused before the token is even considered —
+    /// including when a bearer header is also present.
     #[actix_web::test]
-    async fn bad_targets_are_rejected_before_bash_sees_them() {
-        let admin = token(AccountRole::Administrator);
+    async fn requests_carrying_browser_metadata_are_refused() {
         let app = test::init_service(App::new().configure(routes::shell::router)).await;
 
-        for target in ["..%2f..%2fetc", "--list", "Certbot", "a%20b"] {
-            let res = test::call_service(
-                &app,
-                test::TestRequest::post()
-                    .uri(&format!("/api/shell/vps-setup/run/{}", target))
-                    .insert_header(("Authorization", format!("Bearer {}", admin)))
-                    .to_request(),
-            )
-            .await;
-            assert_eq!(res.status(), 400, "{} was not rejected", target);
-        }
-    }
-
-    #[actix_web::test]
-    async fn unknown_or_unsafe_bundles_are_refused() {
-        let admin = token(AccountRole::Administrator);
-        let app = test::init_service(App::new().configure(routes::shell::router)).await;
-
-        // Malformed name -> 400, before any path is built.
-        for name in ["..", "%2e%2e", "Bad", "-rf"] {
+        for header in ["Sec-Fetch-Mode", "Sec-Fetch-Site", "Sec-Fetch-Dest", "Origin"] {
             let res = test::call_service(
                 &app,
                 test::TestRequest::get()
-                    .uri(&format!("/api/shell/{}/targets", name))
-                    .insert_header(("Authorization", format!("Bearer {}", admin)))
+                    .uri("/api/shell/vps-setup/targets")
+                    .insert_header((header, "cors"))
+                    .insert_header(("Authorization", "Bearer whatever"))
                     .to_request(),
             )
             .await;
-            assert_eq!(res.status(), 400, "bundle {} was not rejected", name);
-        }
-
-        // Well-formed but not installed -> 404.
-        let res = test::call_service(
-            &app,
-            test::TestRequest::get()
-                .uri("/api/shell/not-installed/targets")
-                .insert_header(("Authorization", format!("Bearer {}", admin)))
-                .to_request(),
-        )
-        .await;
-        assert_eq!(res.status(), 404);
-    }
-
-    #[actix_web::test]
-    async fn unknown_jobs_are_404_not_a_panic() {
-        let admin = token(AccountRole::Administrator);
-        let app = test::init_service(App::new().configure(routes::shell::router)).await;
-
-        for path in ["/api/shell/vps-setup/jobs/nope", "/api/shell/vps-setup/jobs/nope/logs"] {
-            let res = test::call_service(
-                &app,
-                test::TestRequest::get()
-                    .uri(path)
-                    .insert_header(("Authorization", format!("Bearer {}", admin)))
-                    .to_request(),
-            )
-            .await;
-            assert_eq!(res.status(), 404, "{}", path);
+            assert_eq!(
+                res.status(),
+                403,
+                "{} did not mark the call as coming from a browser",
+                header
+            );
         }
     }
-
 }

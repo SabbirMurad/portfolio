@@ -268,6 +268,7 @@ async fn main() -> io::Result<()> {
         .configure(Routes::Image::router)
         .configure(Routes::Project::router)
         .configure(Routes::Shell::router)
+        .configure(Routes::Cli::router)
         .configure(Routes::Auth::router)
         .configure(Routes::Pages::router)
     });

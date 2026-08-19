@@ -24,3 +24,6 @@ pub use project as Project;
 
 pub mod shell;
 pub use shell as Shell;
+
+pub mod cli;
+pub use cli as Cli;

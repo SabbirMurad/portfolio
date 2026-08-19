@@ -18,6 +18,9 @@ pub use project as Project;
 pub mod shell;
 pub use shell as Shell;
 
+pub mod cli_token;
+pub use cli_token as CliToken;
+
 // Ported from velora_backend's src/model.rs — image metadata now lives here
 // in Mongo (ImageStruct below) instead of in sqlite columns, which is what
 // let builtins/image.rs go away: sqlite only holds the original/webp blobs.

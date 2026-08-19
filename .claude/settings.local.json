@@ -13,7 +13,8 @@
       "Bash(python -c ' *)",
       "Bash(echo \"check exit=$?\")",
       "Bash(mkdir -p shell/fake-bundle)",
-      "Bash(touch shell/fake-bundle/main.sh)"
+      "Bash(touch shell/fake-bundle/main.sh)",
+      "Bash(export HOME=/tmp/clihome)"
     ]
   }
 }
