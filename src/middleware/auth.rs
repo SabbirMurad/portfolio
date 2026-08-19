@@ -147,7 +147,7 @@ pub async fn require_cli(
         Some(t) => t,
         None => {
             return Err(actix_web::error::ErrorUnauthorized(json!({
-                "error": "Missing CLI token. Run `sabbir login` first."
+                "error": "Missing CLI token. Run `ct login` first."
             })));
         }
     };
@@ -163,7 +163,7 @@ pub async fn require_cli(
         Ok(Some(record)) => record,
         Ok(None) => {
             return Err(actix_web::error::ErrorUnauthorized(json!({
-                "error": "Invalid CLI token. Run `sabbir login` again."
+                "error": "Invalid CLI token. Run `ct login` again."
             })));
         }
         Err(error) => {
@@ -177,7 +177,7 @@ pub async fn require_cli(
     let now = Utc::now().timestamp_millis();
     if record.expires_at <= now {
         return Err(actix_web::error::ErrorUnauthorized(json!({
-            "error": "CLI token has expired. Run `sabbir login` again."
+            "error": "CLI token has expired. Run `ct login` again."
         })));
     }
 

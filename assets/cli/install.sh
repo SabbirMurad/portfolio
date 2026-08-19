@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Installer for the `sabbir` CLI.
+# Installer for the `ct` CLI (short for Compile Time).
 #
 #   curl -fsSL __API_BASE__/install.sh | bash
 #
-# Downloads the client to ~/.local/bin/sabbir and makes it executable. Nothing
+# Downloads the client to ~/.local/bin/ct and makes it executable. Nothing
 # runs as root, nothing is written outside your home directory, and no
 # credential is involved — signing in is a separate, explicit step afterwards.
 #
@@ -13,15 +13,15 @@
 set -euo pipefail
 
 API_BASE="__API_BASE__"
-BIN_DIR="${SABBIR_BIN_DIR:-$HOME/.local/bin}"
-BIN_PATH="$BIN_DIR/sabbir"
+BIN_DIR="${CT_BIN_DIR:-$HOME/.local/bin}"
+BIN_PATH="$BIN_DIR/ct"
 
 say() { printf '%s\n' "$*"; }
 die() { printf 'error: %s\n' "$*" >&2; exit 1; }
 
 command -v curl >/dev/null 2>&1 || die "curl is required"
 
-say "Installing the sabbir CLI from $API_BASE"
+say "Installing the ct CLI from $API_BASE"
 
 mkdir -p "$BIN_DIR"
 
@@ -46,7 +46,7 @@ say "Installed to $BIN_PATH"
 case ":$PATH:" in
     *":$BIN_DIR:"*)
         say ""
-        say "Next:  sabbir login"
+        say "Next:  ct login"
         ;;
     *)
         say ""
@@ -55,6 +55,6 @@ case ":$PATH:" in
         say "    echo 'export PATH=\"\$PATH:$BIN_DIR\"' >> ~/.bashrc"
         say "    exec \$SHELL"
         say ""
-        say "Then:  sabbir login"
+        say "Then:  ct login"
         ;;
 esac

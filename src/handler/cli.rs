@@ -7,10 +7,10 @@
  *   POST /api/cli/logout   revoke the presented token
  *
  *   GET  /install.sh       the installer (public)
- *   GET  /cli.sh           the client itself (public; also `sabbir upgrade`)
+ *   GET  /cli.sh           the client itself (public; also `ct upgrade`)
  *
  * whoami and logout go through require_cli, the same gate the shell execution
- * routes use, so `sabbir whoami` also serves as a check that the token in
+ * routes use, so `ct whoami` also serves as a check that the token in
  * ~/.config still works.
  */
 pub mod script;

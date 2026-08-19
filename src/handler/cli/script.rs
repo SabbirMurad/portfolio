@@ -12,7 +12,7 @@ use std::fs;
 use actix_web::{Error, HttpRequest, HttpResponse};
 
 const INSTALL_SH: &str = "./assets/cli/install.sh";
-const CLI_SH: &str = "./assets/cli/sabbir.sh";
+const CLI_SH: &str = "./assets/cli/ct.sh";
 
 pub async fn install(req: HttpRequest) -> Result<HttpResponse, Error> {
     Ok(serve(&req, INSTALL_SH))

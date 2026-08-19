@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
-# sabbir — terminal client for sabbirhassan.com.
+# ct — terminal client for sabbirhassan.com.
 #
 # The shell execution endpoints refuse the browser (see src/middleware/auth.rs),
-# so this is how they're driven. `sabbir login` exchanges your account password
-# for a token kept in ~/.config/sabbir/credentials with 600 permissions; every
+# so this is how they're driven. `ct login` exchanges your account password
+# for a token kept in ~/.config/ct/credentials with 600 permissions; every
 # later call sends it as a bearer header.
 #
 # Worth being clear about: that token is a bearer credential. Anything holding
 # it can run these commands, so treat the file the way you'd treat an ssh key.
-# `sabbir logout` revokes it server-side, immediately.
+# `ct logout` revokes it server-side, immediately.
 #
 # __API_BASE__ is substituted server-side from the host you installed from.
 set -euo pipefail
 
-API_BASE="${SABBIR_API_BASE:-__API_BASE__}"
-CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/sabbir"
+API_BASE="${CT_API_BASE:-__API_BASE__}"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ct"
 CRED_FILE="$CONFIG_DIR/credentials"
 
 die() { printf 'error: %s\n' "$*" >&2; exit 1; }
@@ -24,10 +24,10 @@ command -v curl >/dev/null 2>&1 || die "curl is required"
 # ── credential handling ─────────────────────────────────────────────────────
 
 load_token() {
-    [ -f "$CRED_FILE" ] || die "not signed in — run: sabbir login"
+    [ -f "$CRED_FILE" ] || die "not signed in — run: ct login"
     # shellcheck disable=SC1090
     . "$CRED_FILE"
-    [ -n "${SABBIR_TOKEN:-}" ] || die "credentials file is unreadable — run: sabbir login"
+    [ -n "${CT_TOKEN:-}" ] || die "credentials file is unreadable — run: ct login"
 }
 
 save_token() {
@@ -39,7 +39,7 @@ save_token() {
     # the case where the file already existed.
     rm -f "$CRED_FILE"
     ( umask 177
-      printf 'SABBIR_TOKEN=%s\nSABBIR_EXPIRES_AT=%s\n' "$1" "$2" > "$CRED_FILE" )
+      printf 'CT_TOKEN=%s\nCT_EXPIRES_AT=%s\n' "$1" "$2" > "$CRED_FILE" )
     chmod 600 "$CRED_FILE"
 }
 
@@ -51,8 +51,8 @@ api() {
     local method="$1" path="$2" body="${3:-}"
     local args=(-sS -X "$method" "$API_BASE$path" -H 'Accept: application/json')
 
-    if [ -n "${SABBIR_TOKEN:-}" ]; then
-        args+=(-H "Authorization: Bearer $SABBIR_TOKEN")
+    if [ -n "${CT_TOKEN:-}" ]; then
+        args+=(-H "Authorization: Bearer $CT_TOKEN")
     fi
     if [ -n "$body" ]; then
         args+=(-H 'Content-Type: application/json' --data-binary "$body")
@@ -133,15 +133,15 @@ cmd_shell() {
             api GET /api/shell
             ;;
         targets)
-            [ $# -ge 1 ] || die "usage: sabbir shell targets <bundle>"
+            [ $# -ge 1 ] || die "usage: ct shell targets <bundle>"
             api GET "/api/shell/$1/targets"
             ;;
         describe)
-            [ $# -ge 2 ] || die "usage: sabbir shell describe <bundle> <target>"
+            [ $# -ge 2 ] || die "usage: ct shell describe <bundle> <target>"
             api GET "/api/shell/$1/describe/$2"
             ;;
         run)
-            [ $# -ge 2 ] || die "usage: sabbir shell run <bundle> <target> [KEY=VALUE ...]"
+            [ $# -ge 2 ] || die "usage: ct shell run <bundle> <target> [KEY=VALUE ...]"
             local bundle="$1" target="$2"; shift 2
             local vars="" pair key value
             for pair in "$@"; do
@@ -157,15 +157,15 @@ cmd_shell() {
             api POST "/api/shell/$bundle/run/$target" "{\"vars\":{$vars}}"
             ;;
         job)
-            [ $# -ge 2 ] || die "usage: sabbir shell job <bundle> <job-id>"
+            [ $# -ge 2 ] || die "usage: ct shell job <bundle> <job-id>"
             api GET "/api/shell/$1/jobs/$2"
             ;;
         logs)
-            [ $# -ge 2 ] || die "usage: sabbir shell logs <bundle> <job-id>"
+            [ $# -ge 2 ] || die "usage: ct shell logs <bundle> <job-id>"
             api GET "/api/shell/$1/jobs/$2/logs"
             ;;
         *)
-            die "unknown subcommand: ${sub:-<none>} (try: sabbir help)"
+            die "unknown subcommand: ${sub:-<none>} (try: ct help)"
             ;;
     esac
 }
@@ -176,21 +176,21 @@ cmd_upgrade() {
 
 cmd_help() {
     cat <<'USAGE'
-sabbir — terminal client for sabbirhassan.com
+ct — terminal client for sabbirhassan.com
 
-  sabbir login                                 sign in, save a token
-  sabbir logout                                revoke it and forget it
-  sabbir whoami                                who the saved token belongs to
+  ct login                                 sign in, save a token
+  ct logout                                revoke it and forget it
+  ct whoami                                who the saved token belongs to
 
-  sabbir shell list                            installed script bundles
-  sabbir shell targets <bundle>                its steps, in run order
-  sabbir shell describe <bundle> <target>      variables that target needs
-  sabbir shell run <bundle> <target> [K=V ...] start it; prints a job id
-  sabbir shell job <bundle> <job-id>           status of a run
-  sabbir shell logs <bundle> <job-id>          its output
+  ct shell list                            installed script bundles
+  ct shell targets <bundle>                its steps, in run order
+  ct shell describe <bundle> <target>      variables that target needs
+  ct shell run <bundle> <target> [K=V ...] start it; prints a job id
+  ct shell job <bundle> <job-id>           status of a run
+  ct shell logs <bundle> <job-id>          its output
 
-  sabbir upgrade                               reinstall the latest client
-  sabbir help                                  this
+  ct upgrade                               reinstall the latest client
+  ct help                                  this
 
 The shell commands run scripts as root on the server's own host. `run` starts
 immediately, with no confirmation.

@@ -34,7 +34,7 @@ const TOKEN_BYTES: usize = 32;
 pub struct PostData {
     email_or_username: String,
     password: String,
-    /// Usually the caller's hostname, so `sabbir tokens` reads sensibly.
+    /// Usually the caller's hostname, so `ct` tokens read sensibly in a list.
     #[serde(default)]
     label: String,
 }

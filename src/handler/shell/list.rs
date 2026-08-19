@@ -12,7 +12,7 @@ use crate::utils::response::Response;
 /// The bundles this server can run, newest first.
 ///
 /// The one shell route that takes either credential: the dashboard lists them
-/// to render the Shell tab, and `sabbir shell list` needs the same read from a
+/// to render the Shell tab, and `ct shell list` needs the same read from a
 /// terminal. Reading names and descriptions executes nothing, so it does not
 /// warrant the stricter gate the run routes use — the session is tried first
 /// because a browser call carries fetch metadata that require_cli refuses.
