@@ -2833,6 +2833,7 @@ dependencies = [
  "actix-web-actors",
  "chrono",
  "dotenv",
+ "flate2",
  "flexi_logger",
  "futures",
  "futures-util",

@@ -1,12 +1,11 @@
 use std::fs;
 use uuid::Uuid;
 use chrono::Utc;
-use zip::ZipArchive;
 use mongodb::bson::doc;
 use crate::{Model, DOCS_ROOT};
 use std::path::Path;
 use crate::BuiltIns::mongo::MongoDB;
-use crate::utils::response::Response;
+use crate::utils::{mkdocs, response::Response};
 use serde::{ Serialize, Deserialize };
 use crate::Model::Account::AccountRole;
 use crate::Middleware::Auth::{require_access, AccessRequirement};
@@ -100,59 +99,28 @@ pub async fn task(
         return Ok(Response::internal_server_error(&error.to_string()));
     }
 
-    // Writing the file to the machine. std::env::temp_dir() (not a hardcoded
-    // /tmp) so this works on Windows dev machines too, and the doc_id keeps
-    // concurrent uploads from colliding on the same file.
-    let temp_path = std::env::temp_dir().join(format!("doc-upload-{}.zip", doc_id));
+    // Unpacked under the uuid, not the name: the name is user-editable and can
+    // contain anything, while /documentation/{uuid}/ is a stable URL. See
+    // utils/mkdocs.rs for what "unpack" does beyond extracting — stripping the
+    // `site/` wrapper, rebasing the URLs mkdocs baked in from site_url, and
+    // giving the root an index.html when the build has none.
+    let target_dir = Path::new(DOCS_ROOT).join(&doc_id);
 
-    let result = fs::write(
-        &temp_path,
-        form_data.file.clone()
-    );
-    
-    if let Err(error) = result {
-        log::error!("{:?}", error);
+    if let Err(error) = mkdocs::unpack(&form_data.file, &target_dir, &doc_id) {
+        log::error!("{}", error);
+        // Nothing should be left half-unpacked under a uuid the database is
+        // about to forget about.
+        let _ = fs::remove_dir_all(&target_dir);
         session.abort_transaction().await.ok().unwrap();
+        return Ok(Response::bad_request(&error));
+    }
+
+    /* DATABASE ACID COMMIT */
+    if let Err(error) = session.commit_transaction().await {
+        log::error!("{:?}", error);
+        let _ = fs::remove_dir_all(&target_dir);
         return Ok(Response::internal_server_error(&error.to_string()));
     }
-
-    let target_dir = format!("{}/{}", DOCS_ROOT, doc_name);
-    fs::create_dir_all(&target_dir)?;
-
-    let zipfile = std::fs::File::open(&temp_path)?;
-    let mut archive = match  ZipArchive::new(zipfile) {
-        Ok(archive) => archive,
-        Err(error) => {
-            fs::remove_file(&temp_path)?; // Clean up
-            session.abort_transaction().await.ok().unwrap();
-            return Ok(Response::internal_server_error(&error.to_string()));
-        }
-    };
-
-    for i in 0..archive.len() {
-        let mut file = match archive.by_index(i) {
-            Ok(file) => file,
-            Err(error) => {
-                fs::remove_file(&temp_path)?; // Clean up
-                session.abort_transaction().await.ok().unwrap();
-                return Ok(Response::internal_server_error(&error.to_string()));
-            }
-        };
-
-        let out_path = Path::new(&target_dir).join(file.mangled_name());
-        
-        if file.name().ends_with('/') {
-            fs::create_dir_all(&out_path)?;
-        } else {
-            if let Some(p) = out_path.parent() {
-                fs::create_dir_all(p)?;
-            }
-            let mut outfile = std::fs::File::create(&out_path)?;
-            std::io::copy(&mut file, &mut outfile)?;
-        }
-    }
-
-    fs::remove_file(&temp_path)?; // Clean up
 
     let res = ResponseBody {
         uuid: doc_id.clone(),

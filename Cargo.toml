@@ -33,6 +33,8 @@ mongodb = "3.2.3"
 
 # Compression
 zip = "0.6"
+# Regenerates sitemap.xml.gz after the site_url rewrite in utils/mkdocs.rs
+flate2 = "1.1"
 
 # Date and time
 chrono = "0.4.40"
