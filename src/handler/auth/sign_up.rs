@@ -48,9 +48,16 @@ pub async fn task(form_data: web::Json<PostData>) -> Result<HttpResponse, Error>
         return Ok(Response::bad_request(&res));
     }
 
-    if let Err(res) = validate_secret_key(&post_data.secret_key) {
-        return Ok(Response::forbidden(&res));
-    }
+    // The secret key is no longer the door — it is what decides the role.
+    // With it you get an Administrator, pre-verified, as before. Without it you
+    // get an ordinary User, which is what public sign-up creates.
+    let role = if post_data.secret_key.trim().is_empty() {
+        Account::AccountRole::User
+    } else if validate_secret_key(&post_data.secret_key).is_ok() {
+        Account::AccountRole::Administrator
+    } else {
+        return Ok(Response::forbidden("Invalid secret key"));
+    };
 
     /* DATABASE ACID SESSION INIT */
 
@@ -82,7 +89,7 @@ pub async fn task(form_data: web::Json<PostData>) -> Result<HttpResponse, Error>
         email_verified: true,
         two_a_factor_auth_enabled: false,
         two_a_factor_auth_updated: None,
-        role: Account::AccountRole::Administrator,
+        role: role.clone(),
         suspended_at: None,
         suspended_by: None,
         created_at: now,

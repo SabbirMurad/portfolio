@@ -49,12 +49,15 @@ use std::process::{Command, Stdio};
 use std::sync::{Mutex, OnceLock};
 
 use chrono::Utc;
+use mongodb::bson::doc;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use actix_web::{web, Error, HttpRequest, HttpResponse};
 
+use crate::BuiltIns::mongo::MongoDB;
 use crate::Middleware::Auth::{require_cli, AccessRequirement};
+use crate::Model::Shell::ShellBundle;
 use crate::Model::Account::AccountRole;
 use crate::utils::response::Response;
 
@@ -63,6 +66,9 @@ pub use create as Create;
 
 pub mod list;
 pub use list as List;
+
+pub mod toggle_public;
+pub use toggle_public as TogglePublic;
 
 /// Where uploaded bundles are unpacked, relative to the process working
 /// directory. Created on demand — nothing is checked in here, so on a fresh
@@ -102,9 +108,11 @@ fn jobs() -> &'static Mutex<HashMap<String, Job>> {
 /* ── routes ── */
 
 pub async fn targets(req: HttpRequest, path: web::Path<String>) -> Result<HttpResponse, Error> {
-    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
-
     let bundle = path.into_inner();
+    if let Err(res) = authorize(&req, &bundle).await {
+        return Ok(res);
+    }
+
     let dir = match bundle_dir(&bundle) {
         Ok(dir) => dir,
         Err(res) => return Ok(res),
@@ -124,9 +132,11 @@ pub async fn describe(
     req: HttpRequest,
     path: web::Path<(String, String)>,
 ) -> Result<HttpResponse, Error> {
-    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
-
     let (bundle, target) = path.into_inner();
+    if let Err(res) = authorize(&req, &bundle).await {
+        return Ok(res);
+    }
+
     let dir = match bundle_dir(&bundle) {
         Ok(dir) => dir,
         Err(res) => return Ok(res),
@@ -158,9 +168,11 @@ pub async fn run(
     path: web::Path<(String, String)>,
     body: Option<web::Json<RunBody>>,
 ) -> Result<HttpResponse, Error> {
-    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
-
     let (bundle, target) = path.into_inner();
+    if let Err(res) = authorize(&req, &bundle).await {
+        return Ok(res);
+    }
+
     let dir = match bundle_dir(&bundle) {
         Ok(dir) => dir,
         Err(res) => return Ok(res),
@@ -191,9 +203,11 @@ pub async fn job(
     req: HttpRequest,
     path: web::Path<(String, String)>,
 ) -> Result<HttpResponse, Error> {
-    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
-
     let (bundle, id) = path.into_inner();
+    if let Err(res) = authorize(&req, &bundle).await {
+        return Ok(res);
+    }
+
     match lookup(&bundle, &id) {
         Some(job) => Ok(HttpResponse::Ok().content_type("application/json").json(job)),
         None => Ok(Response::not_found("No such job")),
@@ -204,9 +218,11 @@ pub async fn job_logs(
     req: HttpRequest,
     path: web::Path<(String, String)>,
 ) -> Result<HttpResponse, Error> {
-    require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
-
     let (bundle, id) = path.into_inner();
+    if let Err(res) = authorize(&req, &bundle).await {
+        return Ok(res);
+    }
+
     if lookup(&bundle, &id).is_none() {
         return Ok(Response::not_found("No such job"));
     }
@@ -240,6 +256,48 @@ pub fn list_targets(dir: &Path) -> Result<Vec<String>, String> {
         .map(|l| l.trim().to_string())
         .filter(|l| !l.is_empty())
         .collect())
+}
+
+/// The gate every execution route runs: a valid CLI token, then permission to
+/// run *this* bundle.
+///
+/// An Administrator may run anything. An ordinary User may run only a bundle
+/// someone has marked `public_run` from the dashboard — uploading a bundle does
+/// not expose it. Running a target executes root scripts on the host, so the
+/// decision to open one up is per bundle and explicit.
+async fn authorize(req: &HttpRequest, bundle: &str) -> Result<(), HttpResponse> {
+    let user = match require_cli(
+        req,
+        AccessRequirement::AnyOf(vec![AccountRole::Administrator, AccountRole::User]),
+    )
+    .await
+    {
+        Ok(user) => user,
+        Err(error) => return Err(error.error_response()),
+    };
+
+    if user.role == AccountRole::Administrator {
+        return Ok(());
+    }
+
+    let db = MongoDB.connect();
+    let collection = db.collection::<ShellBundle>("shell_bundle");
+
+    let found = collection
+        .find_one(doc! { "name": bundle, "deleted_at": null })
+        .await;
+
+    match found {
+        Ok(Some(record)) if record.public_run => Ok(()),
+        Ok(Some(_)) => Err(Response::forbidden(
+            "This bundle is not open to ordinary accounts",
+        )),
+        Ok(None) => Err(Response::not_found("No such shell bundle")),
+        Err(error) => {
+            log::error!("{:?}", error);
+            Err(Response::internal_server_error(&error.to_string()))
+        }
+    }
 }
 
 /// Resolve a bundle name to its directory, or the response explaining why not.

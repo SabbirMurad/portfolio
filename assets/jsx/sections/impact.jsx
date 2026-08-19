@@ -30,13 +30,20 @@ function Impact() {
                   </p>
                 </RevealLayer>
 
+                {/* A button rather than the quiet text link the Projects and
+                    Docs sections use: there, every card is a way through to the
+                    same place, so the "view all" is genuinely secondary. Here
+                    it is the only route to /about, and at 11px muted grey
+                    beside a display heading nobody found it. */}
                 <RevealLayer delay={0.22} distance={18} from="right">
                   <a
                     href="/about"
-                    className="meta group mt-6 inline-flex items-center gap-2 text-muted-2 transition-colors duration-300 hover:text-vermilion"
+                    data-cursor="view"
+                    data-cursor-label="ABOUT"
+                    className="group mt-8 inline-flex items-center gap-3 rounded-sm bg-ink px-6 py-3.5 text-white transition-colors duration-400 hover:bg-vermilion"
                   >
-                    Read the full story
-                    <span className="transition-transform duration-400 group-hover:translate-x-1">
+                    <span className="meta">Read the full story</span>
+                    <span className="inline-block transition-transform duration-400 group-hover:translate-x-1">
                       →
                     </span>
                   </a>

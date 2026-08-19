@@ -16,6 +16,15 @@ pub struct ShellBundle {
     /// on every page load.
     #[serde(default)]
     pub targets: Vec<String>,
+    /// Whether an ordinary signed-in User may run this bundle's targets, not
+    /// just an Administrator.
+    ///
+    /// Off by default and opt-in per bundle, deliberately: running a target
+    /// executes root scripts on the host, so a bundle becoming reachable to
+    /// anyone with an account has to be a decision someone made about *that*
+    /// bundle rather than a side effect of uploading it.
+    #[serde(default)]
+    pub public_run: bool,
     pub created_at: i64,
     pub created_by: String,
     pub deleted_at: Option<i64>,

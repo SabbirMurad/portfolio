@@ -21,6 +21,13 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             .route(web::post().to(Handler::Shell::Create::task))
             .route(web::get().to(Handler::Shell::List::task))
         )
+        // Administrator-only, from the dashboard: opens a bundle to ordinary
+        // accounts. Registered before the {name} routes so "{name}" cannot
+        // swallow it.
+        .route(
+            "/{uuid}/public-run",
+            web::patch().to(Handler::Shell::TogglePublic::task)
+        )
         // {name} is an uploaded bundle directory under SHELL_ROOT. These run
         // root shell scripts on the host, so unlike the two routes above they
         // take a CLI token only — no session cookie, and nothing carrying

@@ -121,6 +121,8 @@ pub async fn task(
         name: name.clone(),
         description,
         targets,
+        // Opt-in from the dashboard, never on upload.
+        public_run: false,
         created_at: Utc::now().timestamp_millis(),
         created_by: "admin".to_string(),
         deleted_at: None,

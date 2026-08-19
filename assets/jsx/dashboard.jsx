@@ -1422,7 +1422,7 @@ function CreateShellBundle({ onCreated, onCancel }) {
   );
 }
 
-function ShellCard({ bundle }) {
+function ShellCard({ bundle, onToggle, toggling }) {
   const date = new Date(bundle.created_at).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -1465,6 +1465,24 @@ function ShellCard({ bundle }) {
       <div className="mt-auto pt-6">
         <div className="border-t border-line pt-4">
           <p className="meta text-muted">{"/api/shell/" + bundle.name}</p>
+
+          {/* The switch that decides whether someone who merely registered can
+              run these scripts as root. Off until turned on, per bundle. */}
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <span
+              className={
+                "meta " + (bundle.public_run ? "font-semibold text-vermilion" : "text-muted-2")
+              }
+            >
+              {bundle.public_run ? "Any signed-in account can run" : "Administrators only"}
+            </span>
+            <Switch
+              on={!!bundle.public_run}
+              disabled={toggling}
+              label={"Let any signed-in account run " + bundle.name}
+              onToggle={() => onToggle(bundle)}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -1478,6 +1496,7 @@ function ShellTab() {
   const [loadError, setLoadError] = useState(null);
   const [search, setSearch] = useState("");
   const [showCreate, setShowCreate] = useState(false);
+  const [togglingUuid, setTogglingUuid] = useState(null);
 
   useEffect(() => {
     let alive = true;
@@ -1510,6 +1529,30 @@ function ShellTab() {
   const onCreated = (bundle) => {
     setBundles((list) => [bundle, ...list]);
     setShowCreate(false);
+  };
+
+  const onToggle = async (bundle) => {
+    setTogglingUuid(bundle.uuid);
+    const next = !bundle.public_run;
+    setBundles((prev) =>
+      prev.map((b) => (b.uuid === bundle.uuid ? { ...b, public_run: next } : b))
+    );
+
+    const result = await Fetcher.patch({
+      endpoint: "/shell/" + bundle.uuid + "/public-run",
+      body: { public_run: next },
+      showError: false,
+    });
+
+    if (!result.ok) {
+      // Roll back — the server didn't record it, and this switch is the one
+      // that decides who can run root scripts, so the UI must not imply it
+      // changed when it didn't.
+      setBundles((prev) =>
+        prev.map((b) => (b.uuid === bundle.uuid ? { ...b, public_run: !next } : b))
+      );
+    }
+    setTogglingUuid(null);
   };
 
   return (
@@ -1567,7 +1610,12 @@ function ShellTab() {
       ) : (
         <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((b) => (
-            <ShellCard key={b.uuid} bundle={b} />
+            <ShellCard
+              key={b.uuid}
+              bundle={b}
+              toggling={togglingUuid === b.uuid}
+              onToggle={onToggle}
+            />
           ))}
         </div>
       )}
