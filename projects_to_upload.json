@@ -1,0 +1,14 @@
+[
+    {
+        "title": "Bento",
+        "subtitle": "custm chrome theme",
+        "tags": [
+            "javascript",
+            "manifest v3",
+            "chrome api",
+            "zero-dep"
+        ],
+        "description": "A Chrome new tab page you arrange yourself. Clock, bookmarks, shortcuts, search and Google links are pieces you move, restyle, reorder or switch off.",
+        "link": "https://chromewebstore.google.com/detail/bento-new-tab/mgnhpoioecgjficdbkghpnplklmohhpl"
+    }
+]
