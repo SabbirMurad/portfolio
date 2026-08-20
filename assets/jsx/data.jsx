@@ -92,50 +92,9 @@ const services = [
   },
 ];
 
-const projects = [
-  {
-    name: "Hyper",
-    kind: "Async Task Queue",
-    year: "2025",
-    blurb:
-      "A distributed task queue in Rust on Tokio. Persistent RocksDB storage, priority scheduling, and a clean HTTP API — built to handle 100k+ jobs/sec.",
-    tags: ["Rust", "Tokio", "RocksDB", "Actix-Web"],
-    href: "https://github.com/sabbirmurad",
-    accent: "#DE4520",
-  },
-  {
-    name: "Bento",
-    kind: "Custom Chrome Theme",
-    year: "2026",
-    blurb:
-      "A Chrome new tab page you arrange yourself. Clock, bookmarks, shortcuts, search and Google links are pieces you move, restyle, reorder or switch off.",
-    tags: ["JavaScript", "Manifest V3", "Chrome API", "Zero-dep"],
-    href: "https://chromewebstore.google.com/detail/bento-new-tab/mgnhpoioecgjficdbkghpnplklmohhpl",
-    accent: "#1ABC9C",
-    // Optional: a real banner. Cards without one fall back to the accent gradient.
-    image: "/assets/image/projects/bento.webp",
-  },
-  {
-    name: "Pixel",
-    kind: "JS Component Library",
-    year: "2024",
-    blurb:
-      "A handcrafted vanilla JS component library with zero dependencies. 30+ accessible, animated components with a tiny runtime footprint.",
-    tags: ["JavaScript", "CSS", "A11y", "Zero-dep"],
-    href: "https://github.com/sabbirmurad",
-    accent: "#A855F7",
-  },
-  {
-    name: "Compile Time",
-    kind: "Developer Education",
-    year: "2024",
-    blurb:
-      "A YouTube channel teaching systems programming, Rust, and competitive programming — breaking down hard concepts into buildable projects.",
-    tags: ["Teaching", "Rust", "C++", "Video"],
-    href: "https://www.youtube.com/@itscompiletime",
-    accent: "#22C55E",
-  },
-];
+/* Projects are not listed here. They come from GET /api/project/feed and are
+   managed in the dashboard — see assets/jsx/project_card.jsx. Nothing published
+   means the pages show their empty state, not a stand-in set. */
 
 /* `category` is the single bucket a doc falls into on the documentations page;
    the filter bar is built from the categories present here, so adding a doc

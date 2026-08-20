@@ -1,4 +1,4 @@
-/* global React, ReactDOM, gsap, ScrollTrigger, Lenis, Cursor, Ripple, Reveal, RevealLayer, Parallax, projects, profile, navLinks, socials */
+/* global React, ReactDOM, gsap, ScrollTrigger, Lenis, Cursor, Ripple, Reveal, useProjects, ProjectCard, ProjectCardSkeletons, ProjectsEmpty, profile, navLinks, socials */
 /*
  * Projects — the standalone index, in the new design language.
  *
@@ -7,11 +7,16 @@
  * `docs`, each entry's `kind` is effectively unique rather than a shared
  * bucket, so a filter row would just duplicate the search box.
  *
- * Cards come from the shared `projects` array in data.jsx — the same source
- * the home page's Projects section renders — so the two can never drift.
+ * Cards come from GET /api/project/feed via useProjects() in
+ * assets/jsx/project_card.jsx — the same hook and the same card component the
+ * home page's Projects section renders, so the two can never drift.
  */
 
 const SITE_URL = "https://sabbirhassan.com";
+
+// Skeletons shown while the feed is in flight. The real count is
+// unknowable until it answers, so this is just enough to fill the fold.
+const LOADING_CARD_COUNT = 4;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -87,112 +92,27 @@ function ProjectsFooter() {
   );
 }
 
-/* ── Card ──
-   Deliberately identical to the home page's Projects card (assets/jsx/
-   sections/projects.jsx): same banner/parallax fallback, same accent dot,
-   same tag row. */
-function ProjectCard({ p }) {
-  return (
-    <a
-      href={p.href}
-      target="_blank"
-      rel="noreferrer"
-      data-cursor="view"
-      data-cursor-label="VIEW"
-      className="group block"
-    >
-      <RevealLayer scaleFrom={1.14} distance={0} className="overflow-hidden rounded-sm">
-        <div className="relative h-[200px] overflow-hidden sm:h-[240px] lg:h-[280px]">
-          {p.image ? (
-            <div className="absolute inset-0 bg-ink">
-              <img
-                src={p.image}
-                alt=""
-                decoding="async"
-                className="h-full w-full object-cover object-left transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-              />
-            </div>
-          ) : (
-            <React.Fragment>
-              <Parallax amount={22} className="absolute inset-x-0 -inset-y-[14%]">
-                <div
-                  className="h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                  style={{
-                    background: `linear-gradient(145deg, ${p.accent}, ${p.accent}bb 45%, #0b0b0b)`,
-                  }}
-                />
-              </Parallax>
-
-              <Parallax
-                amount={-14}
-                className="pointer-events-none absolute inset-0 flex items-center justify-center"
-              >
-                <span className="display text-[clamp(2rem,4.5vw,3.75rem)] leading-none text-white/20">
-                  {p.name}
-                </span>
-              </Parallax>
-            </React.Fragment>
-          )}
-
-          {p.image ? null : (
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
-          )}
-        </div>
-      </RevealLayer>
-
-      <RevealLayer delay={0.12} distance={26}>
-        <div className="mt-4 flex items-baseline justify-between gap-4 border-b border-line pb-3">
-          <span className="display-tight flex items-center gap-2.5 text-xl font-bold">
-            <span
-              className="inline-block h-2 w-2 shrink-0 rounded-full"
-              style={{ background: p.accent }}
-            />
-            {p.name}
-            <span className="meta font-normal text-muted-2">/{p.kind}</span>
-          </span>
-          <span className="meta shrink-0 text-muted">{p.year}</span>
-        </div>
-      </RevealLayer>
-
-      <RevealLayer delay={0.22} distance={22}>
-        <p className="mt-3 line-clamp-2 max-w-md text-[13.5px] leading-[1.65] text-muted-2">
-          {p.blurb}
-        </p>
-      </RevealLayer>
-
-      <RevealLayer delay={0.32} distance={18}>
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {p.tags.map((t) => (
-            <span key={t} className="meta rounded-full border border-line px-2.5 py-1 text-ink/60">
-              {t}
-            </span>
-          ))}
-        </div>
-      </RevealLayer>
-    </a>
-  );
-}
-
 /* ── Page ── */
 function Projects() {
   const { useState, useMemo, useEffect, useRef } = React;
+  const { items, state, loading, retry } = useProjects();
   const [query, setQuery] = useState("");
   const searchRef = useRef(null);
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return projects;
-    return projects.filter((p) => {
+    if (!q) return items;
+    return items.filter((p) => {
       const hay = [p.name, p.kind, p.blurb].concat(p.tags).join(" ").toLowerCase();
       return hay.indexOf(q) !== -1;
     });
-  }, [query]);
+  }, [items, query]);
 
-  /* Filtering changes the document height, so the reveal triggers below the
-     fold need their positions recomputed. */
+  /* Both the arriving entries and a filter change the document height, so the
+     reveal triggers below the fold need their positions recomputed. */
   useEffect(() => {
     ScrollTrigger.refresh();
-  }, [query]);
+  }, [items, query]);
 
   /* "/" focuses the search, the way an index page usually behaves. */
   useEffect(() => {
@@ -208,9 +128,12 @@ function Projects() {
   }, []);
 
   /* A CollectionPage graph listing the real entries. Built here rather than in
-     the Tera head so it cannot drift from `projects`; the page is
-     client-rendered either way. */
+     the Tera head because the entries only exist once the feed has answered;
+     the page is client-rendered either way. Skipped when there is nothing to
+     list — an empty `hasPart` is worse than no graph at all. */
   useEffect(() => {
+    if (!items.length) return;
+
     const el = document.createElement("script");
     el.type = "application/ld+json";
     el.textContent = JSON.stringify({
@@ -224,16 +147,17 @@ function Projects() {
         ".",
       inLanguage: "en",
       author: { "@type": "Person", name: profile.fullName, url: SITE_URL + "/" },
-      hasPart: projects.map((p) => ({
+      hasPart: items.map((p) => ({
         "@type": "CreativeWork",
         name: p.name,
         description: p.blurb,
         about: p.kind,
+        url: p.href || undefined,
       })),
     });
     document.head.appendChild(el);
     return () => el.remove();
-  }, []);
+  }, [items]);
 
   const filtered = query.trim() !== "";
 
@@ -268,8 +192,13 @@ function Projects() {
             </Reveal>
           </div>
 
-          {/* Search */}
-          <Reveal delay={0.24} distance={22} className="mt-12 max-w-xl">
+          {/* Search — hidden once we know there is nothing to search. It stays
+              up while loading so the hero doesn't reflow in the common case. */}
+          <Reveal
+            delay={0.24}
+            distance={22}
+            className={"mt-12 max-w-xl " + (!loading && !items.length ? "hidden" : "")}
+          >
             <label htmlFor="project-search" className="sr-only">
               Search projects
             </label>
@@ -307,17 +236,36 @@ function Projects() {
       {/* ── Grid ── */}
       <main className="bg-bone px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24">
         <div className="mx-auto max-w-[1600px]">
-          <p className="meta text-muted-2" role="status" aria-live="polite">
-            {filtered
-              ? shown.length + " of " + projects.length + " projects"
-              : projects.length + " projects"}
-          </p>
+          {/* The count is only meaningful once there is something to count;
+              with nothing published the panel below says it in words. */}
+          {loading ? (
+            /* Kept inside a `.meta` paragraph so the line box is the same
+               height as the count it stands in for — otherwise the grid
+               below shifts when the feed lands. */
+            <p className="meta" aria-hidden="true">
+              <span className="skeleton inline-block h-[11px] w-24 rounded-xs align-middle" />
+            </p>
+          ) : items.length ? (
+            <p className="meta text-muted-2" role="status" aria-live="polite">
+              {filtered
+                ? shown.length + " of " + items.length + " projects"
+                : items.length + " projects"}
+            </p>
+          ) : null}
 
-          {shown.length ? (
+          {loading ? (
+            <div className="mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2">
+              <ProjectCardSkeletons count={LOADING_CARD_COUNT} />
+            </div>
+          ) : state === "empty" || state === "error" ? (
+            <div className="mt-2">
+              <ProjectsEmpty variant={state} onRetry={retry} />
+            </div>
+          ) : shown.length ? (
             <div className="mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2">
               {shown.map((p, i) => (
                 <Reveal
-                  key={p.name}
+                  key={p.key}
                   from={i % 2 === 0 ? "left" : "right"}
                   delay={(i % 2) * 0.08}
                   scaleFrom={1}

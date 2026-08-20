@@ -183,6 +183,39 @@ html.lenis body {
   }
 }
 
+/* ── SKELETON ──
+   Loading stand-in for anything that arrives from the API (the project cards,
+   today). A highlight sweeping left-to-right rather than a pulse: a grid of
+   pulsing blocks strobes, whereas a sweep reads as one surface loading.
+   The reduced-motion block at the bottom of this file flattens the animation
+   to nothing, which leaves the plain tinted block — still a legible
+   placeholder. */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-bone-2);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
+  animation: skeleton-sweep 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
 /* ── HIDE NATIVE CURSOR (custom cursor takes over on fine pointers) ── */
 @media (pointer: fine) {
   body.custom-cursor,
