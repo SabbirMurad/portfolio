@@ -6,3 +6,6 @@ pub use list as List;
 
 pub mod toggle_featured;
 pub use toggle_featured as ToggleFeatured;
+
+pub mod feed;
+pub use feed as Feed;

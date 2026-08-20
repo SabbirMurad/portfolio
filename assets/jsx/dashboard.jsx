@@ -584,7 +584,15 @@ function DocumentationTab() {
 
 function CreateProject({ onCreated, onCancel }) {
   const { useState, useEffect } = React;
-  const [form, setForm] = useState({ title: "", subtitle: "", description: "", tags: "" });
+  const [form, setForm] = useState({
+    title: "",
+    subtitle: "",
+    description: "",
+    tags: "",
+    link: "",
+    accent: "",
+    year: "",
+  });
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState(null);
   const [status, setStatus] = useState("idle"); // idle | pending
@@ -670,6 +678,18 @@ function CreateProject({ onCreated, onCancel }) {
     if (!form.subtitle.trim()) next.subtitle = "Enter a subtitle";
     if (!form.description.trim()) next.description = "Enter a description";
     if (!imageId) next.image = "Upload a thumbnail image";
+
+    // Both rules are enforced again in src/handler/project/create.rs; these
+    // are here so a typo fails before the round trip, not instead of it.
+    const link = form.link.trim();
+    if (link && !/^(https?:\/\/|\/(?!\/))/.test(link)) {
+      next.link = "Must start with http://, https:// or /";
+    }
+    const accent = form.accent.trim();
+    if (accent && !/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(accent)) {
+      next.accent = "A hex colour, like #DE4520";
+    }
+
     setErrors(next);
     setFormError(null);
     if (Object.keys(next).length) return;
@@ -689,6 +709,9 @@ function CreateProject({ onCreated, onCancel }) {
         description: form.description.trim(),
         tags,
         image_id: imageId,
+        link: form.link.trim(),
+        accent: form.accent.trim(),
+        year: form.year.trim(),
       },
       showError: false,
     });
@@ -707,6 +730,9 @@ function CreateProject({ onCreated, onCancel }) {
       description: form.description.trim(),
       tags,
       image_id: imageId,
+      link: form.link.trim() || null,
+      accent: form.accent.trim() || null,
+      year: form.year.trim() || null,
       featured: false,
       created_at: Date.now(),
     });
@@ -839,6 +865,76 @@ function CreateProject({ onCreated, onCancel }) {
           <p className="meta mt-2 text-muted">Comma-separated</p>
         </div>
 
+        <div>
+          <label htmlFor="project-link" className="meta mb-2 block text-muted-2">
+            Link
+          </label>
+          <input
+            id="project-link"
+            value={form.link}
+            onChange={set("link")}
+            disabled={pending}
+            placeholder="https://github.com/sabbirmurad/hyper"
+            aria-invalid={!!errors.link}
+            className={FIELD}
+          />
+          {errors.link ? (
+            <p className="meta mt-2 text-vermilion">{errors.link}</p>
+          ) : (
+            <p className="meta mt-2 text-muted">
+              Where the card opens. Optional — without one the card is not a link.
+            </p>
+          )}
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="project-year" className="meta mb-2 block text-muted-2">
+              Year
+            </label>
+            <input
+              id="project-year"
+              value={form.year}
+              onChange={set("year")}
+              disabled={pending}
+              placeholder="2026"
+              className={FIELD}
+            />
+            <p className="meta mt-2 text-muted">
+              The year of the work. Defaults to this year.
+            </p>
+          </div>
+
+          <div>
+            <label htmlFor="project-accent" className="meta mb-2 block text-muted-2">
+              Accent
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                id="project-accent"
+                value={form.accent}
+                onChange={set("accent")}
+                disabled={pending}
+                placeholder="#DE4520"
+                aria-invalid={!!errors.accent}
+                className={FIELD}
+              />
+              {/* A live swatch — the value is a colour, and reading a hex code
+                  back off the page is not the same as seeing it. */}
+              <span
+                aria-hidden="true"
+                className="h-9 w-9 shrink-0 rounded-sm border border-line"
+                style={{ background: form.accent.trim() || "var(--color-vermilion)" }}
+              />
+            </div>
+            {errors.accent ? (
+              <p className="meta mt-2 text-vermilion">{errors.accent}</p>
+            ) : (
+              <p className="meta mt-2 text-muted">Card dot. Defaults to vermilion.</p>
+            )}
+          </div>
+        </div>
+
         {formError && (
           <p
             role="alert"
@@ -872,9 +968,9 @@ function ProjectCard({ project, onToggle, toggling }) {
   });
 
   return (
-    /* Same card as DocCard, with the thumbnail promoted to a header image —
-       there is no arrow because a project has no URL of its own to open the
-       way a doc has its built site. */
+    /* Same card as DocCard, with the thumbnail promoted to a header image.
+       The arrow only appears for entries that carry a link — `link` is
+       optional, and an arrow that opens nothing is worse than none. */
     <div className="flex h-full flex-col overflow-hidden rounded-md border border-line bg-paper">
       <div className="aspect-[16/9] w-full overflow-hidden border-b border-line bg-bone">
         <img
@@ -887,7 +983,22 @@ function ProjectCard({ project, onToggle, toggling }) {
       <div className="flex flex-1 flex-col p-5">
         <span className="meta text-muted">{date}</span>
 
-        <p className="mt-3 text-[15px] font-semibold text-ink">{project.title}</p>
+        <div className="mt-3 flex items-start justify-between gap-3">
+          <p className="text-[15px] font-semibold text-ink">{project.title}</p>
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={"Open " + project.title}
+              className="group/arrow -m-1 shrink-0 p-1 text-muted-2 transition-colors duration-300 hover:text-vermilion"
+            >
+              <span className="inline-block transition-transform duration-300 group-hover/arrow:translate-x-0.5">
+                ↗
+              </span>
+            </a>
+          )}
+        </div>
         {project.subtitle && <p className="meta mt-1 text-muted-2">{project.subtitle}</p>}
 
         <p className="mt-1.5 line-clamp-2 text-[13px] leading-[1.6] text-muted-2">

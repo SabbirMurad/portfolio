@@ -98,9 +98,10 @@ pub struct ImageStruct {
     pub width: usize,
     pub original_size: usize,
     pub webp_size: usize,
-    // Not generated yet — no blurhash crate wired up. Left empty rather than
-    // faked, same spirit as the em-dashes elsewhere for numbers not yet real
-    // (see the youtube/competitive sections in assets/jsx/data.jsx).
+    // Encoded client-side and sent with the upload (assets/js/image-uploader.js);
+    // decoded client-side too, by assets/js/blurhash.js, which paints it while
+    // the file downloads. Empty for anything uploaded before that existed —
+    // callers must treat it as optional.
     pub blur_hash: String,
     pub used_at: AssetUsedAt,
     pub original_type: String,

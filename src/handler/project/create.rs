@@ -19,6 +19,41 @@ pub struct RequestBody {
     // From a prior POST /api/image/upload — this endpoint never takes the
     // image bytes directly.
     image_id: String,
+    // Optional card fields — see Model::Project for what each one is for.
+    #[serde(default)]
+    link: Option<String>,
+    #[serde(default)]
+    accent: Option<String>,
+    #[serde(default)]
+    year: Option<String>,
+}
+
+// "" and "   " both mean "not given" coming from a form field.
+fn optional(value: &Option<String>) -> Option<String> {
+    value
+        .as_ref()
+        .map(|v| v.trim().to_string())
+        .filter(|v| !v.is_empty())
+}
+
+// The card renders `link` straight into an href, so anything that isn't a
+// plain http(s) or same-site URL is rejected before it can become a
+// `javascript:` anchor on the public page. Protocol-relative ("//evil.com")
+// is out too — it reads as same-site but isn't.
+fn valid_link(link: &str) -> bool {
+    link.starts_with("http://")
+        || link.starts_with("https://")
+        || (link.starts_with('/') && !link.starts_with("//"))
+}
+
+// Goes into a `style` attribute; #rgb/#rrggbb only, nothing else.
+fn valid_accent(accent: &str) -> bool {
+    match accent.strip_prefix('#') {
+        Some(body) => {
+            (body.len() == 3 || body.len() == 6) && body.chars().all(|c| c.is_ascii_hexdigit())
+        }
+        None => false,
+    }
 }
 
 #[derive(Debug, Serialize)]
@@ -37,6 +72,9 @@ pub async fn task(
     let subtitle = form_data.subtitle.trim().to_string();
     let description = form_data.description.trim().to_string();
     let image_id = form_data.image_id.trim().to_string();
+    let link = optional(&form_data.link);
+    let accent = optional(&form_data.accent);
+    let year = optional(&form_data.year);
 
     if title.is_empty() {
         return Ok(Response::bad_request("Title is required"));
@@ -46,6 +84,14 @@ pub async fn task(
     }
     if image_id.is_empty() {
         return Ok(Response::bad_request("Thumbnail image is required"));
+    }
+
+    if link.as_deref().is_some_and(|l| !valid_link(l)) {
+        return Ok(Response::bad_request("Link must start with http://, https:// or /"));
+    }
+
+    if accent.as_deref().is_some_and(|a| !valid_accent(a)) {
+        return Ok(Response::bad_request("Accent must be a hex colour like #DE4520"));
     }
 
     // The image_id has to point at something real — catches a stale/typo'd
@@ -89,6 +135,9 @@ pub async fn task(
         description,
         tags: form_data.tags.clone(),
         image_id,
+        link,
+        accent,
+        year,
         featured: false,
         created_at: Utc::now().timestamp_millis(),
         created_by: "admin".to_string(),
@@ -103,4 +152,46 @@ pub async fn task(
     }
 
     Ok(HttpResponse::Ok().content_type("application/json").json(ResponseBody { uuid, title }))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn only_http_and_same_site_links_are_accepted() {
+        assert!(valid_link("https://example.com/x"));
+        assert!(valid_link("http://example.com"));
+        assert!(valid_link("/projects/hyper"));
+
+        // These are what the check exists for: an href the browser would
+        // happily run, or one that leaves the site while looking local.
+        assert!(!valid_link("javascript:alert(1)"));
+        assert!(!valid_link("data:text/html,<script>alert(1)</script>"));
+        assert!(!valid_link("//evil.example.com"));
+        assert!(!valid_link("example.com"));
+        assert!(!valid_link(""));
+    }
+
+    #[test]
+    fn accents_are_hex_colours_and_nothing_else() {
+        assert!(valid_accent("#DE4520"));
+        assert!(valid_accent("#de4520"));
+        assert!(valid_accent("#abc"));
+
+        assert!(!valid_accent("red"));
+        assert!(!valid_accent("#gggggg"));
+        assert!(!valid_accent("#12345"));
+        assert!(!valid_accent("DE4520"));
+        // No escaping out of the style attribute.
+        assert!(!valid_accent("#fff; background: url(javascript:alert(1))"));
+        assert!(!valid_accent(""));
+    }
+
+    #[test]
+    fn blank_optional_fields_read_as_absent() {
+        assert_eq!(optional(&None), None);
+        assert_eq!(optional(&Some("   ".to_string())), None);
+        assert_eq!(optional(&Some("  2026 ".to_string())), Some("2026".to_string()));
+    }
 }
