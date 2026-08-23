@@ -20,6 +20,9 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             .route(web::post().to(Handler::Documentation::Create::task))
             .route(web::get().to(Handler::Documentation::List::task))
         )
+        // Public, unauthenticated — what the home page reads. Registered
+        // before "/{uuid}/featured" so the literal path wins.
+        .route("/feed", web::get().to(Handler::Documentation::Feed::task))
         .route(
             "/{uuid}/featured",
             web::patch().to(Handler::Documentation::ToggleFeatured::task)

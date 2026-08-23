@@ -127,59 +127,9 @@ const services = [
    managed in the dashboard — see assets/jsx/project_card.jsx. Nothing published
    means the pages show their empty state, not a stand-in set. */
 
-/* `category` is the single bucket a doc falls into on the documentations page;
-   the filter bar is built from the categories present here, so adding a doc
-   with a new category adds the filter. `tags` stay free-form. */
-const docs = [
-  {
-    title: "Hyper API Reference",
-    category: "Rust",
-    blurb:
-      "Endpoint reference for the task queue HTTP API — authentication, job submission, priority scheduling, and webhook payloads, with runnable examples.",
-    tags: ["Rust", "OpenAPI", "MkDocs"],
-    href: "https://github.com/sabbirmurad",
-  },
-  {
-    title: "Pixel Component Guide",
-    category: "JavaScript",
-    blurb:
-      "Usage docs for all 30+ components — props, accessibility notes, keyboard behaviour, and theming tokens, with a live example beside each entry.",
-    tags: ["JavaScript", "A11y", "Design Tokens"],
-    href: "https://github.com/sabbirmurad",
-  },
-  {
-    title: "Finora Architecture Notes",
-    category: "Flutter",
-    blurb:
-      "How the offline-first layer works: Hive schema design, conflict resolution on sync, and why the state model is split the way it is.",
-    tags: ["Flutter", "Hive", "Architecture"],
-    href: "https://github.com/sabbirmurad",
-  },
-  {
-    title: "Rust for Systems Work",
-    category: "Rust",
-    blurb:
-      "A working guide to ownership, lifetimes, and async Tokio — written for engineers arriving from C++ who want the model, not a syntax tour.",
-    tags: ["Rust", "Tokio", "Teaching"],
-    href: "https://www.youtube.com/@itscompiletime",
-  },
-  {
-    title: "Deployment Handbook",
-    category: "DevOps",
-    blurb:
-      "The shipping checklist I run for every project — environment layout, migrations, rollback strategy, and what to have wired up before launch day.",
-    tags: ["DevOps", "MySQL", "CI/CD"],
-    href: "https://github.com/sabbirmurad",
-  },
-  {
-    title: "Design System Primer",
-    category: "Design",
-    blurb:
-      "Turning a Figma library into shipped components without losing intent — token naming, handoff structure, and keeping the two in sync over time.",
-    tags: ["Figma", "Design Systems", "Tokens"],
-    href: "https://github.com/sabbirmurad",
-  },
-];
+/* Documentation is not listed here either, for the same reason — it comes
+   from GET /api/documentation/feed, managed in the dashboard, see
+   assets/jsx/doc_card.jsx. */
 
 /* The YouTube section renders this until /api/youtube/feed answers (and instead
    of it, if the feed is unavailable). Counts are left as em dashes rather than

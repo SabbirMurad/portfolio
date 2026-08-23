@@ -10,5 +10,8 @@ pub use create as Create;
 pub mod list;
 pub use list as List;
 
+pub mod feed;
+pub use feed as Feed;
+
 pub mod toggle_featured;
 pub use toggle_featured as ToggleFeatured;

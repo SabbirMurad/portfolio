@@ -1,4 +1,4 @@
-/* global React, ReactDOM, gsap, ScrollTrigger, Lenis, Cursor, Ripple, Reveal, RevealLayer, docs, profile, navLinks, socials */
+/* global React, ReactDOM, gsap, ScrollTrigger, Lenis, Cursor, Ripple, Reveal, useDocs, DocCard, DocCardSkeletons, DocsEmpty, profile, navLinks, socials */
 /*
  * Documentations — the standalone index, in the new design language.
  *
@@ -6,13 +6,19 @@
  * what it invented: the per-doc view counts were hardcoded figures with nothing
  * behind them.
  *
- * Cards come from the shared `docs` array in data.jsx — the same source the
- * home page's Docs section renders — so the two can never drift. The filter bar
- * is derived from the categories actually present rather than hardcoded.
+ * Cards come from GET /api/documentation/feed via useDocs() in
+ * assets/jsx/doc_card.jsx — the same hook and the same card component the
+ * home page's Docs section renders, so the two can never drift. There is no
+ * `category` field on the backend model, so the filter chips are built from
+ * the tags actually present across the real entries instead.
  */
 
 const SITE_URL = "https://sabbirhassan.com";
 const ALL = "All";
+
+// Skeletons shown while the feed is in flight. The real count is
+// unknowable until it answers, so this is just enough to fill the fold.
+const LOADING_CARD_COUNT = 6;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,86 +94,42 @@ function DocsFooter() {
   );
 }
 
-/* ── Card ──
-   Deliberately identical to the home page's Docs card (assets/jsx/sections/
-   docs.jsx): same classes, same reveal stagger, same "View details" footer.
-   Two differences, both structural rather than visual — `bg-paper` because this
-   grid sits on bone where that one sits on paper, and `h2` because these titles
-   sit directly under the page h1. */
-function DocCard({ doc }) {
-  return (
-    <a
-      href={doc.href}
-      target="_blank"
-      rel="noreferrer"
-      data-cursor="view"
-      data-cursor-label="READ"
-      className="group flex h-full flex-col rounded-sm border border-line bg-paper p-6 transition-colors duration-500 hover:border-ink/25 sm:p-7"
-    >
-      <RevealLayer distance={20}>
-        <h2 className="display-tight text-xl font-bold leading-tight transition-colors duration-400 group-hover:text-vermilion">
-          {doc.title}
-        </h2>
-      </RevealLayer>
-
-      <RevealLayer delay={0.08} distance={18}>
-        <p className="mt-3 text-[13.5px] leading-[1.7] text-muted-2">{doc.blurb}</p>
-      </RevealLayer>
-
-      <RevealLayer delay={0.16} distance={14} className="mt-5 flex flex-wrap gap-1.5">
-        {doc.tags.map((t) => (
-          <span key={t} className="meta rounded-full border border-line px-2.5 py-1 text-ink/60">
-            {t}
-          </span>
-        ))}
-      </RevealLayer>
-
-      <RevealLayer
-        delay={0.24}
-        distance={12}
-        className="mt-auto flex items-center justify-end gap-2 pt-7 text-muted-2 transition-colors duration-400 group-hover:text-vermilion"
-      >
-        <span className="meta">View details</span>
-        <span className="inline-block transition-transform duration-400 group-hover:translate-x-1">
-          →
-        </span>
-      </RevealLayer>
-    </a>
-  );
-}
-
 /* ── Page ── */
 function Documentations() {
   const { useState, useMemo, useEffect, useRef } = React;
+  const { items, state, loading, retry } = useDocs();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(ALL);
   const searchRef = useRef(null);
 
-  /* One chip per category present in the data, in the order the docs declare
-     them — a new doc with a new category gets a filter for free. */
+  /* One chip per tag present across the real entries, in the order they're
+     first seen — a new doc with a new tag gets a filter for free. */
   const categories = useMemo(() => {
     const seen = [];
-    docs.forEach((d) => {
-      if (d.category && seen.indexOf(d.category) === -1) seen.push(d.category);
+    items.forEach((d) => {
+      d.tags.forEach((t) => {
+        if (seen.indexOf(t) === -1) seen.push(t);
+      });
     });
     return [ALL].concat(seen);
-  }, []);
+  }, [items]);
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return docs.filter((d) => {
-      if (category !== ALL && d.category !== category) return false;
+    return items.filter((d) => {
+      if (category !== ALL && d.tags.indexOf(category) === -1) return false;
       if (!q) return true;
-      const hay = [d.title, d.blurb, d.category].concat(d.tags).join(" ").toLowerCase();
+      const hay = [d.title, d.blurb].concat(d.tags).join(" ").toLowerCase();
       return hay.indexOf(q) !== -1;
     });
-  }, [query, category]);
+  }, [items, query, category]);
 
-  /* Filtering changes the document height, so the reveal triggers below the
-     fold need their positions recomputed. */
+  /* The arriving entries and a filter change both change the document
+     height, so the reveal triggers below the fold need their positions
+     recomputed. */
   useEffect(() => {
     ScrollTrigger.refresh();
-  }, [query, category]);
+  }, [items, query, category]);
 
   /* "/" focuses the search, the way a docs index usually behaves. */
   useEffect(() => {
@@ -183,9 +145,12 @@ function Documentations() {
   }, []);
 
   /* A CollectionPage graph listing the real entries. Built here rather than in
-     the Tera head so it cannot drift from `docs`; the page is client-rendered
-     either way. */
+     the Tera head because the entries only exist once the feed has answered;
+     the page is client-rendered either way. Skipped when there is nothing to
+     list — an empty `hasPart` is worse than no graph at all. */
   useEffect(() => {
+    if (!items.length) return;
+
     const el = document.createElement("script");
     el.type = "application/ld+json";
     el.textContent = JSON.stringify({
@@ -199,16 +164,15 @@ function Documentations() {
         ".",
       inLanguage: "en",
       author: { "@type": "Person", name: profile.fullName, url: SITE_URL + "/" },
-      hasPart: docs.map((d) => ({
+      hasPart: items.map((d) => ({
         "@type": "TechArticle",
         name: d.title,
         description: d.blurb,
-        about: d.category,
       })),
     });
     document.head.appendChild(el);
     return () => el.remove();
-  }, []);
+  }, [items]);
 
   const filtered = query.trim() !== "" || category !== ALL;
 
@@ -245,8 +209,13 @@ function Documentations() {
             </Reveal>
           </div>
 
-          {/* Search */}
-          <Reveal delay={0.24} distance={22} className="mt-12 max-w-xl">
+          {/* Search — hidden once we know there is nothing to search. It stays
+              up while loading so the hero doesn't reflow in the common case. */}
+          <Reveal
+            delay={0.24}
+            distance={22}
+            className={"mt-12 max-w-xl " + (!loading && !items.length ? "hidden" : "")}
+          >
             <label htmlFor="doc-search" className="sr-only">
               Search documentation
             </label>
@@ -279,51 +248,70 @@ function Documentations() {
             </div>
           </Reveal>
 
-          {/* Filters */}
-          <Reveal delay={0.3} distance={18} className="mt-5 flex flex-wrap gap-2">
-            {categories.map((c) => {
-              const on = c === category;
-              return (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setCategory(c)}
-                  aria-pressed={on}
-                  className={
-                    "meta rounded-full border px-3.5 py-1.5 transition-colors duration-400 " +
-                    (on
-                      ? "border-vermilion bg-vermilion text-white"
-                      : "border-line-dark text-white/60 hover:border-white/35 hover:text-white")
-                  }
-                >
-                  {c}
-                </button>
-              );
-            })}
-          </Reveal>
+          {/* Filters — chips are built from tags actually present, so they
+              only make sense once the feed has answered with something. */}
+          {!loading && items.length ? (
+            <Reveal delay={0.3} distance={18} className="mt-5 flex flex-wrap gap-2">
+              {categories.map((c) => {
+                const on = c === category;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setCategory(c)}
+                    aria-pressed={on}
+                    className={
+                      "meta rounded-full border px-3.5 py-1.5 transition-colors duration-400 " +
+                      (on
+                        ? "border-vermilion bg-vermilion text-white"
+                        : "border-line-dark text-white/60 hover:border-white/35 hover:text-white")
+                    }
+                  >
+                    {c}
+                  </button>
+                );
+              })}
+            </Reveal>
+          ) : null}
         </div>
       </section>
 
       {/* ── Grid ── */}
       <main className="bg-bone px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24">
         <div className="mx-auto max-w-[1600px]">
-          <p className="meta text-muted-2" role="status" aria-live="polite">
-            {filtered
-              ? shown.length + " of " + docs.length + " documents"
-              : docs.length + " documents"}
-          </p>
+          {/* The count is only meaningful once there is something to count;
+              with nothing published the panel below says it in words. */}
+          {loading ? (
+            <p className="meta" aria-hidden="true">
+              <span className="skeleton inline-block h-[11px] w-24 rounded-xs align-middle" />
+            </p>
+          ) : items.length ? (
+            <p className="meta text-muted-2" role="status" aria-live="polite">
+              {filtered
+                ? shown.length + " of " + items.length + " documents"
+                : items.length + " documents"}
+            </p>
+          ) : null}
 
-          {shown.length ? (
+          {loading ? (
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <DocCardSkeletons count={LOADING_CARD_COUNT} />
+            </div>
+          ) : state === "empty" || state === "error" ? (
+            <div className="mt-2">
+              <DocsEmpty variant={state} onRetry={retry} />
+            </div>
+          ) : shown.length ? (
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {shown.map((d, i) => (
                 <Reveal
-                  key={d.title}
+                  key={d.key}
                   delay={(i % 3) * 0.09}
                   scaleFrom={0.97}
                   distance={40}
                   className="h-full"
                 >
-                  <DocCard doc={d} />
+                  <DocCard d={d} />
                 </Reveal>
               ))}
             </div>

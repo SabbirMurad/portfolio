@@ -1,5 +1,26 @@
-/* global React, Reveal, RevealLayer, SplitHeading, docs */
+/* global React, Reveal, SplitHeading, useDocs, DocCard, DocCardSkeletons, DocsEmpty */
+/*
+ * The home page's documentation strip.
+ *
+ * The card, its skeleton and the fetch all live in assets/jsx/doc_card.jsx,
+ * shared with the standalone /documentations index.
+ */
+
+// How many cards the strip shows, and so how many skeletons stand in for them.
+const HOME_DOC_COUNT = 6;
+
 function Docs() {
+  const { items, state, loading, retry } = useDocs();
+
+  const shown = React.useMemo(() => {
+    // `featured` is the dashboard's toggle for "put this on the home page".
+    // With nothing featured the strip would be empty, which reads as broken
+    // rather than as a deliberately short list — so fall back to the newest.
+    const featured = items.filter((d) => d.featured);
+    const pick = featured.length ? featured : items;
+    return pick.slice(0, HOME_DOC_COUNT);
+  }, [items]);
+
   return (
     <section id="docs" className="bg-paper py-24 sm:py-32 lg:py-40">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
@@ -31,56 +52,25 @@ function Docs() {
           </Reveal>
         </div>
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {docs.map((d, i) => (
-            <Reveal
-              key={d.title}
-              delay={(i % 3) * 0.09}
-              scaleFrom={0.97}
-              distance={40}
-              className="h-full"
-            >
-              <a
-                href={d.href}
-                target="_blank"
-                rel="noreferrer"
-                data-cursor="view"
-                data-cursor-label="READ"
-                className="group flex h-full flex-col rounded-sm border border-line bg-bone p-6 transition-colors duration-500 hover:border-ink/25 sm:p-7"
-              >
-                <RevealLayer distance={20}>
-                  <h3 className="display-tight text-xl font-bold leading-tight transition-colors duration-400 group-hover:text-vermilion">
-                    {d.title}
-                  </h3>
-                </RevealLayer>
-
-                <RevealLayer delay={0.08} distance={18}>
-                  <p className="mt-3 text-[13.5px] leading-[1.7] text-muted-2">{d.blurb}</p>
-                </RevealLayer>
-
-                <RevealLayer delay={0.16} distance={14} className="mt-5 flex flex-wrap gap-1.5">
-                  {d.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="meta rounded-full border border-line px-2.5 py-1 text-ink/60"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </RevealLayer>
-
-                <RevealLayer
-                  delay={0.24}
-                  distance={12}
-                  className="mt-auto flex items-center justify-end gap-2 pt-7 text-muted-2 transition-colors duration-400 group-hover:text-vermilion"
-                >
-                  <span className="meta">View details</span>
-                  <span className="transition-transform duration-400 group-hover:translate-x-1">→</span>
-                </RevealLayer>
-              </a>
-            </Reveal>
-          ))}
-        </div>
+        {/* With nothing to show, the panel replaces the grid rather than
+            sitting inside it — same reasoning as the projects strip. */}
+        {state === "empty" || state === "error" ? (
+          <Reveal className="mt-16" distance={26}>
+            <DocsEmpty variant={state} onRetry={retry} />
+          </Reveal>
+        ) : (
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {loading ? (
+              <DocCardSkeletons count={HOME_DOC_COUNT} />
+            ) : (
+              shown.map((d, i) => (
+                <Reveal key={d.key} delay={(i % 3) * 0.09} scaleFrom={0.97} distance={40} className="h-full">
+                  <DocCard d={d} />
+                </Reveal>
+              ))
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
