@@ -264,6 +264,7 @@ async fn main() -> io::Result<()> {
         .configure(Routes::Resume::router)
         .configure(Routes::Contact::router)
         .configure(Routes::Youtube::router)
+        .configure(Routes::Leetcode::router)
         .configure(Routes::Documentation::router)
         .configure(Routes::Image::router)
         .configure(Routes::Project::router)

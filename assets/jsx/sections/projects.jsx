@@ -36,9 +36,11 @@ function Projects() {
             </p>
             <a
               href="/projects"
-              className="meta group inline-flex items-center gap-2 text-muted-2 transition-colors duration-300 hover:text-vermilion"
+              data-cursor="view"
+              data-cursor-label="WORK"
+              className="group inline-flex items-center gap-3 rounded-sm bg-ink px-6 py-3.5 text-white transition-colors duration-400 hover:bg-vermilion"
             >
-              View all projects
+              <span className="meta">View all projects</span>
               <span className="inline-block transition-transform duration-400 group-hover:translate-x-1">
                 →
               </span>

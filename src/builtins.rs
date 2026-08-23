@@ -6,3 +6,4 @@ pub mod cors;
 pub mod csp;
 pub mod jwt;
 pub mod mongo;
+pub mod redis;

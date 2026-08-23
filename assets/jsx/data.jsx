@@ -65,30 +65,61 @@ const services = [
       "High-performance, memory-safe services built in Rust — APIs, real-time systems, and infrastructure designed to stay fast under load.",
     tags: ["Rust", "Actix-Web", "Tokio", "WebSockets", "REST APIs"],
     tone: "#DE4520",
+    icon: "server",
   },
   {
     num: "002",
+    title: "Website Development",
+    blurb:
+      "Fast, responsive websites and web apps — from marketing sites to full product dashboards, built with modern frameworks and clean, maintainable code.",
+    tags: ["React", "Next.js", "Tailwind CSS", "SEO", "Performance"],
+    tone: "#14B8A6",
+    icon: "globe",
+  },
+  {
+    num: "003",
     title: "Mobile Apps",
     blurb:
       "Cross-platform iOS and Android apps with native performance. Smooth animations, offline-first architecture, one codebase.",
     tags: ["Flutter", "Dart", "Riverpod", "Hive", "Firebase"],
     tone: "#54C5F8",
+    icon: "smartphone",
   },
   {
-    num: "003",
+    num: "004",
     title: "UI/UX Design",
     blurb:
       "End-to-end design, from wireframes to polished prototypes. Design systems and component libraries developers can actually build from.",
     tags: ["Figma", "Adobe XD", "Prototyping", "Design Systems"],
     tone: "#A855F7",
+    icon: "palette",
   },
   {
-    num: "004",
+    num: "005",
     title: "Desktop Software",
     blurb:
       "Native desktop applications and CLI tooling in Rust and C++ — system utilities that are fast, small, and built to last.",
     tags: ["Rust", "C++", "Tauri", "CLI Tools", "Cross-platform"],
     tone: "#22C55E",
+    icon: "monitor",
+  },
+  {
+    num: "006",
+    title: "AI Automation",
+    blurb:
+      "Practical AI integration — LLM-powered features, automated workflows, and custom agents that cut manual work without adding fragile complexity.",
+    tags: ["LLM Integration", "Workflow Automation", "Python", "Agents"],
+    tone: "#6366F1",
+    icon: "cpu",
+  },
+  {
+    num: "007",
+    title: "Technical Consultation",
+    blurb:
+      "Architecture reviews, code audits, and technical strategy for teams that need an outside eye — clear recommendations, not just a report.",
+    tags: ["Architecture Review", "Code Audits", "Tech Strategy", "Mentorship"],
+    tone: "#EAB308",
+    icon: "chat",
   },
 ];
 
@@ -206,14 +237,18 @@ const youtube = {
   ],
 };
 
-/* Competitive programming. The solved counts are filled in at runtime from the
-   LeetCode stats endpoint below — the same one the previous site used. Leave the
-   fallbacks null rather than inventing figures: the section renders em dashes and
-   a flat track until real numbers arrive. Add a href to a platform once you have
-   the profile URL; without one it renders as plain text instead of a dead link. */
+/* Competitive programming. The solved counts are filled in at runtime from our
+   own /api/leetcode/stats endpoint (src/handler/leetcode/stats.rs) rather than
+   calling the third-party LeetCode API straight from the browser — that used
+   to get sabbir0087's IP rate-limited under real traffic. The backend caches
+   the upstream response in Redis and only re-fetches once a day. Leave the
+   fallbacks null rather than inventing figures: the section renders em dashes
+   and a flat track until real numbers arrive. Add a href to a platform once
+   you have the profile URL; without one it renders as plain text instead of a
+   dead link. */
 const competitive = {
   leetcodeUser: "sabbir0087",
-  endpoint: "https://alfa-leetcode-api.onrender.com/sabbir0087/solved",
+  endpoint: "/api/leetcode/stats",
   solved: { easy: null, medium: null, hard: null },
   difficulties: [
     { key: "easy", label: "Easy", tone: "#22C55E" },

@@ -34,6 +34,9 @@ reqwest = "0.12.15"
 # MongoDB driver
 mongodb = "3.2.3"
 
+# Redis client (external-API response caching, e.g. src/handler/leetcode/stats.rs)
+redis = { version = "0.27", features = ["tokio-comp"] }
+
 # Compression
 zip = "0.6"
 # Regenerates sitemap.xml.gz after the site_url rewrite in utils/mkdocs.rs

@@ -16,6 +16,9 @@ pub use contact as Contact;
 pub mod youtube;
 pub use youtube as Youtube;
 
+pub mod leetcode;
+pub use leetcode as Leetcode;
+
 pub mod image;
 pub use image as Image;
 

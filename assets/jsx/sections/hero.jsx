@@ -217,7 +217,6 @@ function Hero() {
               <span className="flex min-w-[188px] flex-col justify-between py-0.5 pr-0.5">
                 <span className="flex items-start justify-between gap-6">
                   <span className="text-[15px] font-semibold leading-none">Let&apos;s talk</span>
-                  <span className="text-[13px] leading-none text-white/70">✳</span>
                 </span>
 
                 <span className="flex items-end justify-between gap-6">

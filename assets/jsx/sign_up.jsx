@@ -354,7 +354,6 @@ function SignUp() {
             </Enter>
 
             <Enter delay={0.28} distance={22} className="relative mt-12">
-              <span className="text-2xl text-white">✳</span>
               <p className="meta mt-4 font-semibold">Restricted area</p>
               <p className="mt-3 max-w-xs text-[13px] leading-[1.7] text-white/70">
                 Anyone can submit this form, but only a request carrying the correct secret key

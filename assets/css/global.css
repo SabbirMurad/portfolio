@@ -216,6 +216,132 @@ html.lenis body {
   }
 }
 
+/* ── SERVICE PANEL SCENES ──
+   Small looping animations inside each service's accordion panel
+   (assets/jsx/sections/services.jsx) — a little "device" scene per service
+   (server lights, a loading browser, a scrolling phone feed...) in the same
+   white-line-on-gradient language the section already uses, but alive rather
+   than a single static icon. Covered by the prefers-reduced-motion block
+   below like every other animation on the page. */
+@keyframes svc-blink {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+.svc-blink {
+  animation: svc-blink 1.8s ease-in-out infinite;
+}
+
+@keyframes svc-flow {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+.svc-flow {
+  position: absolute;
+  animation: svc-flow 2.2s ease-in-out infinite;
+}
+
+@keyframes svc-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+.svc-scroll {
+  animation: svc-scroll 6s linear infinite;
+}
+
+@keyframes svc-draw {
+  0%,
+  15% {
+    stroke-dashoffset: 1;
+  }
+  60%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.svc-draw {
+  stroke-dasharray: 1;
+  animation: svc-draw 3.2s ease-in-out infinite;
+}
+
+@keyframes svc-grow {
+  0%,
+  10% {
+    width: 0%;
+  }
+  45%,
+  100% {
+    width: var(--svc-line-w, 100%);
+  }
+}
+.svc-grow {
+  animation: svc-grow 3s ease-in-out infinite;
+}
+
+@keyframes svc-caret {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.svc-caret {
+  animation: svc-caret 1s step-end infinite;
+}
+
+@keyframes svc-pulse-node {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+.svc-pulse-node {
+  animation: svc-pulse-node 2.4s ease-in-out infinite;
+}
+
+@keyframes svc-bounce-dot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+.svc-bounce-dot {
+  animation: svc-bounce-dot 1.2s ease-in-out infinite;
+}
+
 /* ── HIDE NATIVE CURSOR (custom cursor takes over on fine pointers) ── */
 @media (pointer: fine) {
   body.custom-cursor,
