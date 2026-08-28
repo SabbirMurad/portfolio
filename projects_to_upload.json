@@ -15,11 +15,7 @@
         "title": "Simfrii",
         "subtitle": "global esim marketplace",
         "tags": [
-            "react",
-            "vite",
-            "tailwind css",
-            "i18n",
-            "rest api"
+            "rust","flutter","react","vite"
         ],
         "description": "Buy and install eSIM data for 200+ countries in seconds. Compare live plans across five providers side by side, then manage your eSIMs, top up and get support — all in six languages, no roaming, no physical SIM.",
         "link": "https://simfrii.com"

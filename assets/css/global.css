@@ -144,30 +144,6 @@ html.lenis body {
   animation-play-state: paused;
 }
 
-/* ── HERO RÉSUMÉ LINK ──
-   The little vertical tick above the "Résumé" link: the accent color
-   fills it from top to bottom on loop, like the line itself is turning
-   color, then resets. Motion only — color comes from whatever Tailwind
-   class is on the filling span, same split as the svc-* animations above. */
-@keyframes hero-resume-sweep {
-  0% {
-    transform: scaleY(0);
-    opacity: 1;
-  }
-  85% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scaleY(1);
-    opacity: 0;
-  }
-}
-.hero-resume-sweep {
-  transform-origin: top;
-  animation: hero-resume-sweep 2s ease-in-out infinite;
-}
-
 /* ── CLICK RIPPLE ──
    Ported from the previous site: a disc spawned at the pointer that swells past
    its own size and fades, 600ms. One fixed layer holds them; the tint is set

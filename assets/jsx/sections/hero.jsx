@@ -13,20 +13,22 @@
 
 const HERO_FIELD = "linear-gradient(270deg, rgb(43 43 43), rgb(8, 8, 8))";
 const HERO_OVERLAY = "linear-gradient(100deg, rgb(0 0 0 / 91%), rgb(43 43 43))";
-const HERO_GRID_ROWS = ["var(--nav-h)", "35%", "70%"];
+/* The row the résumé tab hangs from — drawn with the tab, not with the grid. */
+const HERO_ROW_RESUME = "35%";
+const HERO_GRID_ROWS = ["var(--nav-h)", HERO_ROW_RESUME, "70%"];
 /* Left side bearings for Archivo 700 — pull the ink onto the grid line. */
 const HERO_BEARING_H = "-0.0625em";
 const HERO_BEARING_S = "-0.0417em";
 /* Close approximation of the original cubic-bezier(0.16, 1, 0.3, 1). */
 const HERO_EASE = "expo.out";
 
-function HeroCrosshair({ top, side }) {
+function HeroCrosshair({ top, side, className = "" }) {
   return (
     <span
       style={{ top }}
       className={`absolute -translate-y-1/2 text-[11px] leading-none text-white/30 ${
         side === "left" ? "-left-[4.5px]" : "-right-[4.5px]"
-      }`}
+      } ${className}`}
     >
       +
     </span>
@@ -35,6 +37,31 @@ function HeroCrosshair({ top, side }) {
 
 function Hero() {
   const ref = React.useRef(null);
+
+  /* Row 2 of the grid stops either side of the résumé tab, and it is drawn up
+     in the grid layer so it passes behind the portrait like the other rows —
+     which means that layer needs the tab's width. Measured rather than assumed:
+     the label is copy, and copy is as wide as the font that actually loaded.
+     offsetWidth is 0 while the tab is display:none under sm, which is exactly
+     the value the rule wants there. */
+  React.useEffect(() => {
+    const root = ref.current;
+    const tab = root && root.querySelector("[data-hero-resume]");
+    if (!tab) return;
+    const measure = () => root.style.setProperty("--hero-resume-w", `${tab.offsetWidth}px`);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(tab);
+    /* The observer covers the breakpoint and the webfont swap on its own, but
+       only while the tab is rendering; these two catch the same moments when it
+       is not, so a page restored in the background still comes back correct. */
+    window.addEventListener("resize", measure);
+    if (document.fonts) document.fonts.ready.then(measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
 
   React.useEffect(() => {
     const root = ref.current;
@@ -73,7 +100,11 @@ function Hero() {
         .from(q("[data-hero-tagline-p]"), { opacity: 0, y: 20, duration: 1, ease: HERO_EASE }, 0.5)
         .from(q("[data-hero-year]"), { opacity: 0, duration: 0.8 }, 0.75)
         .from(q("[data-hero-card]"), { opacity: 0, y: 30, duration: 1, ease: HERO_EASE }, 0.85)
-        .from(q("[data-hero-resume]"), { opacity: 0, y: -14, duration: 0.9, ease: HERO_EASE }, 0.9);
+        .from(
+          q("[data-hero-resume]"),
+          { clipPath: "inset(0 -16px 100% -16px)", opacity: 0, duration: 0.9, ease: HERO_EASE },
+          0.9,
+        );
 
       /* ── idle drift (forever) ──
          Distance scales with the element; each has its own period/offset so
@@ -103,22 +134,70 @@ function Hero() {
       style={{ background: HERO_FIELD }}
       className="relative min-h-[100dvh] overflow-hidden text-white"
     >
-      {/* Measurement grid. */}
+      {/* Measurement grid. Row 2 is missing from this set on purpose: it runs
+          into the résumé tab's carve, so it is drawn down there instead, where
+          it can stop at the right place. The crosshairs still cover all three. */}
       <div className="pointer-events-none absolute inset-0">
-        {HERO_GRID_ROWS.map((top) => (
+        {HERO_GRID_ROWS.filter((top) => top !== HERO_ROW_RESUME).map((top) => (
           <span key={top} style={{ top }} className="absolute inset-x-0 h-px bg-white/[0.09]" />
         ))}
 
+        {/* Row 2, in two runs: it stops at the tab's carve and picks up again
+            past the bend the column rule makes. -left/w-50vw carry each run out
+            to the edges of a section that clips them. */}
+        <div className="absolute inset-x-0" style={{ top: HERO_ROW_RESUME }}>
+          <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
+            <div className="relative">
+              <span className="absolute -left-[50vw] right-0 top-0 h-px bg-white/[0.09] sm:right-[calc(var(--hero-resume-w,0px)+15px)]" />
+              <span className="absolute left-full top-0 h-px w-[50vw] bg-white/[0.09] sm:ml-[15px]" />
+            </div>
+          </div>
+        </div>
+
         <div className="mx-auto grid h-full max-w-[1600px] grid-cols-3 px-5 sm:px-8 lg:px-12">
           {[0, 1, 2].map((col) => (
-            <div key={col} className="relative border-l border-white/[0.09] last:border-r">
+            <div key={col} className="relative border-l border-white/[0.09]">
               {HERO_GRID_ROWS.map((top) => (
                 <HeroCrosshair key={`l-${top}`} top={top} side="left" />
               ))}
-              {col === 2 &&
-                HERO_GRID_ROWS.map((top) => (
-                  <HeroCrosshair key={`r-${top}`} top={top} side="right" />
-                ))}
+
+              {/* The right-hand rule. From sm up the résumé tab hangs off this
+                  corner, and the rule turns into row 2 rather than crossing it —
+                  from both directions. Coming down it stops 15px short and bends
+                  right; coming up it is the tab's right wall, which the shoulder
+                  carve sweeps out to the same point. Both meet the row line
+                  tangentially 15px past the corner. Under sm there is no tab, so
+                  it is one plain rule and row 2 crosses it as usual. */}
+              {col === 2 && (
+                <React.Fragment>
+                  <span className="absolute inset-y-0 right-0 w-px bg-white/[0.09] sm:hidden" />
+
+                  <span
+                    style={{ height: `calc(${HERO_ROW_RESUME} - 15px)` }}
+                    className="absolute right-0 top-0 hidden w-px bg-white/[0.09] sm:block"
+                  />
+                  <span
+                    style={{ top: `calc(${HERO_ROW_RESUME} + 16px)` }}
+                    className="absolute bottom-0 right-0 hidden w-px bg-white/[0.09] sm:block"
+                  />
+                  {/* The bend. Bottom-left radius eats both of this box's edges,
+                      so its left + bottom borders render as one quarter circle,
+                      handing the rule off to the row line 15px further right. */}
+                  <span
+                    style={{ top: `calc(${HERO_ROW_RESUME} - 15px)`, right: "-15px" }}
+                    className="absolute hidden h-4 w-4 rounded-bl-[16px] border-b border-l border-white/[0.09] sm:block"
+                  />
+
+                  {HERO_GRID_ROWS.map((top) => (
+                    <HeroCrosshair
+                      key={`r-${top}`}
+                      top={top}
+                      side="right"
+                      className={top === HERO_ROW_RESUME ? "sm:hidden" : ""}
+                    />
+                  ))}
+                </React.Fragment>
+              )}
             </div>
           ))}
         </div>
@@ -180,22 +259,91 @@ function Hero() {
       </div>
 
       <div className="relative mx-auto flex min-h-[100dvh] max-w-[1600px] flex-col px-5 pb-7 pt-[var(--nav-h)] sm:px-8 lg:px-12">
-        {/* Résumé link — hangs off the row-2 grid line, flush with the same
-            right edge as the nav and the "Let's talk" card below (this div's
-            own padding box), so all three line up. Styled like the nav links
-            so it reads as part of the grid, not a separate widget. */}
+        {/* Résumé — a tab hanging off the row-2 grid line, right edge flush with
+            the nav and the "Let's talk" card below (this div's own padding box),
+            so all three line up. The outline, the label pair and the arrow tile
+            are what make it read as the action it is; there is no resting fill,
+            only a backdrop blur, so it stays legible on the narrower viewports
+            where the portrait passes behind it, and the vermilion arrives on
+            hover.
+
+            Its shape is split across five boxes because a CSS box cannot
+            express a concave corner: a skin, and two halves — wedge and arc —
+            for each shoulder. Enters by unfurling downward out of the line,
+            hence the resting clip-path, whose side offsets are negative so it
+            does not cut the carves off. */}
         <a
           data-hero-resume
           href="/assets/cv/cv.html"
-          style={{ top: "calc(35% + 14px)" }}
-          className="group absolute right-5 z-10 hidden w-fit flex-col items-center gap-4 sm:right-8 sm:flex lg:right-12"
+          data-cursor-label="OPEN"
+          style={{ top: HERO_ROW_RESUME, clipPath: "inset(0 -16px 0% -16px)" }}
+          className="group absolute right-5 z-10 hidden w-fit items-center gap-5 py-3 pl-5 pr-3 sm:right-8 sm:flex lg:right-12"
         >
-          <span aria-hidden="true" className="relative block h-16 w-px bg-white/20">
-            <span className="hero-resume-sweep absolute inset-0 bg-vermilion" />
+          {/* Skin: the plain box — fill, blur, outline. The clip lifts a
+              1px × 16px sliver off the top of each side border; with a carve
+              attached, those stretches are interior to the shape rather than
+              edges of it, and leaving them drawn is what puts a square corner
+              back under the curve. */}
+          <span
+            aria-hidden="true"
+            style={{
+              clipPath:
+                "polygon(1px 0, calc(100% - 1px) 0, calc(100% - 1px) 16px, 100% 16px, 100% 100%, 0 100%, 0 16px, 1px 16px)",
+            }}
+            className="absolute inset-0 rounded-b-xl border border-t-0 border-white/15 backdrop-blur-md transition-colors duration-400 group-hover:border-vermilion group-hover:bg-vermilion"
+          />
+
+          {/* Carve, part one: the wedge of body that lives outside the skin —
+              everything in this 16px box further than 16px from its own bottom
+              left corner. Painted through currentColor so it picks up the skin's
+              hover vermilion and the shape reads as one solid body, and it runs
+              a hair under the arc so the two never leave a seam. Fill and stroke
+              have to be separate boxes: the radius that draws the arc would clip
+              this gradient away to nothing. */}
+          <span
+            aria-hidden="true"
+            style={{
+              background: "radial-gradient(circle 16px at 0 100%, transparent 0 15px, currentColor 15px)",
+            }}
+            className="absolute -left-[15px] top-0 h-4 w-4 text-transparent transition-colors duration-400 group-hover:text-vermilion"
+          />
+
+          {/* Carve, part two: the arc. The top-right radius eats both of this
+              box's edges, so its top + right borders render as one quarter
+              circle — the row line easing down into the tab's left wall, its
+              right border column landing exactly on the skin's. It keeps the
+              line's colour on hover: this is the grid arriving at the tab, not
+              part of the button. */}
+          <span
+            aria-hidden="true"
+            className="absolute -left-[15px] top-0 h-4 w-4 rounded-tr-[16px] border-r border-t border-white/15"
+          />
+
+          {/* The right shoulder, the same two boxes mirrored. Its arc lands on
+              the column rule where the rule resumes below, so the wall coming up
+              from the bottom curves off to the row line just as the rule coming
+              down from the top bends into it. */}
+          <span
+            aria-hidden="true"
+            style={{
+              background: "radial-gradient(circle 16px at 100% 100%, transparent 0 15px, currentColor 15px)",
+            }}
+            className="absolute -right-[15px] top-0 h-4 w-4 text-transparent transition-colors duration-400 group-hover:text-vermilion"
+          />
+          <span
+            aria-hidden="true"
+            className="absolute -right-[15px] top-0 h-4 w-4 rounded-tl-[16px] border-l border-t border-white/15"
+          />
+
+          <span className="relative flex flex-col">
+            <span className="meta text-white/45 transition-colors duration-400 group-hover:text-white/75">
+              Curriculum vitae
+            </span>
+            <span className="whitespace-nowrap text-[17px] font-semibold leading-tight">Résumé</span>
           </span>
-          <span className="relative whitespace-nowrap text-[17px] font-medium">
-            Résumé <span aria-hidden="true">↗</span>
-            <span className="absolute -bottom-1 left-0 h-px w-0 bg-vermilion transition-all duration-400 group-hover:w-full" />
+
+          <span className="relative grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-base text-ink transition-transform duration-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+            ↗
           </span>
         </a>
 

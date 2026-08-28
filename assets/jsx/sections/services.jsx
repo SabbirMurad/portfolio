@@ -212,11 +212,55 @@ function ServiceScene({ icon, tone }) {
 }
 
 function Services() {
-  const { useState } = React;
-  const [open, setOpen] = useState(0);
+  const { useState, useEffect, useRef } = React;
+  const ref = useRef(null);
+  const [active, setActive] = useState(0);
+
+  /* Scroll drives the section: the active service is the last row whose heading
+     has reached the focal line. Nothing in the list opens or closes any more —
+     the detail lives in a sticky stage that is out of the flow — so the rows
+     never move, and reading their live positions is both exact and stable. An
+     accordion could not do this: collapsing a panel moved every heading below
+     it, which let one switch shove the next heading past the line too, and the
+     section skipped a row and lurched while it did. */
+  useEffect(() => {
+    const root = ref.current;
+    const heads = root ? Array.from(root.querySelectorAll("[data-svc-row]")) : [];
+    if (!heads.length) return;
+
+    let raf = 0;
+    const pick = () => {
+      raf = 0;
+      const focal = window.innerHeight * 0.5;
+      let next = 0;
+      heads.forEach((h, i) => {
+        if (h.getBoundingClientRect().top <= focal) next = i;
+      });
+      setActive(next);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(pick);
+    };
+
+    pick();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    /* The stylesheet is compiled in the browser, so that first read can land on
+       a page that has not been laid out yet, with every heading stacked at the
+       top and therefore already "past" the line. Re-run it whenever the section
+       settles into a new size. */
+    const ro = new ResizeObserver(onScroll);
+    ro.observe(root);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      ro.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   return (
-    <section id="services" className="bg-paper py-24 sm:py-32 lg:py-40">
+    <section ref={ref} id="services" className="bg-paper py-24 sm:py-32 lg:py-40">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
         <SplitHeading
           as="h2"
@@ -224,55 +268,37 @@ function Services() {
           className="display text-display-lg max-w-[14ch]"
         />
 
-        <div className="mt-16 border-t border-line">
-          {services.map((s, i) => {
-            const isOpen = open === i;
-            return (
-              <Reveal key={s.num} from="left" delay={i * 0.09} scaleFrom={1} rotate={0.5} rule>
-                <button
-                  onClick={() => setOpen(isOpen ? -1 : i)}
-                  aria-expanded={isOpen}
-                  className="group grid w-full grid-cols-[1fr_auto] items-start gap-5 py-8 text-left sm:gap-10 sm:py-10"
-                >
-                  <span className="grid gap-5 lg:grid-cols-[1fr_1.15fr] lg:items-start lg:gap-12">
-                    <RevealLayer as="span" from="left" distance={20} className="block">
-                      <span
-                        className="display text-display-sm block transition-colors duration-400"
-                        style={{ color: isOpen ? s.tone : undefined }}
-                      >
-                        {s.title}
-                      </span>
-                    </RevealLayer>
-                    <RevealLayer as="span" from="left" delay={0.13} distance={20} className="block">
-                      <span className="block max-w-lg text-[14px] leading-[1.7] text-muted-2 lg:pt-1">
-                        {s.blurb}
-                      </span>
-                    </RevealLayer>
-                  </span>
+        <div className="mt-16 lg:mt-24 lg:grid lg:grid-cols-[1.05fr_1fr] lg:gap-20">
+          {/* The stage. Sticky, so it holds still while the list scrolls past
+              it, and absolutely stacked, so swapping service changes nothing
+              about the layout — that is the whole reason this is smooth. Every
+              scene is mounted; only opacity and a small lift move.
 
-                  <RevealLayer as="span" delay={0.24} distance={0} scaleFrom={0.5} className="block">
-                    <span
-                      className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line text-lg transition-all duration-500"
+              Sticky needs a containing block taller than itself to have
+              anywhere to travel, which is why the wrapper is a plain block
+              under lg — a single-column grid would put the stage in a row of
+              its own and it would scroll straight off — and why the grid above
+              lg is left to stretch its columns rather than align them start. */}
+          <div className="mb-12 lg:order-last lg:mb-0">
+            <div className="sticky top-[calc(var(--nav-h)+1rem)] bg-paper lg:top-[max(calc(var(--nav-h)+2rem),18vh)]">
+              <div className="relative h-56 sm:h-72 lg:h-[26rem]">
+                {services.map((s, i) => {
+                  const on = active === i;
+                  return (
+                    <div
+                      key={s.num}
+                      aria-hidden={!on}
                       style={{
-                        transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        background: isOpen ? s.tone : undefined,
-                        borderColor: isOpen ? s.tone : undefined,
-                        color: isOpen ? "#fff" : undefined,
+                        opacity: on ? 1 : 0,
+                        transform: on ? "translateY(0) scale(1)" : "translateY(18px) scale(0.97)",
+                        transitionDelay: on ? "80ms" : "0ms",
                       }}
+                      className="absolute inset-0 flex flex-col items-center justify-center gap-8 transition-all duration-[550ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
                     >
-                      +
-                    </span>
-                  </RevealLayer>
-                </button>
-
-                {/* Accordion — grid-rows 0fr→1fr replaces framer-motion height:auto. */}
-                <div
-                  className="grid transition-all duration-[600ms] ease-[cubic-bezier(0.76,0,0.24,1)]"
-                  style={{ gridTemplateRows: isOpen ? "1fr" : "0fr", opacity: isOpen ? 1 : 0 }}
-                >
-                  <div className="overflow-hidden">
-                    <div className="grid gap-8 pb-10 lg:grid-cols-[auto_1fr] lg:gap-16">
-                      <div className="flex flex-wrap items-start content-start gap-2">
+                      <div className="flex w-full flex-1 items-center justify-center px-2">
+                        <ServiceScene icon={s.icon} tone={s.tone} />
+                      </div>
+                      <div className="flex flex-wrap justify-center gap-2">
                         {s.tags.map((t) => (
                           <span
                             key={t}
@@ -282,16 +308,54 @@ function Services() {
                           </span>
                         ))}
                       </div>
-
-                      <div className="flex h-56 items-center justify-center px-2 sm:h-64">
-                        <ServiceScene icon={s.icon} tone={s.tone} />
-                      </div>
                     </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* The list. Generous rows so each one gets a moment of its own on the
+              way past, and everything but the active row drops back so the eye
+              is told where it is. The tail of padding is what the stage sticks
+              against while the last row is the active one — without it the
+              stage would come unstuck and drift away before you got there. */}
+          <div className="border-t border-line pb-16 lg:pb-[18rem]">
+            {services.map((s, i) => {
+              const on = active === i;
+              return (
+                <Reveal key={s.num} from="left" delay={i * 0.09} scaleFrom={1} rotate={0.5} rule>
+                  <div
+                    data-svc-row
+                    className="grid gap-4 py-10 transition-opacity duration-500 sm:py-14 lg:py-[4.5rem]"
+                    style={{ opacity: on ? 1 : 0.4 }}
+                  >
+                    <RevealLayer as="span" from="left" distance={20} className="block">
+                      <span className="flex items-baseline gap-4">
+                        <span
+                          className="meta shrink-0 transition-colors duration-500"
+                          style={{ color: on ? s.tone : "rgba(11,11,11,0.35)" }}
+                        >
+                          {s.num}
+                        </span>
+                        <span
+                          className="display text-display-sm block transition-colors duration-500"
+                          style={{ color: on ? s.tone : undefined }}
+                        >
+                          {s.title}
+                        </span>
+                      </span>
+                    </RevealLayer>
+                    <RevealLayer as="span" from="left" delay={0.13} distance={20} className="block">
+                      <span className="block max-w-lg text-[14px] leading-[1.7] text-muted-2">
+                        {s.blurb}
+                      </span>
+                    </RevealLayer>
                   </div>
-                </div>
-              </Reveal>
-            );
-          })}
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
