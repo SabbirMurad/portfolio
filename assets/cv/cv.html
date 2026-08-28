@@ -176,10 +176,91 @@
       .role-block li { margin-bottom: 0.8mm; }
       .role-block li::marker { color: var(--vermilion); }
 
+      /* ── featured work ──
+         Same language as the site's own project cards (accent dot + name/kind,
+         a line of description, tag pills) so the entries with real data read
+         as more than a link — everything else stays a plain link below. One
+         per line, stacked. */
+      .work-features {
+        display: grid;
+        gap: 3.5mm;
+        margin-bottom: 4mm;
+      }
+      .work-feature {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        padding: 4mm 5mm;
+        break-inside: avoid;
+      }
+      .work-feature .row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 4mm;
+      }
+      .work-feature .name {
+        display: inline-flex;
+        align-items: center;
+        gap: 2mm;
+        font-family: var(--display);
+        font-size: 11pt;
+        font-weight: 700;
+      }
+      .work-feature .dot {
+        width: 2mm;
+        height: 2mm;
+        border-radius: 50%;
+        background: var(--vermilion);
+        flex-shrink: 0;
+      }
+      .work-feature .kind {
+        font-weight: 500;
+        font-size: 8.5pt;
+        color: var(--muted);
+      }
+      .work-feature .visit {
+        flex-shrink: 0;
+        font-size: 8.5pt;
+        font-weight: 500;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .work-feature p {
+        margin: 2.5mm 0 0;
+        font-size: 9pt;
+        color: var(--ink-soft);
+        max-width: 155mm;
+      }
+      .work-feature .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5mm;
+        margin-top: 3mm;
+      }
+      .work-feature .tag {
+        font-size: 7.5pt;
+        color: var(--ink-soft);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 0.6mm 2.5mm;
+      }
+
       /* ── work grid ── */
+      .work-label {
+        font-family: var(--display);
+        font-size: 8.5pt;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin: 0 0 2.5mm;
+      }
       .work {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
         gap: 2.5mm 8mm;
       }
       .work div { break-inside: avoid; }
@@ -264,6 +345,7 @@
         border-left: 2px solid var(--line);
         padding-left: 3mm;
       }
+      .note a { color: var(--vermilion); font-weight: 500; }
 
       /* ── two-up ── */
       .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
@@ -291,6 +373,35 @@
         justify-content: space-between;
       }
 
+      /* ── download button ──
+         Triggers the browser's native print dialog rather than generating a
+         PDF client-side: the @page/@media print rules above already produce
+         the exact two-sheet layout, so "print to PDF" *is* the export path —
+         a second renderer would only risk drifting from what's on screen. */
+      .download-btn {
+        position: fixed;
+        right: 8mm;
+        bottom: 8mm;
+        z-index: 10;
+        display: inline-flex;
+        align-items: center;
+        gap: 2.5mm;
+        border: none;
+        border-radius: 999px;
+        padding: 3.5mm 6mm;
+        background: var(--vermilion);
+        color: #fff;
+        font-family: var(--body);
+        font-size: 10.5pt;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        box-shadow: 0 3mm 8mm rgba(0, 0, 0, 0.28);
+        transition: background 0.15s ease, transform 0.15s ease;
+      }
+      .download-btn:hover { background: #c93b19; transform: translateY(-1px); }
+      .download-btn svg { width: 3.6mm; height: 3.6mm; flex-shrink: 0; }
+
       @media print {
         body { background: #fff; }
         .page {
@@ -303,11 +414,26 @@
         .page + .page { break-before: page; }
         @page { size: A4; margin: 14mm 15mm; }
         a { color: inherit; }
+        .download-btn { display: none; }
       }
     </style>
   </head>
 
   <body>
+    <button
+      type="button"
+      class="download-btn"
+      onclick="window.print()"
+      aria-label="Download this CV as a PDF"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v12" />
+        <path d="M7 10l5 5 5-5" />
+        <path d="M5 21h14" />
+      </svg>
+      Download PDF
+    </button>
+
     <!-- ══════════════════ PAGE 1 ══════════════════ -->
     <div class="page">
       <header class="head">
@@ -473,33 +599,117 @@
     <div class="page">
       <section style="margin-top: 0">
         <h2>Selected Work</h2>
+
+        <!-- Featured, in the same language as the project cards on the site:
+             accent dot, name/kind, a line of description, tag pills. The rest
+             stay plain links below — these four are the ones worth a second
+             look. Sourced from sabbirhassan.com's own project feed. -->
+        <div class="work-features">
+          <a
+            class="work-feature"
+            href="https://play.google.com/store/apps/details?id=com.sabbir.hasp&hl=en"
+          >
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="background: #bb80fa"></span>Hasp
+                <span class="kind">/ dating app</span></span
+              >
+              <span class="visit">Google Play ↗</span>
+            </div>
+            <p>
+              Swipe to discover people, match on mutual likes, then chat with photos, voice notes
+              and video calls — verified selfie profiles, smart filters, travel mode, boosts and a
+              built-in safety centre.
+            </p>
+            <div class="tags">
+              <span class="tag">flutter</span>
+              <span class="tag">dart</span>
+              <span class="tag">firebase</span>
+              <span class="tag">webrtc</span>
+              <span class="tag">websocket</span>
+            </div>
+          </a>
+
+          <a class="work-feature" href="https://github.com/SabbirMurad/scaffold">
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="background: #868aff"></span>Scaffold
+                <span class="kind">/ design → code</span></span
+              >
+              <span class="visit">GitHub ↗</span>
+            </div>
+            <p>
+              A browser-based design tool for building interfaces on an infinite canvas — frames,
+              auto-layout, layers and real-time collaboration, with AI assist and one-click code
+              export, backed by a Rust server.
+            </p>
+            <div class="tags">
+              <span class="tag">rust</span>
+              <span class="tag">actix web</span>
+              <span class="tag">javascript</span>
+              <span class="tag">canvas</span>
+              <span class="tag">websocket</span>
+            </div>
+          </a>
+
+          <a
+            class="work-feature"
+            href="https://chromewebstore.google.com/detail/bento-new-tab/mgnhpoioecgjficdbkghpnplklmohhpl"
+          >
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="background: #1abc9c"></span>Bento
+                <span class="kind">/ custom chrome theme</span></span
+              >
+              <span class="visit">Chrome Web Store ↗</span>
+            </div>
+            <p>
+              A Chrome new tab page you arrange yourself. Clock, bookmarks, shortcuts, search and
+              Google links are pieces you move, restyle, reorder or switch off.
+            </p>
+            <div class="tags">
+              <span class="tag">javascript</span>
+              <span class="tag">manifest v3</span>
+              <span class="tag">chrome api</span>
+              <span class="tag">zero-dep</span>
+            </div>
+          </a>
+
+          <a class="work-feature" href="https://simfrii.com">
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="background: #e97400"></span>Simfrii
+                <span class="kind">/ global esim marketplace</span></span
+              >
+              <span class="visit">simfrii.com ↗</span>
+            </div>
+            <p>
+              Buy and install eSIM data for 200+ countries in seconds. Compare live plans across
+              five providers side by side, then manage eSIMs, top up and get support — six
+              languages, no roaming, no physical SIM.
+            </p>
+            <div class="tags">
+              <span class="tag">rust</span>
+              <span class="tag">flutter</span>
+              <span class="tag">react</span>
+              <span class="tag">vite</span>
+            </div>
+          </a>
+        </div>
+
         <!-- Anchored so the links work in the exported PDF, but labelled
              short: the Chrome Web Store and Play Store URLs are long enough to
              wrap across the column and wreck the grid. -->
+        <p class="work-label">Previous partners you may know</p>
         <div class="work">
-          <div>
-            <a href="https://chromewebstore.google.com/detail/bento-new-tab/mgnhpoioecgjficdbkghpnplklmohhpl">
-              <b>Bento</b><span>Chrome extension — Web Store</span>
-            </a>
-          </div>
           <div>
             <a href="https://healthmasterbd.com"
               ><b>Health Master BD</b><span>healthmasterbd.com</span></a
             >
           </div>
           <div>
-            <a href="https://play.google.com/store/apps/details?id=com.fahimshahariar.romatoo"
-              ><b>Romatoo</b><span>Android — Google Play</span></a
-            >
-          </div>
-          <div>
             <a href="https://heartsmedistudy.com"
               ><b>Hearts Medi Study</b><span>heartsmedistudy.com</span></a
-            >
-          </div>
-          <div>
-            <a href="https://play.google.com/store/apps/details?id=com.heartsmedistudy.master_the_ward"
-              ><b>Master The Ward</b><span>Android — Google Play</span></a
             >
           </div>
           <div>
@@ -509,28 +719,9 @@
           </div>
         </div>
         <p class="note">
-          Further client work is covered by confidentiality or is no longer in service.
+          Further client work is covered by confidentiality or is available in
+          <a href="https://sabbirhassan.com/projects">my portfolio</a>.
         </p>
-      </section>
-      <section>
-        <h2>Open Source</h2>
-        <div class="cols">
-          <div>
-            <h3>Fanari</h3>
-            <p class="summary">
-              A social media application built for the performance and efficiency of a
-              large-scale platform.
-              <span class="yrs">github.com/SabbirMurad/fanari_v2</span>
-            </p>
-          </div>
-          <div>
-            <h3>Frame Forge</h3>
-            <p class="summary">
-              A design tool that generates production frontend code from the design itself.
-              <span class="yrs">github.com/SabbirMurad/frame_forge</span>
-            </p>
-          </div>
-        </div>
       </section>
       <section>
         <h2>Education</h2>

@@ -72,7 +72,8 @@ function Hero() {
         .from(q("[data-hero-name-inner]"), { yPercent: 105, duration: 1.25, ease: HERO_EASE }, 0.25)
         .from(q("[data-hero-tagline-p]"), { opacity: 0, y: 20, duration: 1, ease: HERO_EASE }, 0.5)
         .from(q("[data-hero-year]"), { opacity: 0, duration: 0.8 }, 0.75)
-        .from(q("[data-hero-card]"), { opacity: 0, y: 30, duration: 1, ease: HERO_EASE }, 0.85);
+        .from(q("[data-hero-card]"), { opacity: 0, y: 30, duration: 1, ease: HERO_EASE }, 0.85)
+        .from(q("[data-hero-resume]"), { opacity: 0, y: -14, duration: 0.9, ease: HERO_EASE }, 0.9);
 
       /* ── idle drift (forever) ──
          Distance scales with the element; each has its own period/offset so
@@ -179,6 +180,25 @@ function Hero() {
       </div>
 
       <div className="relative mx-auto flex min-h-[100dvh] max-w-[1600px] flex-col px-5 pb-7 pt-[var(--nav-h)] sm:px-8 lg:px-12">
+        {/* Résumé link — hangs off the row-2 grid line, flush with the same
+            right edge as the nav and the "Let's talk" card below (this div's
+            own padding box), so all three line up. Styled like the nav links
+            so it reads as part of the grid, not a separate widget. */}
+        <a
+          data-hero-resume
+          href="/assets/cv/cv.html"
+          style={{ top: "calc(35% + 14px)" }}
+          className="group absolute right-5 z-10 hidden w-fit flex-col items-center gap-4 sm:right-8 sm:flex lg:right-12"
+        >
+          <span aria-hidden="true" className="relative block h-16 w-px bg-white/20">
+            <span className="hero-resume-sweep absolute inset-0 bg-vermilion" />
+          </span>
+          <span className="relative whitespace-nowrap text-[17px] font-medium">
+            Résumé <span aria-hidden="true">↗</span>
+            <span className="absolute -bottom-1 left-0 h-px w-0 bg-vermilion transition-all duration-400 group-hover:w-full" />
+          </span>
+        </a>
+
         <div className="flex-1" />
 
         {/* Bottom row */}

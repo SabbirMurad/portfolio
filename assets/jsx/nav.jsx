@@ -6,7 +6,7 @@ function Nav() {
   const [mode, setMode] = useState("top");
   const [overHero, setOverHero] = useState(true);
 
-  const menuLinks = [...navLinks, { label: "Résumé", href: "/assets/cv.pdf" }];
+  const menuLinks = [...navLinks, { label: "Résumé", href: "/assets/cv/cv.html" }];
 
   useEffect(() => {
     const navH =
