@@ -7,11 +7,15 @@
     <!--
       Print-first CV, in the portfolio's own design language (Archivo display +
       Inter body, ink/bone/vermilion). Open in a browser and print to PDF:
-      Ctrl/Cmd+P -> Save as PDF, margins "Default", background graphics ON.
+      Ctrl/Cmd+P -> Save as PDF, margins "Default". Colour survives with or
+      without the dialog's "background graphics" box.
 
       Two pages by design. The old one ran to four because every skill got its
       own icon card; here the same information is set as dense lists so the
       experience — the part that gets read — starts on page one.
+
+      Served by Tera at /resume (src/routes/pages.rs -> Markup::resume), so
+      asset paths here are absolute, not relative to this file.
 
       TO SWAP THE PHOTO: replace the src on <img class="photo"> below. It points
       at the hero image as a placeholder.
@@ -115,6 +119,7 @@
         display: inline-block;
         width: 3px;
         height: 3px;
+        border: 1.5px solid var(--vermilion);
         border-radius: 50%;
         background: var(--vermilion);
         vertical-align: 2px;
@@ -184,7 +189,7 @@
       .work-features {
         display: grid;
         gap: 3.5mm;
-        margin-bottom: 4mm;
+        margin-bottom: 3mm;
       }
       .work-feature {
         display: block;
@@ -212,8 +217,13 @@
       .work-feature .dot {
         width: 2mm;
         height: 2mm;
+        /* Fill *and* ring: the ring is what survives a print with background
+           graphics off, the fill closes the pixel-rounding seam the ring's
+           four arcs leave at the centre. */
+        border: 1mm solid currentColor;
+        background: currentColor;
         border-radius: 50%;
-        background: var(--vermilion);
+        color: var(--vermilion);
         flex-shrink: 0;
       }
       .work-feature .kind {
@@ -256,7 +266,10 @@
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: var(--muted);
-        margin: 0 0 2.5mm;
+        /* Set apart from the featured cards above and the next section below —
+           the run of plain links needs air on both sides to read as its own
+           thing rather than a tail on the last card. */
+        margin: 5mm 0 2.5mm;
       }
       .work {
         display: grid;
@@ -306,7 +319,9 @@
         display: flex;
         align-items: baseline;
         gap: 3mm;
-        padding: 0.7mm 0;
+        /* 0.5mm rather than 0.7: with five rows in every group the extra
+           leading pushed the skills block past the foot of page one. */
+        padding: 0.5mm 0;
       }
 
       .skill .name {
@@ -339,7 +354,7 @@
       }
 
       .note {
-        margin: 2mm 0 0;
+        margin: 2mm 0 7mm;
         font-size: 8.8pt;
         color: var(--muted);
         border-left: 2px solid var(--line);
@@ -403,6 +418,10 @@
       .download-btn svg { width: 3.6mm; height: 3.6mm; flex-shrink: 0; }
 
       @media print {
+        /* Print the accents whether or not the dialog's "Background graphics"
+           box is ticked — everything coloured here is part of the document,
+           not decoration. */
+        html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         body { background: #fff; }
         .page {
           margin: 0;
@@ -439,7 +458,7 @@
       <header class="head">
         <!-- SWAP THIS: your own headshot. Square crops best; it is masked to a
              circle. Placeholder is the site's hero image. -->
-        <img class="photo" src="../image/hero_image.webp" alt="" />
+        <img class="photo" src="/assets/image/hero_image.webp" alt="" />
 
         <div>
           <h1>Md. Sabbir <span>Hassan</span></h1>
@@ -534,6 +553,14 @@
               ><span class="yrs">4 yrs</span>
             </div>
             <div class="skill">
+              <span class="name">Kotlin</span><span class="fill"></span
+              ><span class="yrs">1 yr</span>
+            </div>
+            <div class="skill">
+              <span class="name">Swift</span><span class="fill"></span
+              ><span class="yrs">1 yr</span>
+            </div>
+            <div class="skill">
               <span class="name">Vanilla JS, HTML, CSS</span><span class="fill"></span
               ><span class="yrs">6 yrs</span>
             </div>
@@ -605,13 +632,34 @@
              stay plain links below — these four are the ones worth a second
              look. Sourced from sabbirhassan.com's own project feed. -->
         <div class="work-features">
+          <a class="work-feature" href="https://github.com/SabbirMurad/fireball">
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="color: #ff6a1f"></span>Fireball
+                <span class="kind">/ camera hand tracking</span></span
+              >
+              <span class="visit">GitHub ↗</span>
+            </div>
+            <p>
+              MediaPipe’s 21-point hand skeleton drawn over the live camera feed. Close your fist
+              and open it and a fireball lights in that palm — flick the hand and the fire flies
+              off along the hand’s own path.
+            </p>
+            <div class="tags">
+              <span class="tag">flutter</span>
+              <span class="tag">kotlin</span>
+              <span class="tag">mediapipe</span>
+              <span class="tag">camerax</span>
+            </div>
+          </a>
+
           <a
             class="work-feature"
             href="https://play.google.com/store/apps/details?id=com.sabbir.hasp&hl=en"
           >
             <div class="row">
               <span class="name"
-                ><span class="dot" style="background: #bb80fa"></span>Hasp
+                ><span class="dot" style="color: #bb80fa"></span>Hasp
                 <span class="kind">/ dating app</span></span
               >
               <span class="visit">Google Play ↗</span>
@@ -633,7 +681,7 @@
           <a class="work-feature" href="https://github.com/SabbirMurad/scaffold">
             <div class="row">
               <span class="name"
-                ><span class="dot" style="background: #868aff"></span>Scaffold
+                ><span class="dot" style="color: #868aff"></span>Scaffold
                 <span class="kind">/ design → code</span></span
               >
               <span class="visit">GitHub ↗</span>
@@ -658,7 +706,7 @@
           >
             <div class="row">
               <span class="name"
-                ><span class="dot" style="background: #1abc9c"></span>Bento
+                ><span class="dot" style="color: #1abc9c"></span>Bento
                 <span class="kind">/ custom chrome theme</span></span
               >
               <span class="visit">Chrome Web Store ↗</span>
@@ -678,7 +726,7 @@
           <a class="work-feature" href="https://simfrii.com">
             <div class="row">
               <span class="name"
-                ><span class="dot" style="background: #e97400"></span>Simfrii
+                ><span class="dot" style="color: #e97400"></span>Simfrii
                 <span class="kind">/ global esim marketplace</span></span
               >
               <span class="visit">simfrii.com ↗</span>
@@ -693,6 +741,26 @@
               <span class="tag">flutter</span>
               <span class="tag">react</span>
               <span class="tag">vite</span>
+            </div>
+          </a>
+
+          <a class="work-feature" href="https://github.com/SabbirMurad/bambe">
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="color: #faaa39"></span>Bambe
+                <span class="kind">/ e-commerce storefront</span></span
+              >
+              <span class="visit">GitHub ↗</span>
+            </div>
+            <p>
+              A storefront served from Rust — browse and search the catalogue, wishlist, cart and
+              check out, with accounts, orders and returns, and an admin console behind it.
+            </p>
+            <div class="tags">
+              <span class="tag">rust</span>
+              <span class="tag">actix web</span>
+              <span class="tag">tera</span>
+              <span class="tag">javascript</span>
             </div>
           </a>
         </div>

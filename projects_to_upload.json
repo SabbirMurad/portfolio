@@ -45,5 +45,17 @@
         ],
         "description": "A modern dating app: swipe to discover people, match on mutual likes, then chat with photos, voice notes and video calls — with verified selfie profiles, smart filters, travel mode, boosts and a built-in safety centre.",
         "link": "https://play.google.com/store/apps/details?id=com.sabbir.hasp&hl=en"
+    },
+    {
+        "title": "Fireball",
+        "subtitle": "camera hand tracking",
+        "tags": [
+            "flutter",
+            "kotlin",
+            "mediapipe",
+            "camerax"
+        ],
+        "description": "Live hand tracking on the camera feed — MediaPipe's 21-point skeleton drawn over every frame, in real time. Close your fist and open it and a fireball lights in that palm; flick the hand and the fire is let go along the hand's own path, arcing until another palm catches it or it burns out.",
+        "link": "https://github.com/SabbirMurad/fireball"
     }
 ]

@@ -37,6 +37,14 @@ pub async fn projects(template: web::Data<Tera>) -> Result<HttpResponse, Error> 
     Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
 }
 
+pub async fn resume(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
+    let res_data = template
+        .render("resume.html", &Context::new())
+        .map_err(|e| error::ErrorInternalServerError(e))?;
+
+    Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
+}
+
 pub async fn hire(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
     let res_data = template
         .render("hire.html", &Context::new())

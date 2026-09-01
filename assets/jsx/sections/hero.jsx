@@ -274,7 +274,7 @@ function Hero() {
             does not cut the carves off. */}
         <a
           data-hero-resume
-          href="/assets/cv/cv.html"
+          href="/resume"
           data-cursor-label="OPEN"
           style={{ top: HERO_ROW_RESUME, clipPath: "inset(0 -16px 0% -16px)" }}
           className="group absolute right-5 z-10 hidden w-fit items-center gap-5 py-3 pl-5 pr-3 sm:right-8 sm:flex lg:right-12"
