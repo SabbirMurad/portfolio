@@ -362,6 +362,20 @@
       }
       .note a { color: var(--vermilion); font-weight: 500; }
 
+      /* ── speciality ──
+         Capability claims, not history, so they are set as one tight list with
+         the same vermilion markers as the experience bullets. The lead phrase
+         is bold so the page can be skimmed on the openers alone. */
+      .speciality {
+        margin: 0;
+        padding-left: 4.5mm;
+        color: var(--ink-soft);
+      }
+      .speciality li { margin-bottom: 1.2mm; break-inside: avoid; }
+      .speciality li:last-child { margin-bottom: 0; }
+      .speciality li::marker { color: var(--vermilion); }
+      .speciality b { font-weight: 600; color: var(--ink); }
+
       /* ── two-up ── */
       .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
       .cols h3, .stack h3 {
@@ -517,8 +531,9 @@
               interface design — while managing delivery as project manager on most of them.
             </li>
             <li>
-              Worked across the stack the company used: Rust and Node on the server, Flutter and
-              vanilla web on the client, MongoDB and SQLite for storage.
+              Developed full-stack solutions across diverse technologies including Rust, Node.js,
+              Flutter, and vanilla web, managing data persistence through MongoDB and SQLite
+              databases for 30+ features.
             </li>
           </ul>
         </div>
@@ -625,6 +640,38 @@
     <!-- ══════════════════ PAGE 2 ══════════════════ -->
     <div class="page">
       <section style="margin-top: 0">
+        <h2>Speciality</h2>
+        <ul class="speciality">
+          <li>
+            <b>Real-time computer vision on device</b> — MediaPipe’s pose and hand landmarkers run
+            against the live camera feed, the 21-point skeleton tracked and the gesture read frame
+            by frame, with the overlay composited back onto the preview. Fireball is built on that
+            pipeline.
+          </li>
+          <li>
+            <b>Data models that scale</b> — schema, index and sharding design with the caching
+            layer planned alongside it, structured to serve on the order of a million users
+            without the read path degrading.
+          </li>
+          <li>
+            <b>Systems-level Rust on the server</b> — services on Actix Web, with WebSocket and
+            WebRTC transport where the product has to be live rather than merely fast.
+          </li>
+          <li>
+            <b>One codebase across platforms</b> — Flutter and Tauri for the client, dropping into
+            Kotlin or Swift when a feature needs the platform’s own API.
+          </li>
+          <li>
+            <b>Design through to implementation</b> — I draw the interface in Figma and ship the
+            build myself, so nothing is lost in the handoff between the two.
+          </li>
+          <li>
+            <b>Delivery, not only code</b> — project management on most of what I built, a team of
+            twenty led for nine months, now operations across three teams.
+          </li>
+        </ul>
+      </section>
+      <section>
         <h2>Selected Work</h2>
 
         <!-- Featured, in the same language as the project cards on the site:
@@ -743,26 +790,6 @@
               <span class="tag">vite</span>
             </div>
           </a>
-
-          <a class="work-feature" href="https://github.com/SabbirMurad/bambe">
-            <div class="row">
-              <span class="name"
-                ><span class="dot" style="color: #faaa39"></span>Bambe
-                <span class="kind">/ e-commerce storefront</span></span
-              >
-              <span class="visit">GitHub ↗</span>
-            </div>
-            <p>
-              A storefront served from Rust — browse and search the catalogue, wishlist, cart and
-              check out, with accounts, orders and returns, and an admin console behind it.
-            </p>
-            <div class="tags">
-              <span class="tag">rust</span>
-              <span class="tag">actix web</span>
-              <span class="tag">tera</span>
-              <span class="tag">javascript</span>
-            </div>
-          </a>
         </div>
 
         <!-- Anchored so the links work in the exported PDF, but labelled
@@ -825,14 +852,6 @@
             </ul>
           </div>
         </div>
-      </section>
-      <section>
-        <h2>Beyond Work</h2>
-        <p class="summary">
-          I write scripts and sketch. Reading manga is where the writing habit came from, and
-          working out a complicated story turns out to use the same patience as working out a
-          complicated algorithm — both reward staying calm in the middle of them.
-        </p>
       </section>
       <div class="foot">
         <span>Md. Sabbir Hassan — CV</span>
