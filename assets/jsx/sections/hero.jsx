@@ -366,36 +366,31 @@ function Hero() {
             </div>
           </div>
 
-          {/* Let's-talk card — drift wrapper → entrance anchor. */}
+          {/* Let's-talk card — drift wrapper → entrance anchor. Built in the
+              Résumé tab's language (meta label over a bold line, white arrow
+              tile, vermilion on hover) so the hero's two actions read as a
+              pair. The name is not repeated here: the h1 beside it already
+              carries it, and the card only has to say what it does. */}
           <div data-hero-card-drift className="shrink-0 will-change-transform">
             <a
               data-hero-card
               href="#contact"
               data-cursor="view"
-              className="group hidden h-[124px] shrink-0 items-stretch gap-4 rounded-xl bg-ink p-3 sm:flex"
+              data-cursor-label="WRITE"
+              className="group hidden w-fit items-center gap-5 rounded-xl bg-ink/85 py-3 pl-5 pr-3 ring-1 ring-white/12 backdrop-blur-md transition-colors duration-400 hover:bg-vermilion hover:ring-vermilion sm:flex"
             >
-              <span className="relative block w-[92px] shrink-0 overflow-hidden rounded-lg bg-vermilion">
-                <img
-                  src="/assets/image/hero_image.webp"
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-cover object-top"
-                />
+              <span className="flex flex-col">
+                <span className="meta flex items-center gap-2 text-white/45 transition-colors duration-400 group-hover:text-white/75">
+                  <span aria-hidden className="block h-1.5 w-1.5 rounded-full bg-vermilion transition-colors duration-400 group-hover:bg-white" />
+                  Available for work
+                </span>
+                <span className="whitespace-nowrap text-[17px] font-semibold leading-tight">
+                  Let&apos;s talk
+                </span>
               </span>
 
-              <span className="flex min-w-[188px] flex-col justify-between py-0.5 pr-0.5">
-                <span className="flex items-start justify-between gap-6">
-                  <span className="text-[15px] font-semibold leading-none">Let&apos;s talk</span>
-                </span>
-
-                <span className="flex items-end justify-between gap-6">
-                  <span className="block leading-tight">
-                    <span className="block text-[17px] font-bold">{profile.fullName}</span>
-                    <span className="mt-0.5 block text-[12px] text-white/50">{profile.role}</span>
-                  </span>
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-white text-base text-ink transition-colors duration-400 group-hover:bg-vermilion group-hover:text-white">
-                    ↗
-                  </span>
-                </span>
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-base text-ink transition-transform duration-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+                ↗
               </span>
             </a>
           </div>

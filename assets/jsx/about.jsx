@@ -98,7 +98,7 @@ function About() {
             <Reveal scaleFrom={1.06} distance={0} className="order-2 lg:order-1">
               <div className="mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-sm bg-ink-2 lg:mx-0">
                 <img
-                  src="/assets/image/hero_image.webp"
+                  src="/assets/image/sabbir_hassan.webp"
                   alt={profile.fullName}
                   decoding="async"
                   className="h-full w-full object-cover object-top"

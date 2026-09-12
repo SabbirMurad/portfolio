@@ -342,10 +342,14 @@ html.lenis body {
   animation: svc-bounce-dot 1.2s ease-in-out infinite;
 }
 
-/* ── HIDE NATIVE CURSOR (custom cursor takes over on fine pointers) ── */
+/* ── HIDE NATIVE CURSOR ──
+   Only while the pointer is over something interactive, where the ring and
+   its label stand in for it. At rest the native cursor is the better one:
+   it is the shape the OS taught the visitor, and it never lags the pointer.
+   Cursor (helpers.jsx) puts .cursor-hover on the body for those hits. */
 @media (pointer: fine) {
-  body.custom-cursor,
-  body.custom-cursor * {
+  body.custom-cursor.cursor-hover,
+  body.custom-cursor.cursor-hover * {
     cursor: none !important;
   }
 }

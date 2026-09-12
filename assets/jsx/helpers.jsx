@@ -290,7 +290,6 @@ function StackSection(props) {
 /* ── Custom cursor ── ring + dot follow via gsap.quickTo; state via data attrs. */
 function Cursor() {
   const ringRef = React.useRef(null);
-  const dotRef = React.useRef(null);
   const [active, setActive] = React.useState(false);
   const [label, setLabel] = React.useState(null);
   const [onDark, setOnDark] = React.useState(false);
@@ -308,13 +307,9 @@ function Cursor() {
     if (!enabled) return;
     const rx = gsap.quickTo(ringRef.current, "x", { duration: 0.35, ease: "power3" });
     const ry = gsap.quickTo(ringRef.current, "y", { duration: 0.35, ease: "power3" });
-    const dx = gsap.quickTo(dotRef.current, "x", { duration: 0.12, ease: "power3" });
-    const dy = gsap.quickTo(dotRef.current, "y", { duration: 0.12, ease: "power3" });
     const onMove = (e) => {
       rx(e.clientX);
       ry(e.clientY);
-      dx(e.clientX);
-      dy(e.clientY);
       const t = e.target;
       setOnDark(!!(t.closest && t.closest('[data-cursor-theme="dark"]')));
       const el = t.closest && t.closest("[data-cursor], a, button");
@@ -330,12 +325,21 @@ function Cursor() {
     return () => window.removeEventListener("mousemove", onMove);
   }, [enabled]);
 
+  React.useEffect(() => {
+    if (!enabled) return;
+    document.body.classList.toggle("cursor-hover", active);
+    return () => document.body.classList.remove("cursor-hover");
+  }, [enabled, active]);
+
   if (!enabled) return null;
   const ink = onDark ? "255,255,255" : "11,11,11";
   const size = active ? (label ? 84 : 52) : 34;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[9999] hidden md:block">
+    <div
+      className="pointer-events-none fixed inset-0 z-[9999] hidden md:block"
+      style={{ opacity: active ? 1 : 0, transition: "opacity .2s" }}
+    >
       <div ref={ringRef} className="absolute left-0 top-0">
         <div
           className="flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border"
@@ -353,16 +357,6 @@ function Cursor() {
         >
           {label ? <span className="meta text-[9px] font-semibold text-white">{label}</span> : null}
         </div>
-      </div>
-      <div ref={dotRef} className="absolute left-0 top-0">
-        <div
-          className="h-[5px] w-[5px] rounded-full"
-          style={{
-            backgroundColor: "rgb(" + ink + ")",
-            transform: "translate(-50%,-50%) scale(" + (active ? 0 : 1) + ")",
-            transition: "transform .28s, background-color .28s",
-          }}
-        />
       </div>
     </div>
   );
@@ -404,6 +398,11 @@ function Ripple() {
 
 /* ── Social brand marks (was SocialIcon.tsx) ── */
 const SOCIAL_MARKS = {
+  LinkedIn: {
+    viewBox: "0 0 24 24",
+    className: "h-5 w-5",
+    d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z",
+  },
   GitHub: {
     viewBox: "0 0 24 24",
     className: "h-5 w-5",

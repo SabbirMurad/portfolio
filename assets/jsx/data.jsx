@@ -20,6 +20,7 @@ const profile = {
 
 const socials = [
   { label: "GitHub", href: "https://github.com/sabbirmurad" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/sabbir-hassan-aa302824a/" },
   { label: "YouTube", href: "https://www.youtube.com/@itscompiletime" },
   { label: "Fiverr", href: "https://www.fiverr.com/sabbirhassan" },
   { label: "Upwork", href: "https://www.upwork.com/freelancers/sabbirhassan" },
