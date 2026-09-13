@@ -97,40 +97,6 @@
   <script type="text/babel" src="/assets/jsx/loader.jsx"></script>
 
   <script type="text/babel" src="/assets/jsx/app.jsx"></script>
-
-  <!-- TEMPORARY debug readout — remove once the mobile pinch-zoom/nav-width
-       investigation is done. Shows live viewport + header metrics so they
-       can be read straight off a real phone without needing devtools. -->
-  <script>
-    (function () {
-      var el = document.createElement("div");
-      el.style.cssText =
-        "position:fixed;bottom:0;left:0;z-index:2147483647;background:#ff0040;color:#fff;font:10px/1.4 monospace;padding:4px 6px;white-space:pre;pointer-events:none;";
-      document.body.appendChild(el);
-      function update() {
-        var header = document.querySelector("header");
-        var hr = header ? header.getBoundingClientRect() : null;
-        var cs = header ? getComputedStyle(header) : null;
-        var vv = window.visualViewport;
-        el.textContent =
-          "innerW:" + window.innerWidth +
-          " clientW:" + document.documentElement.clientWidth +
-          " vvW:" + (vv ? vv.width.toFixed(1) : "-") +
-          " vvScale:" + (vv ? vv.scale.toFixed(2) : "-") +
-          "\nhdrW:" + (hr ? Math.round(hr.width) : "-") +
-          " hdrRight:" + (hr ? Math.round(hr.right) : "-") +
-          " hdrPos:" + (cs ? cs.position : "-");
-      }
-      update();
-      window.addEventListener("resize", update);
-      window.addEventListener("scroll", update, { passive: true });
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", update);
-        window.visualViewport.addEventListener("scroll", update);
-      }
-      setInterval(update, 400);
-    })();
-  </script>
 </body>
 
 </html>
