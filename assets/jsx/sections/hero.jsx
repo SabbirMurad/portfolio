@@ -221,17 +221,26 @@ function Hero() {
         </div>
       </div>
 
-      {/* Cut-out portrait — entrance (opacity/scale) + scroll parallax. */}
+      {/* Cut-out portrait — entrance (opacity/scale) + scroll parallax. Below sm
+          it is capped much shorter: at the full 96% it renders wider than the
+          viewport (its aspect ratio is close to square) and swallows the
+          whole width, which is what was crowding the tagline. */}
       <div
         data-hero-portrait
-        className="pointer-events-none absolute bottom-0 left-1/2 h-[96%] -translate-x-1/2 will-change-transform"
+        className="pointer-events-none absolute bottom-[14%] left-1/2 h-[42%] -translate-x-1/2 will-change-transform sm:bottom-0 sm:h-[96%]"
       >
+        {/* Below sm the portrait floats clear of the section's own bottom edge
+            (see the wrapper above), so the section-wide "Bottom blend" below
+            no longer reaches its foot — it needs its own fade there instead,
+            dissolving the crop line into the field rather than cutting hard.
+            From sm up the portrait still runs to the true bottom, where that
+            shared blend already does the job, so the mask is switched off. */}
         <img
           src="/assets/image/hero_image.webp"
           alt={profile.fullName}
           width={1323}
           height={1189}
-          className="h-full w-auto max-w-none object-contain object-bottom"
+          className="h-full w-auto max-w-none object-contain object-bottom [mask-image:linear-gradient(to_bottom,#000_70%,transparent_96%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_70%,transparent_96%)] sm:[-webkit-mask-image:none] sm:[mask-image:none]"
         />
       </div>
 
@@ -248,10 +257,14 @@ function Hero() {
 
       {/* Tagline — second grid row, first column. Fades on scroll, enters on load. */}
       <div data-hero-tagline style={{ top: "35%" }} className="absolute inset-x-0 will-change-[opacity]">
-        <div className="mx-auto grid max-w-[1600px] grid-cols-3 px-5 sm:px-8 lg:px-12">
+        {/* Below sm this is a single column, so the tagline runs the full
+            measure of the viewport instead of being boxed into a 1-of-3
+            grid column; from sm up it goes back to sitting beside the
+            portrait in column one. */}
+        <div className="mx-auto grid max-w-[1600px] grid-cols-1 px-5 sm:grid-cols-3 sm:px-8 lg:px-12">
           <p
             data-hero-tagline-p
-            className="max-w-[24rem] pt-3 text-[17px] font-medium uppercase leading-[1.58]"
+            className="pt-3 text-[15px] font-medium uppercase leading-[1.58] sm:max-w-[24rem] sm:text-[17px]"
           >
             {profile.tagline}
           </p>

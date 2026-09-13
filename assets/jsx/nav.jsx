@@ -55,7 +55,9 @@ function Nav() {
   }, []);
 
   const surface =
-    open || mode === "top"
+    open
+      ? { bg: "rgba(11,11,11,0.85)", blur: "blur(16px)", color: "#ffffff", onDark: true }
+      : mode === "top"
       ? { bg: "rgba(255,255,255,0)", blur: "blur(0px)", color: "#ffffff", onDark: true }
       : overHero
         ? { bg: "rgba(255,255,255,0.10)", blur: "blur(16px)", color: "#ffffff", onDark: true }
@@ -127,7 +129,7 @@ function Nav() {
       {/* Full-screen menu overlay */}
       <div
         data-cursor-theme="dark"
-        className="fixed inset-0 z-[105] bg-ink text-white"
+        className="fixed inset-0 z-[105] overflow-y-auto overscroll-contain bg-ink text-white"
         style={{
           transform: open ? "translateY(0%)" : "translateY(-100%)",
           transition: "transform .8s cubic-bezier(0.76,0,0.24,1)",
@@ -141,7 +143,11 @@ function Nav() {
           Menu
         </span>
 
-        <div className="relative mx-auto grid h-full max-w-[1600px] content-center gap-y-12 px-5 sm:px-8 lg:grid-cols-3 lg:gap-x-16 lg:px-12">
+        {/* pt clears the fixed header (transparent while the menu is open, so
+            the list would otherwise start underneath it); pb keeps the last
+            row off the bottom edge on short viewports where content-center's
+            usual vertical centering isn't enough room. */}
+        <div className="relative mx-auto grid min-h-full max-w-[1600px] content-center gap-y-12 px-5 pb-10 pt-[calc(var(--nav-h)+24px)] sm:px-8 lg:grid-cols-3 lg:gap-x-16 lg:px-12 lg:pb-1 lg:pt-0">
           <ul className="lg:col-span-2">
             {menuLinks.map((l, i) => (
               <li
