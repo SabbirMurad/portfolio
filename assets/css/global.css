@@ -43,6 +43,14 @@ html {
   position: relative;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* legacy Edge */
+  /* fixed-position elements (the nav header, the full-screen menu) are
+     positioned against the viewport itself, not against <body> — body's
+     own overflow-x:hidden below does not clip them. If one is ever a
+     hair wider than the screen, this is what stops it from pushing the
+     mobile layout viewport wider than the device (the classic case of a
+     fixed header "still full width" while everything else looks zoomed
+     out, and content past the true edge going uninteractable). */
+  overflow-x: hidden;
 }
 
 body {
