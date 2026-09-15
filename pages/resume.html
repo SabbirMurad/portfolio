@@ -1,9 +1,21 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=810" />
-    <title>Md. Sabbir Hassan — CV</title>
+
+    <!-- The CV is the page a search for the name should land on, so it gets
+         the same head as the rest of the site rather than a bare <title>.
+         seo.html emits the title itself — do not add one here as well. -->
+    {% set seo_title = "Résumé — Md. Sabbir Hassan, Fullstack Developer & Designer" %}
+    {% set seo_description = "The CV of Md. Sabbir Hassan — fullstack developer and designer. Rust, C++, Flutter and Tauri, six years of client work, and the projects behind it. Readable in the browser or downloadable as a PDF." %}
+    {% set seo_keywords = "Sabbir Hassan CV, Sabbir Hassan resume, fullstack developer resume, Rust developer CV, Flutter developer CV, Bangladesh developer, freelance developer" %}
+    {% set seo_path = "/resume" %}
+    {% set seo_og_title = "Résumé — Md. Sabbir Hassan" %}
+    {% set seo_og_description = "Fullstack developer and designer. Rust, C++, Flutter, Tauri — the experience, the stack and the selected work, in one page." %}
+    {% set seo_twitter_description = "The CV: Rust · C++ · Flutter · Tauri, the experience and the selected work in one page." %}
+    {% set seo_image_alt = "Md. Sabbir Hassan — Résumé" %}
+    {% include "common/seo.html" %}
 
     <!--
       Print-first CV, in the portfolio's own design language (Archivo display +
@@ -490,7 +502,7 @@
       <header class="head">
         <!-- SWAP THIS: your own headshot. Square crops best; it is masked to a
              circle. Placeholder is the site's hero image. -->
-        <img class="photo" src="/assets/image/hero_image.webp" alt="" />
+        <img class="photo" src="/assets/image/hero_image.webp" alt="Md. Sabbir Hassan" />
 
         <div>
           <h1>Md. Sabbir <span>Hassan</span></h1>

@@ -45,20 +45,23 @@ pub async fn resume(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
     Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
 }
 
-pub async fn hire(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
-    let res_data = template
-        .render("hire.html", &Context::new())
-        .map_err(|e| error::ErrorInternalServerError(e))?;
-
-    Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
+/// `/hire` and `/contact` used to render templates of their own. Those pages
+/// were folded into the home page long ago and the templates went with them,
+/// so both routes answered 500 — the worst thing to hand a crawler, and worse
+/// than a 404. The content they promised lives at #contact, so they redirect
+/// there permanently and any link still pointing here keeps working.
+fn to_contact_anchor() -> HttpResponse {
+    HttpResponse::MovedPermanently()
+        .append_header(("Location", "/#contact"))
+        .finish()
 }
 
-pub async fn contact(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
-    let res_data = template
-        .render("contact.html", &Context::new())
-        .map_err(|e| error::ErrorInternalServerError(e))?;
+pub async fn hire() -> HttpResponse {
+    to_contact_anchor()
+}
 
-    Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
+pub async fn contact() -> HttpResponse {
+    to_contact_anchor()
 }
 
 pub async fn sign_in(template: web::Data<Tera>) -> Result<HttpResponse, Error> {

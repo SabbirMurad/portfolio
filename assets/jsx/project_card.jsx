@@ -85,7 +85,7 @@ function useProjects() {
    its hover transform transition, and there is no frame where neither is
    painted. With no hash (an older upload, or the data.jsx fallback) the
    accent gradient plays the same part. */
-function ProjectBanner({ src, hash, accent, name }) {
+function ProjectBanner({ src, hash, accent, name, kind }) {
   const [loaded, setLoaded] = React.useState(false);
   const imgRef = React.useRef(null);
 
@@ -106,7 +106,9 @@ function ProjectBanner({ src, hash, accent, name }) {
       <img
         ref={imgRef}
         src={src}
-        alt=""
+        /* Named, not decorative: these banners are artwork made for each
+           project and the only thing about them image search can read. */
+        alt={kind ? name + " — " + kind : name}
         decoding="async"
         onLoad={() => setLoaded(true)}
         /* A broken file leaves the placeholder up rather than showing the
@@ -165,7 +167,13 @@ function ProjectCard({ p }) {
       <RevealLayer scaleFrom={1.14} distance={0} className="overflow-hidden rounded-sm">
         <div className="relative h-[200px] overflow-hidden sm:h-[240px] lg:h-[280px]">
           {p.image ? (
-            <ProjectBanner src={p.image} hash={p.blurHash} accent={p.accent} name={p.name} />
+            <ProjectBanner
+              src={p.image}
+              hash={p.blurHash}
+              accent={p.accent}
+              name={p.name}
+              kind={p.kind}
+            />
           ) : (
             <React.Fragment>
               {/* No banner at all: the accent gradient parallaxes instead. */}

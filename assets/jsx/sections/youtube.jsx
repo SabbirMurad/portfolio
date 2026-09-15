@@ -23,7 +23,7 @@ function _YtPoster(props) {
     return (
       <img
         src={video.thumbnail}
-        alt=""
+        alt={video.title || ""}
         loading="lazy"
         className={
           "h-full w-full object-cover" +
