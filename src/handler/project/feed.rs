@@ -6,6 +6,7 @@ use crate::Model::ImageStruct;
 use crate::Model::Project::Project;
 use crate::BuiltIns::mongo::MongoDB;
 use crate::utils::response::Response;
+use crate::utils::slug::project_slug;
 use actix_web::{Error, HttpResponse};
 
 // The public feed — no auth, read-only, and deliberately a different shape
@@ -28,6 +29,12 @@ struct ImageMeta {
 #[derive(Serialize)]
 struct PublicProject {
     uuid: String,
+    // The card's own URL, /projects/<slug>. Sent whether or not there is a
+    // detail page, so the pages don't have to know how a slug is made.
+    slug: String,
+    // With a detail page the card goes there and `link` becomes the button on
+    // it; without one the card links straight out to `link`, as it always did.
+    has_details: bool,
     title: String,
     subtitle: String,
     description: String,
@@ -103,6 +110,8 @@ pub async fn task() -> Result<HttpResponse, Error> {
             });
 
             PublicProject {
+                slug: project_slug(&p.slug, &p.title),
+                has_details: p.details_id.is_some(),
                 uuid: p.uuid,
                 title: p.title,
                 subtitle: p.subtitle,

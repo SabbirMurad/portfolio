@@ -37,6 +37,25 @@ pub async fn projects(template: web::Data<Tera>) -> Result<HttpResponse, Error> 
     Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
 }
 
+/// /projects/<slug>. The page itself is client-rendered like the rest of the
+/// site, but the slug is known here, so canonical and og:url can name the
+/// actual project instead of the shell. The API decides whether the slug
+/// exists; a bad one renders the shell and the page shows its not-found
+/// state.
+pub async fn project_detail(
+    template: web::Data<Tera>,
+    path: web::Path<String>,
+) -> Result<HttpResponse, Error> {
+    let mut context = Context::new();
+    context.insert("slug", &path.into_inner());
+
+    let res_data = template
+        .render("project.html", &context)
+        .map_err(|e| error::ErrorInternalServerError(e))?;
+
+    Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
+}
+
 pub async fn resume(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
     let res_data = template
         .render("resume.html", &Context::new())

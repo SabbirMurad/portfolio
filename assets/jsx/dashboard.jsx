@@ -960,7 +960,7 @@ function CreateProject({ onCreated, onCancel }) {
   );
 }
 
-function ProjectCard({ project, onToggle, toggling }) {
+function ProjectCard({ project, onToggle, toggling, onEditDetails }) {
   const date = new Date(project.created_at).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -1025,8 +1025,356 @@ function ProjectCard({ project, onToggle, toggling }) {
               onToggle={() => onToggle(project)}
             />
           </div>
+
+          {/* Whether the card on the site opens a page of its own or goes
+              straight out to `link`. */}
+          <div className="mt-4 flex items-center justify-between gap-3 border-t border-line pt-4">
+            <span className="meta text-muted-2">
+              {project.details_id ? "Has a detail page" : "No detail page"}
+            </span>
+            <button
+              type="button"
+              onClick={() => onEditDetails(project)}
+              className="meta rounded-sm border border-line px-3 py-2 text-muted-2 transition-colors duration-300 hover:border-ink hover:text-ink"
+            >
+              {project.details_id ? "Edit" : "Add"}
+            </button>
+          </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ── project detail page editor ──────────────────────────────────────── */
+
+/* The long form behind /projects/<slug>: titled sections and YouTube links.
+   A project without one is a card that links straight out, which is what
+   every project was before this existed — so the editor opens on an empty
+   form, and "Remove" puts a project back to that.
+
+   The whole form is sent on save (PUT /project/<uuid>/details) rather than
+   diffed: rows are reordered and deleted freely here, and a list the server
+   replaces wholesale is one where the order on screen is the order stored. */
+
+const EMPTY_SECTION = { title: "", body: "" };
+const EMPTY_VIDEO = { url: "", title: "" };
+
+function RowTools({ index, count, onMove, onRemove, disabled, label }) {
+  const btn =
+    "grid h-8 w-8 place-items-center rounded-sm border border-line text-muted-2 transition-colors duration-300 hover:border-ink hover:text-ink disabled:opacity-40";
+
+  return (
+    <div className="flex shrink-0 items-center gap-1.5">
+      <button
+        type="button"
+        onClick={() => onMove(index, -1)}
+        disabled={disabled || index === 0}
+        aria-label={"Move " + label + " up"}
+        className={btn}
+      >
+        ↑
+      </button>
+      <button
+        type="button"
+        onClick={() => onMove(index, 1)}
+        disabled={disabled || index === count - 1}
+        aria-label={"Move " + label + " down"}
+        className={btn}
+      >
+        ↓
+      </button>
+      <button
+        type="button"
+        onClick={() => onRemove(index)}
+        disabled={disabled}
+        aria-label={"Remove " + label}
+        className={btn + " hover:border-vermilion hover:text-vermilion"}
+      >
+        ×
+      </button>
+    </div>
+  );
+}
+
+function ProjectDetailsEditor({ project, onClose, onSaved }) {
+  const { useState, useEffect } = React;
+  const [sections, setSections] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [loadState, setLoadState] = useState("loading"); // loading | ready | error
+  const [hasPage, setHasPage] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState(null);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      const result = await Fetcher.get({
+        endpoint: "/project/" + project.uuid + "/details",
+        showError: false,
+      });
+      if (!alive) return;
+      if (!result.ok) {
+        setLoadState("error");
+        setError(result.error || "Couldn't load the detail page");
+        return;
+      }
+      const data = result.data || {};
+      // One empty row each, so the form opens on something to type into.
+      setSections((data.sections || []).length ? data.sections : [{ ...EMPTY_SECTION }]);
+      setVideos(
+        (data.videos || []).length
+          ? data.videos.map((v) => ({ url: v.url, title: v.title || "" }))
+          : [{ ...EMPTY_VIDEO }],
+      );
+      setHasPage(!!data.details_id);
+      setLoadState("ready");
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [project.uuid]);
+
+  const editRow = (setter) => (index, field) => (e) => {
+    const value = e.target.value;
+    setSaved(false);
+    setter((prev) => prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)));
+  };
+
+  const moveRow = (setter) => (index, delta) => {
+    const next = index + delta;
+    setSaved(false);
+    setter((prev) => {
+      if (next < 0 || next >= prev.length) return prev;
+      const copy = prev.slice();
+      const [row] = copy.splice(index, 1);
+      copy.splice(next, 0, row);
+      return copy;
+    });
+  };
+
+  const removeRow = (setter, blank) => (index) => {
+    setSaved(false);
+    setter((prev) => {
+      const copy = prev.filter((_, i) => i !== index);
+      return copy.length ? copy : [{ ...blank }];
+    });
+  };
+
+  const editSection = editRow(setSections);
+  const editVideo = editRow(setVideos);
+
+  const save = async () => {
+    setPending(true);
+    setError(null);
+
+    const result = await Fetcher.put({
+      endpoint: "/project/" + project.uuid + "/details",
+      body: {
+        sections: sections
+          .map((s) => ({ title: s.title.trim(), body: s.body.trim() }))
+          .filter((s) => s.title || s.body),
+        videos: videos
+          .map((v) => ({ url: v.url.trim(), title: v.title.trim() || null }))
+          .filter((v) => v.url),
+      },
+      showError: false,
+    });
+
+    setPending(false);
+
+    if (!result.ok) {
+      setError(result.error || "Couldn't save");
+      return;
+    }
+
+    setHasPage(true);
+    setSaved(true);
+    onSaved && onSaved(project.uuid, result.data);
+  };
+
+  const remove = async () => {
+    setPending(true);
+    setError(null);
+
+    const result = await Fetcher.delete({
+      endpoint: "/project/" + project.uuid + "/details",
+      showError: false,
+    });
+
+    setPending(false);
+
+    if (!result.ok) {
+      setError(result.error || "Couldn't remove the detail page");
+      return;
+    }
+
+    setHasPage(false);
+    setSections([{ ...EMPTY_SECTION }]);
+    setVideos([{ ...EMPTY_VIDEO }]);
+    onSaved && onSaved(project.uuid, null);
+  };
+
+  return (
+    <div className="rounded-md border border-line bg-paper p-5 sm:p-6">
+      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-5">
+        <div>
+          <p className="meta text-vermilion">Detail page</p>
+          <h2 className="display-tight mt-2 text-xl font-bold">{project.title}</h2>
+          <p className="meta mt-2 max-w-lg text-muted-2">
+            {hasPage
+              ? "The card opens this page; the project's own link becomes the button at the end of it."
+              : "Nothing here yet — the card links straight out. Save one section and it gets a page."}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          className="meta rounded-sm border border-line px-4 py-2.5 text-muted-2 transition-colors duration-300 hover:border-ink hover:text-ink"
+        >
+          Close
+        </button>
+      </div>
+
+      {loadState === "loading" && <p className="meta py-8 text-center text-muted-2">Loading…</p>}
+      {loadState === "error" && <p className="meta py-8 text-center text-vermilion">{error}</p>}
+
+      {loadState === "ready" && (
+        <React.Fragment>
+          {/* ── Sections ── */}
+          <div className="pt-6">
+            <div className="flex items-center justify-between gap-4">
+              <p className="meta text-muted-2">Sections</p>
+              <span className="meta text-muted">{sections.length}</span>
+            </div>
+
+            <div className="mt-4 grid gap-5">
+              {sections.map((s, i) => (
+                <div key={i} className="rounded-sm border border-line bg-bone/60 p-4">
+                  <div className="flex items-center gap-3">
+                    <input
+                      value={s.title}
+                      onChange={editSection(i, "title")}
+                      disabled={pending}
+                      placeholder="Section title"
+                      className={FIELD + " bg-paper"}
+                    />
+                    <RowTools
+                      index={i}
+                      count={sections.length}
+                      onMove={moveRow(setSections)}
+                      onRemove={removeRow(setSections, EMPTY_SECTION)}
+                      disabled={pending}
+                      label={"section " + (i + 1)}
+                    />
+                  </div>
+                  <textarea
+                    value={s.body}
+                    onChange={editSection(i, "body")}
+                    disabled={pending}
+                    rows={4}
+                    placeholder="What this section says. Leave a blank line between paragraphs."
+                    className={FIELD + " mt-3 resize-y bg-paper"}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setSections((prev) => prev.concat([{ ...EMPTY_SECTION }]))}
+              disabled={pending}
+              className="meta mt-4 rounded-sm border border-line px-4 py-2.5 text-muted-2 transition-colors duration-300 hover:border-ink hover:text-ink"
+            >
+              + Add section
+            </button>
+          </div>
+
+          {/* ── Videos ── */}
+          <div className="mt-8 border-t border-line pt-6">
+            <div className="flex items-center justify-between gap-4">
+              <p className="meta text-muted-2">YouTube videos</p>
+              <span className="meta text-muted">{videos.length}</span>
+            </div>
+
+            <div className="mt-4 grid gap-4">
+              {videos.map((v, i) => (
+                <div key={i} className="flex flex-wrap items-center gap-3 sm:flex-nowrap">
+                  <input
+                    value={v.url}
+                    onChange={editVideo(i, "url")}
+                    disabled={pending}
+                    placeholder="https://youtu.be/… or the video id"
+                    className={FIELD}
+                  />
+                  <input
+                    value={v.title}
+                    onChange={editVideo(i, "title")}
+                    disabled={pending}
+                    placeholder="Caption (optional)"
+                    className={FIELD + " sm:max-w-[240px]"}
+                  />
+                  <RowTools
+                    index={i}
+                    count={videos.length}
+                    onMove={moveRow(setVideos)}
+                    onRemove={removeRow(setVideos, EMPTY_VIDEO)}
+                    disabled={pending}
+                    label={"video " + (i + 1)}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setVideos((prev) => prev.concat([{ ...EMPTY_VIDEO }]))}
+              disabled={pending}
+              className="meta mt-4 rounded-sm border border-line px-4 py-2.5 text-muted-2 transition-colors duration-300 hover:border-ink hover:text-ink"
+            >
+              + Add video
+            </button>
+          </div>
+
+          {error && <p className="meta mt-6 text-vermilion">{error}</p>}
+
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6">
+            <div className="flex flex-wrap items-center gap-4">
+              <button
+                type="button"
+                onClick={save}
+                disabled={pending}
+                className="rounded-sm bg-ink px-6 py-3 text-white transition-colors duration-300 hover:bg-vermilion disabled:opacity-50"
+              >
+                <span className="meta">{pending ? "Saving…" : "Save detail page"}</span>
+              </button>
+              {saved && <span className="meta text-muted-2">Saved</span>}
+              {hasPage && project.slug && (
+                <a
+                  href={"/projects/" + project.slug}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="meta text-muted-2 underline decoration-line underline-offset-4 transition-colors duration-300 hover:text-ink"
+                >
+                  View page ↗
+                </a>
+              )}
+            </div>
+
+            {hasPage && (
+              <button
+                type="button"
+                onClick={remove}
+                disabled={pending}
+                className="meta rounded-sm border border-line px-4 py-2.5 text-muted-2 transition-colors duration-300 hover:border-vermilion hover:text-vermilion disabled:opacity-50"
+              >
+                Remove detail page
+              </button>
+            )}
+          </div>
+        </React.Fragment>
+      )}
     </div>
   );
 }
@@ -1039,6 +1387,7 @@ function ProjectsTab() {
   const [search, setSearch] = useState("");
   const [showCreate, setShowCreate] = useState(false);
   const [togglingUuid, setTogglingUuid] = useState(null);
+  const [editingDetails, setEditingDetails] = useState(null);
 
   useEffect(() => {
     let alive = true;
@@ -1072,6 +1421,23 @@ function ProjectsTab() {
   const onCreated = (project) => {
     setProjects((prev) => [project, ...prev]);
     setShowCreate(false);
+  };
+
+  /* The editor answers with the details_id and the slug it settled on (or
+     null, on removal), which is exactly what the card reads — so the list is
+     patched in place instead of refetched. */
+  const onDetailsSaved = (uuid, result) => {
+    setProjects((prev) =>
+      prev.map((p) =>
+        p.uuid === uuid
+          ? {
+              ...p,
+              details_id: result ? result.details_id : null,
+              slug: result && result.slug ? result.slug : p.slug,
+            }
+          : p,
+      ),
+    );
   };
 
   const onToggle = async (project) => {
@@ -1120,6 +1486,17 @@ function ProjectsTab() {
         </div>
       )}
 
+      {editingDetails && (
+        <div className="mt-6">
+          <ProjectDetailsEditor
+            key={editingDetails.uuid}
+            project={editingDetails}
+            onClose={() => setEditingDetails(null)}
+            onSaved={onDetailsSaved}
+          />
+        </div>
+      )}
+
       <div className="mt-6">
         <input
           value={search}
@@ -1155,6 +1532,7 @@ function ProjectsTab() {
               project={project}
               toggling={togglingUuid === project.uuid}
               onToggle={onToggle}
+              onEditDetails={setEditingDetails}
             />
           ))}
         </div>

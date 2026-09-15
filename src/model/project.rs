@@ -26,6 +26,16 @@ pub struct Project {
     // Whether this shows up in the projects grid on the home page.
     #[serde(default)]
     pub featured: bool,
+    // URL segment for the detail page: /projects/<slug>. Optional because
+    // rows written before detail pages existed don't have one; readers fall
+    // back to slugifying the title, which is what those rows would have got.
+    #[serde(default)]
+    pub slug: Option<String>,
+    // uuid of the row in `project_details` that this project's detail page is
+    // built from. None means there is no detail page, and the card links
+    // straight out to `link` as it always did.
+    #[serde(default)]
+    pub details_id: Option<String>,
     pub created_at: i64,
     pub created_by: String,
     pub deleted_at: Option<i64>,

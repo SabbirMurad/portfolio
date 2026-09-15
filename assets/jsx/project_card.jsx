@@ -26,6 +26,10 @@ function _toCard(p) {
     blurb: p.description,
     tags: p.tags || [],
     href: p.link || null,
+    // With a detail page the card goes there instead of straight out — the
+    // outbound link becomes the button on that page. `slug` comes from the
+    // feed so the card never has to know how one is made.
+    detailHref: p.has_details && p.slug ? "/projects/" + p.slug : null,
     accent: p.accent || "#DE4520",
     featured: !!p.featured,
     image: p.image ? "/image/webp/" + p.image.id : null,
@@ -149,17 +153,22 @@ function ProjectBanner({ src, hash, accent, name, kind }) {
 
 /* ── card ── */
 function ProjectCard({ p }) {
-  // An entry with no link is still worth showing; it just isn't an anchor.
-  const linked = !!p.href;
-  const Tag = linked ? "a" : "div";
-  const linkProps = linked
-    ? {
-        href: p.href,
-        target: "_blank",
-        rel: "noreferrer",
-        "data-cursor": "view",
-        "data-cursor-label": "VIEW",
-      }
+  // Three states: a detail page of its own, an outbound link, or neither —
+  // an entry with nowhere to go is still worth showing, it just isn't an
+  // anchor. The detail page wins when both exist.
+  const href = p.detailHref || p.href;
+  const internal = !!p.detailHref;
+  const Tag = href ? "a" : "div";
+  const linkProps = href
+    ? Object.assign(
+        {
+          href,
+          "data-cursor": "view",
+          "data-cursor-label": internal ? "READ" : "VIEW",
+        },
+        // Only the outbound one leaves the site.
+        internal ? {} : { target: "_blank", rel: "noreferrer" },
+      )
     : {};
 
   return (

@@ -15,6 +15,9 @@ pub use youtube as Youtube;
 pub mod project;
 pub use project as Project;
 
+pub mod project_details;
+pub use project_details as ProjectDetails;
+
 pub mod shell;
 pub use shell as Shell;
 

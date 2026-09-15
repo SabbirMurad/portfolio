@@ -8,6 +8,7 @@ use crate::BuiltIns::mongo::MongoDB;
 use crate::builtins::sqlite;
 use crate::Middleware::Auth::{require_access, AccessRequirement};
 use crate::utils::response::Response;
+use crate::utils::slug::slugify;
 use actix_web::{web, Error, HttpRequest, HttpResponse};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -139,6 +140,13 @@ pub async fn task(
         accent,
         year,
         featured: false,
+        // Settled now rather than when a detail page is first saved, so the
+        // URL a project will answer to is fixed from the moment it exists.
+        // Titles are unique among live projects (checked above), so this is
+        // too, unless two titles differ only in punctuation — the details
+        // upsert is where that collision gets a suffix.
+        slug: Some(slugify(&title)).filter(|s| !s.is_empty()),
+        details_id: None,
         created_at: Utc::now().timestamp_millis(),
         created_by: "admin".to_string(),
         deleted_at: None,

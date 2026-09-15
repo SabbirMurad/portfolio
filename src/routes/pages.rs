@@ -21,6 +21,12 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             "/projects",
             web::get().to(Markup::projects)
         )
+        // Detail pages hang off the same segment as the grid that links to
+        // them. Declared after "/projects" so the literal keeps its route.
+        .route(
+            "/projects/{slug}",
+            web::get().to(Markup::project_detail)
+        )
         .route(
             "/resume",
             web::get().to(Markup::resume)

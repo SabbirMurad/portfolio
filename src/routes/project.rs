@@ -14,9 +14,20 @@ pub fn router(cfg: &mut web::ServiceConfig) {
         // Public, unauthenticated — what the home page and /projects read.
         // Registered before "/{uuid}/featured" so the literal path wins.
         .route("/feed", web::get().to(Handler::Project::Feed::task))
+        // Public too: what /projects/<slug> loads. Literal-first ordering
+        // again — "/detail/{slug}" cannot collide with "/{uuid}/...".
+        .route("/detail/{slug}", web::get().to(Handler::Project::Detail::task))
         .route(
             "/{uuid}/featured",
             web::patch().to(Handler::Project::ToggleFeatured::task)
+        )
+        // The long form behind a detail page. One resource, three verbs: the
+        // dashboard reads the form, saves it whole, or takes the page down.
+        .service(
+            web::resource("/{uuid}/details")
+            .route(web::get().to(Handler::Project::DetailsRead::task))
+            .route(web::put().to(Handler::Project::DetailsUpsert::task))
+            .route(web::delete().to(Handler::Project::DetailsDelete::task))
         )
     );
 }
