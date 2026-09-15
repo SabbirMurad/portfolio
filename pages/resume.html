@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=810" />
     <title>Md. Sabbir Hassan — CV</title>
 
     <!--
@@ -188,7 +189,7 @@
          per line, stacked. */
       .work-features {
         display: grid;
-        gap: 3.5mm;
+        gap: 3mm;
         margin-bottom: 3mm;
       }
       .work-feature {
@@ -430,6 +431,23 @@
       }
       .download-btn:hover { background: #c93b19; transform: translateY(-1px); }
       .download-btn svg { width: 3.6mm; height: 3.6mm; flex-shrink: 0; }
+
+      /* A phone scales this whole 810px-wide document down to its screen, so
+         the button lands at roughly half the size it has here and reads as a
+         chip. Touch pointers get it back to a normal tap target — the query is
+         on the pointer rather than a width, because the layout viewport is 810
+         on every phone and cannot be told apart from a small desktop window. */
+      @media (hover: none) and (pointer: coarse) {
+        .download-btn {
+          right: 14mm;
+          bottom: 14mm;
+          gap: 4.5mm;
+          padding: 8mm 13mm;
+          font-size: 25pt;
+          box-shadow: 0 5mm 14mm rgba(0, 0, 0, 0.3);
+        }
+        .download-btn svg { width: 8.5mm; height: 8.5mm; stroke-width: 2.6; }
+      }
 
       @media print {
         /* Print the accents whether or not the dialog's "Background graphics"
@@ -785,11 +803,16 @@
             </div>
           </a>
         </div>
+      </section>
+    </div>
 
+    <!-- ══════════════════ PAGE 3 ══════════════════ -->
+    <div class="page">
+      <section style="margin-top: 0">
         <!-- Anchored so the links work in the exported PDF, but labelled
              short: the Chrome Web Store and Play Store URLs are long enough to
              wrap across the column and wreck the grid. -->
-        <p class="work-label">Previous partners you may know</p>
+        <p class="work-label" style="margin-top: 0">Previous partners you may know</p>
         <div class="work">
           <div>
             <a href="https://healthmasterbd.com"
