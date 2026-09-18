@@ -15,3 +15,6 @@ pub use feed as Feed;
 
 pub mod toggle_featured;
 pub use toggle_featured as ToggleFeatured;
+
+pub mod update;
+pub use update as Update;

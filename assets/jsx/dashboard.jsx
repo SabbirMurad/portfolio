@@ -378,7 +378,222 @@ function CreateDocumentation({ onCreated, onCancel }) {
   );
 }
 
-function DocCard({ doc, onToggle, toggling }) {
+/* Editing an existing entry.
+
+   Same fields as CreateDocumentation, with one difference that matters: the
+   zip is optional here. Most edits are a wording fix, and re-uploading a
+   40MB build to correct a typo would be absurd — leave the file empty and the
+   published site is left exactly as it is. Pick one and it replaces the site
+   wholesale, which is what a rebuilt mkdocs output is. */
+function EditDocumentation({ doc, onSaved, onCancel }) {
+  const { useState } = React;
+  const [form, setForm] = useState({
+    title: doc.name || "",
+    description: doc.description || "",
+    tags: (doc.tags || []).join(", "),
+  });
+  const [file, setFile] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState(null);
+  const [status, setStatus] = useState("idle"); // idle | pending
+
+  const set = (k) => (e) => {
+    const v = e.target.value;
+    setForm((f) => ({ ...f, [k]: v }));
+    setErrors((s) => ({ ...s, [k]: undefined }));
+    setFormError(null);
+  };
+
+  const onFile = (e) => {
+    const f = e.target.files && e.target.files[0];
+    setFile(f || null);
+    setErrors((s) => ({ ...s, file: undefined }));
+    setFormError(null);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (status === "pending") return;
+
+    const next = {};
+    if (!form.title.trim()) next.title = "Enter a title";
+    if (!form.description.trim()) next.description = "Enter a description";
+    if (file) {
+      if (!file.name.toLowerCase().endsWith(".zip")) next.file = "Must be a .zip file";
+      else if (file.size > MAX_ZIP_BYTES) {
+        next.file = "Zip is too large (max " + Math.floor(MAX_ZIP_BYTES / (1024 * 1024)) + "MB)";
+      }
+    }
+    setErrors(next);
+    setFormError(null);
+    if (Object.keys(next).length) return;
+
+    setStatus("pending");
+
+    let bytes = [];
+    if (file) {
+      try {
+        const buffer = await file.arrayBuffer();
+        bytes = Array.from(new Uint8Array(buffer));
+      } catch (err) {
+        setStatus("idle");
+        setFormError("Could not read that file. Try picking it again.");
+        return;
+      }
+    }
+
+    const tags = form.tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    const result = await Fetcher.patch({
+      endpoint: "/documentation/" + doc.uuid,
+      body: {
+        name: form.title.trim(),
+        description: form.description.trim(),
+        tags,
+        file: bytes,
+      },
+      showError: false,
+    });
+
+    if (!result.ok) {
+      setStatus("idle");
+      setFormError(result.error || "Failed to save (" + result.status + ")");
+      return;
+    }
+
+    setStatus("idle");
+    onSaved({
+      ...doc,
+      name: form.title.trim(),
+      description: form.description.trim(),
+      tags,
+    });
+  };
+
+  const pending = status === "pending";
+
+  return (
+    <div className="rounded-md border border-line bg-paper p-6 sm:p-8">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="meta text-vermilion">Edit entry</p>
+          <h2 className="display-tight mt-2 text-xl font-bold">{doc.name}</h2>
+        </div>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="meta text-muted-2 transition-colors duration-300 hover:text-ink"
+        >
+          Cancel
+        </button>
+      </div>
+      <p className="mt-2 max-w-lg text-[14px] leading-[1.7] text-muted-2">
+        The zip is optional — leave it empty to change only the wording, or pick a new build to
+        replace the published site.
+      </p>
+
+      <form onSubmit={onSubmit} noValidate className="mt-6 space-y-4">
+        <div>
+          <label htmlFor="doc-edit-title" className="meta mb-2 block text-muted-2">
+            Title
+          </label>
+          <input
+            id="doc-edit-title"
+            value={form.title}
+            onChange={set("title")}
+            disabled={pending}
+            aria-invalid={!!errors.title}
+            className={FIELD}
+          />
+          {errors.title && <p className="meta mt-2 text-vermilion">{errors.title}</p>}
+        </div>
+
+        <div>
+          <label htmlFor="doc-edit-description" className="meta mb-2 block text-muted-2">
+            Description
+          </label>
+          <textarea
+            id="doc-edit-description"
+            value={form.description}
+            onChange={set("description")}
+            disabled={pending}
+            rows={3}
+            aria-invalid={!!errors.description}
+            className={FIELD + " resize-none"}
+          />
+          {errors.description && <p className="meta mt-2 text-vermilion">{errors.description}</p>}
+        </div>
+
+        <div>
+          <label htmlFor="doc-edit-tags" className="meta mb-2 block text-muted-2">
+            Tags
+          </label>
+          <input
+            id="doc-edit-tags"
+            value={form.tags}
+            onChange={set("tags")}
+            disabled={pending}
+            placeholder="Rust, OpenAPI, MkDocs"
+            className={FIELD}
+          />
+          <p className="meta mt-2 text-muted">Comma-separated</p>
+        </div>
+
+        <div>
+          <label htmlFor="doc-edit-zip" className="meta mb-2 block text-muted-2">
+            Replace the site — optional
+          </label>
+          <input
+            id="doc-edit-zip"
+            type="file"
+            accept=".zip"
+            onChange={onFile}
+            disabled={pending}
+            aria-invalid={!!errors.file}
+            className="meta block w-full text-muted-2 file:mr-4 file:rounded-sm file:border-0 file:bg-ink file:px-4 file:py-2.5 file:text-[13px] file:font-semibold file:text-white file:transition-colors file:duration-300 hover:file:bg-vermilion"
+          />
+          {errors.file ? (
+            <p className="meta mt-2 text-vermilion">{errors.file}</p>
+          ) : (
+            <p className="meta mt-2 text-muted">
+              {file ? file.name + " replaces the published site" : "Keeping the current site"}
+            </p>
+          )}
+        </div>
+
+        {formError && (
+          <p
+            role="alert"
+            className="meta rounded-sm border border-vermilion/30 bg-vermilion/5 px-4 py-3 text-vermilion"
+          >
+            {formError}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={pending}
+          className={
+            "group flex items-center justify-center gap-3 rounded-sm bg-ink px-6 py-3.5 text-white transition-colors duration-400 " +
+            (pending ? "cursor-default opacity-60" : "hover:bg-vermilion")
+          }
+        >
+          <span className="meta">
+            {pending ? (file ? "Uploading…" : "Saving…") : "Save changes"}
+          </span>
+          <span className="transition-transform duration-400 group-hover:translate-x-1">→</span>
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function DocCard({ doc, onToggle, toggling, onEdit, onDelete, deleting }) {
+  const { useState } = React;
+  const [confirming, setConfirming] = useState(false);
   const date = new Date(doc.created_at).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -442,6 +657,52 @@ function DocCard({ doc, onToggle, toggling }) {
             onToggle={() => onToggle(doc)}
           />
         </div>
+
+        {/* Delete asks first, in the card rather than in a window.confirm:
+            removing an entry also removes the built site under it, and that
+            cannot be undone without the original zip. */}
+        <div className="mt-4 flex items-center justify-between gap-3 border-t border-line pt-4">
+          {confirming ? (
+            <React.Fragment>
+              <span className="meta text-vermilion">Delete for good?</span>
+              <span className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setConfirming(false)}
+                  disabled={deleting}
+                  className="meta rounded-sm border border-line px-3 py-2 text-muted-2 transition-colors duration-300 hover:border-ink hover:text-ink"
+                >
+                  Keep
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onDelete(doc)}
+                  disabled={deleting}
+                  className="meta rounded-sm bg-vermilion px-3 py-2 text-white transition-colors duration-300 hover:bg-vermilion-2 disabled:opacity-60"
+                >
+                  {deleting ? "Deleting…" : "Delete"}
+                </button>
+              </span>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <button
+                type="button"
+                onClick={() => onEdit(doc)}
+                className="meta rounded-sm border border-line px-3 py-2 text-muted-2 transition-colors duration-300 hover:border-ink hover:text-ink"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirming(true)}
+                className="meta rounded-sm border border-line px-3 py-2 text-muted-2 transition-colors duration-300 hover:border-vermilion hover:text-vermilion"
+              >
+                Delete
+              </button>
+            </React.Fragment>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -455,6 +716,9 @@ function DocumentationTab() {
   const [search, setSearch] = useState("");
   const [showCreate, setShowCreate] = useState(false);
   const [togglingUuid, setTogglingUuid] = useState(null);
+  const [editing, setEditing] = useState(null);
+  const [deletingUuid, setDeletingUuid] = useState(null);
+  const [actionError, setActionError] = useState(null);
 
   useEffect(() => {
     let alive = true;
@@ -486,6 +750,34 @@ function DocumentationTab() {
   const onCreated = (doc) => {
     setDocs((prev) => [doc, ...prev]);
     setShowCreate(false);
+  };
+
+  const onSaved = (doc) => {
+    setDocs((prev) => prev.map((d) => (d.uuid === doc.uuid ? { ...d, ...doc } : d)));
+    setEditing(null);
+    setActionError(null);
+  };
+
+  /* No optimistic removal here, unlike the featured switch: this one takes the
+     built site with it, so the card stays until the server says it is done. */
+  const onDelete = async (doc) => {
+    setDeletingUuid(doc.uuid);
+    setActionError(null);
+
+    const result = await Fetcher.delete({
+      endpoint: "/documentation/" + doc.uuid,
+      showError: false,
+    });
+
+    setDeletingUuid(null);
+
+    if (!result.ok) {
+      setActionError(result.error || "Couldn't delete " + doc.name);
+      return;
+    }
+
+    setDocs((prev) => prev.filter((d) => d.uuid !== doc.uuid));
+    setEditing((current) => (current && current.uuid === doc.uuid ? null : current));
   };
 
   const onToggle = async (doc) => {
@@ -531,6 +823,26 @@ function DocumentationTab() {
         </div>
       )}
 
+      {editing && (
+        <div className="mt-6">
+          <EditDocumentation
+            key={editing.uuid}
+            doc={editing}
+            onSaved={onSaved}
+            onCancel={() => setEditing(null)}
+          />
+        </div>
+      )}
+
+      {actionError && (
+        <p
+          role="alert"
+          className="meta mt-6 rounded-sm border border-vermilion/30 bg-vermilion/5 px-4 py-3 text-vermilion"
+        >
+          {actionError}
+        </p>
+      )}
+
       <div className="mt-6">
         <input
           value={search}
@@ -567,7 +879,10 @@ function DocumentationTab() {
               key={doc.uuid}
               doc={doc}
               toggling={togglingUuid === doc.uuid}
+              deleting={deletingUuid === doc.uuid}
               onToggle={onToggle}
+              onEdit={setEditing}
+              onDelete={onDelete}
             />
           ))}
         </div>

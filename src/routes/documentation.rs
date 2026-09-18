@@ -27,6 +27,15 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             "/{uuid}/featured",
             web::patch().to(Handler::Documentation::ToggleFeatured::task)
         )
+        // Editing and removing an entry. One resource, two verbs — PATCH
+        // carries the metadata and, optionally, a whole new zip; DELETE takes
+        // the entry down and the unpacked site with it. Registered after the
+        // literal "/{uuid}/featured" so that keeps its route.
+        .service(
+            web::resource("/{uuid}")
+            .route(web::patch().to(Handler::Documentation::Update::task))
+            .route(web::delete().to(Handler::Documentation::Delete::task))
+        )
     );
     cfg.service(
         // Serves the unzipped doc site's own files (html/css/js) back out —
