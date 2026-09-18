@@ -13,6 +13,74 @@ const SECTION_OVERLAP = SECTION_SLIDE + SECTION_SEAL;
 const reducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* ── entrance safety net ──
+   Every reveal below the fold waits for a scroll. A renderer never scrolls, so
+   it never gets one: Google's own screenshot of this site is a near-empty page
+   for exactly that reason, and copy left at opacity 0 is copy Google can
+   discount as hidden.
+
+   So each entrance registers itself here, and if nothing has scrolled by the
+   time the page has sat still for a few seconds, the ones that never ran are
+   put straight into their end state. Their ScrollTrigger is dropped at the same
+   time, so a later scroll cannot pull them back to the start.
+
+   A visitor who scrolls — within five seconds, which is most of them — never
+   reaches any of this: the first scroll, wheel, touch or key cancels the timer
+   and the animations play exactly as they always did. The one who sits reading
+   the hero for longer simply finds the rest of the page already in place. */
+/* Long enough that a visitor reading the hero is not caught by it, and every
+   sign of a person cancels it anyway — a mouse that moves a pixel is enough.
+   A renderer produces none of these events, which is the whole distinction
+   being drawn here: not "is this a bot", which would be cloaking, but "has
+   anything happened that only a person makes happen". */
+const REVEAL_IDLE_MS = 8000;
+const _VISITOR_EVENTS = [
+  "scroll",
+  "wheel",
+  "touchstart",
+  "keydown",
+  "mousemove",
+  "pointerdown",
+];
+const _pendingEntrances = new Set();
+let _entranceListenersBound = false;
+let _entranceFallbackTimer = null;
+let _visitorIsHere = false;
+
+function _snapPendingEntrances() {
+  _pendingEntrances.forEach((t) => {
+    // End state first: killing the trigger before the tween has been moved
+    // would leave the element wherever it was parked.
+    t.progress(1, true);
+    if (t.scrollTrigger) t.scrollTrigger.kill(false, true);
+  });
+  _pendingEntrances.clear();
+}
+
+function _registerEntrance(tween) {
+  if (!tween || _visitorIsHere) return;
+  _pendingEntrances.add(tween);
+
+  // Rescheduled on every registration rather than armed once: the feeds mount
+  // their cards a few seconds after the rest of the page, and an entrance that
+  // registered after a one-shot timer had already fired would stay invisible
+  // for good.
+  window.clearTimeout(_entranceFallbackTimer);
+  _entranceFallbackTimer = window.setTimeout(_snapPendingEntrances, REVEAL_IDLE_MS);
+
+  if (_entranceListenersBound) return;
+  _entranceListenersBound = true;
+
+  const cancel = () => {
+    _visitorIsHere = true;
+    window.clearTimeout(_entranceFallbackTimer);
+    _pendingEntrances.clear();
+    _VISITOR_EVENTS.forEach((e) => window.removeEventListener(e, cancel));
+  };
+
+  _VISITOR_EVENTS.forEach((e) => window.addEventListener(e, cancel, { passive: true }));
+}
+
 /* ── entrance shared by Reveal / RevealLayer ──
    A scroll-triggered "from" tween: the element starts offset/faded and settles
    as it enters the viewport, staggered by `delay` (kept in the same 0–1 units
@@ -40,19 +108,19 @@ function _revealEntrance(el, opts) {
     };
     if (from === "bottom") vars.y = distance;
     else vars.x = from === "left" ? -distance : distance;
-    gsap.from(el, vars);
+    _registerEntrance(gsap.from(el, vars));
 
     if (rule) {
       const r = el.querySelector("[data-rule]");
       if (r)
-        gsap.from(r, {
+        _registerEntrance(gsap.from(r, {
           scaleX: 0,
           transformOrigin: "left center",
           duration: 0.9,
           delay: delay * 0.9,
           ease: "expo.out",
           scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none none" },
-        });
+        }));
     }
   }, el);
   return () => ctx.revert();
@@ -143,7 +211,7 @@ function SplitHeading(props) {
     }
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
+      _registerEntrance(gsap.fromTo(
         spans,
         { color: muted, opacity: 0.45, y: "0.14em", "--rblur": "7px" },
         {
@@ -155,7 +223,7 @@ function SplitHeading(props) {
           stagger: 0.3,
           scrollTrigger: { trigger: el, start: "top 90%", end: "top 35%", scrub: true },
         },
-      );
+      ));
     }, el);
     return () => ctx.revert();
   }, []);

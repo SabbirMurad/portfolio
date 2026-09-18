@@ -51,13 +51,30 @@
 </head>
 
 <body class="custom-cursor">
+  <!-- The splash is also the only markup a crawler gets before the JSX runs,
+       so it carries the portrait and the name rather than a bare word: an
+       <img> in the served HTML is what Google Images can index, and og:image
+       is not — that one is for social cards. React replaces this on mount
+       with the real page, which renders the same portrait at the same URL in
+       the About section, so nothing here claims anything the page does not
+       show. -->
   <div id="root">
-    <div class="boot">Sabbir Hassan</div>
+    <div class="boot">
+      <img
+        class="boot-photo"
+        src="/assets/image/sabbir_hassan.webp"
+        width="1254"
+        height="1254"
+        alt="Sabbir Hassan — fullstack developer and designer"
+        fetchpriority="high"
+      />
+      <h1 class="boot-name">Sabbir Hassan</h1>
+      <p class="boot-role">Fullstack Developer &amp; Designer</p>
+    </div>
   </div>
 
-  <!-- Runtime globals (regular scripts — ready before Babel runs the JSX) -->
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>

@@ -67,6 +67,8 @@ body {
   inset: 0;
   display: grid;
   place-items: center;
+  align-content: center;
+  gap: 1.25rem;
   background: var(--color-ink);
   color: #fff;
   font-family: var(--font-display);
@@ -74,6 +76,31 @@ body {
   letter-spacing: -0.03em;
   text-transform: uppercase;
   font-size: clamp(1.5rem, 5vw, 2.5rem);
+}
+
+/* The splash now holds the portrait and the name — see the comment in
+   pages/home.html for why they are in the served markup at all. Sized small:
+   it is on screen for the moment before React mounts, not a hero. */
+#root .boot-photo {
+  width: clamp(88px, 12vw, 132px);
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+}
+#root .boot-name {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+#root .boot-role {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-vermilion);
 }
 
 /* ── Lenis smooth scroll ── */
