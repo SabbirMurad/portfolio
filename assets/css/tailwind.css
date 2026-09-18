@@ -1,0 +1,44 @@
+/*
+ * Tailwind input. Compiled to assets/build/tailwind.css by
+ * tools/build_assets.mjs — the page links the built file, and nothing
+ * generates CSS in the browser any more.
+ *
+ * The @theme block used to sit inline in all eight pages, eight identical
+ * copies of it. It lives here now, once.
+ *
+ * @source tells the scanner where class names appear. The .jsx files are the
+ * real source; the built bundles under assets/build hold the same strings, so
+ * scanning them too would only cost time.
+ */
+@import "tailwindcss";
+
+@source "../../pages/**/*.html";
+@source "../../assets/jsx/**/*.jsx";
+
+@theme {
+    /* palette */
+    --color-bone: #f4f3f1;
+    --color-bone-2: #eceae7;
+    --color-paper: #ffffff;
+    --color-ink: #0b0b0b;
+    --color-ink-2: #141414;
+    --color-ink-3: #1d1d1d;
+    --color-vermilion: #de4520;
+    --color-vermilion-2: #c93b19;
+    --color-muted: #9a9a9a;
+    --color-muted-2: #6e6e6e;
+    --color-line: rgba(11, 11, 11, 0.1);
+    --color-line-dark: rgba(255, 255, 255, 0.12);
+
+    /* type */
+    --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "Inter", system-ui, sans-serif;
+
+    /* motion */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+    /* layout */
+    --nav-h: 72px;
+  }
+

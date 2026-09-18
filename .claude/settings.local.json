@@ -14,7 +14,10 @@
       "Bash(echo \"check exit=$?\")",
       "Bash(mkdir -p shell/fake-bundle)",
       "Bash(touch shell/fake-bundle/main.sh)",
-      "Bash(export HOME=/tmp/clihome)"
+      "Bash(export HOME=/tmp/clihome)",
+      "Read(//c/Users/Sabbir/.cache/sabbirhassan-build/**)",
+      "Bash(npm install *)",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/tailwindcss/package.json'\\).version\\)\")"
     ]
   }
 }

@@ -3,9 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Canonical is /projects, matching the route in src/routes/pages.rs.
-         The CollectionPage JSON-LD is built at runtime in
-         assets/jsx/projects.jsx so it stays in step with the projects data. -->
     {% set seo_title = "Projects — Sabbir Hassan" %}
     {% set seo_description = "Selected work by Sabbir Hassan spanning systems programming, mobile apps and the web — each built end to end, from architecture through interface." %}
     {% set seo_keywords = "Sabbir Hassan, projects, portfolio, Rust project, Flutter app, JavaScript project, systems programming, software portfolio" %}
@@ -26,36 +23,10 @@
     />
     {% include "common/favicon.html" %}
 
-    <!-- Tailwind v4 browser build (replaces the PostCSS build; no node_modules) -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-      @theme {
-        /* palette */
-        --color-bone: #f4f3f1;
-        --color-bone-2: #eceae7;
-        --color-paper: #ffffff;
-        --color-ink: #0b0b0b;
-        --color-ink-2: #141414;
-        --color-ink-3: #1d1d1d;
-        --color-vermilion: #de4520;
-        --color-vermilion-2: #c93b19;
-        --color-muted: #9a9a9a;
-        --color-muted-2: #6e6e6e;
-        --color-line: rgba(11, 11, 11, 0.1);
-        --color-line-dark: rgba(255, 255, 255, 0.12);
-
-        /* type */
-        --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-        --font-body: "Inter", system-ui, sans-serif;
-
-        /* motion */
-        --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-        --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
-
-        /* layout */
-        --nav-h: 72px;
-      }
-    </style>
+    <!-- Tailwind, compiled ahead of time by tools/build_assets.mjs from
+         assets/css/tailwind.css, which is where the @theme tokens live now.
+         Linked before global.css so global.css still wins the ties it did. -->
+    <link rel="stylesheet" href="/assets/build/tailwind.css" />
 
     <link rel="stylesheet" href="/assets/css/global.css" />
   </head>
@@ -63,9 +34,8 @@
   <body class="custom-cursor">
     <div id="root"><div class="boot">Sabbir Hassan</div></div>
 
-    <!-- Runtime globals (regular scripts — ready before Babel runs the JSX) -->
-    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
@@ -73,13 +43,10 @@
     <!-- Paints a thumbnail's blurhash while the file downloads. -->
     <script src="/assets/js/blurhash.js"></script>
 
-    <!-- In-browser JSX (replaces the bundler) -->
-    <script src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"></script>
-
-    <script type="text/babel" src="/assets/jsx/data.jsx"></script>
-    <script type="text/babel" src="/assets/jsx/helpers.jsx"></script>
-    <!-- The project card + its skeleton + the feed hook, shared with the home page. -->
-    <script type="text/babel" src="/assets/jsx/project_card.jsx"></script>
-    <script type="text/babel" src="/assets/jsx/projects.jsx"></script>
+    <!-- One compiled bundle, not twenty .jsx files and a compiler. The
+         sources are still assets/jsx/*.jsx; what goes in here, and in
+         what order, is tools/bundles.json. After editing any .jsx:
+         node tools/build_assets.mjs -->
+    <script src="/assets/build/projects.js"></script>
   </body>
 </html>

@@ -1,0 +1,63 @@
+{
+  "about": [
+    "/assets/jsx/data.jsx",
+    "/assets/jsx/helpers.jsx",
+    "/assets/jsx/about.jsx"
+  ],
+  "dashboard": [
+    "/assets/jsx/data.jsx",
+    "/assets/jsx/helpers.jsx",
+    "/assets/jsx/dashboard.jsx"
+  ],
+  "documentations": [
+    "/assets/jsx/data.jsx",
+    "/assets/jsx/helpers.jsx",
+    "/assets/jsx/doc_card.jsx",
+    "/assets/jsx/documentations.jsx"
+  ],
+  "home": [
+    "/assets/jsx/data.jsx",
+    "/assets/jsx/helpers.jsx",
+    "/assets/jsx/project_card.jsx",
+    "/assets/jsx/doc_card.jsx",
+    "/assets/jsx/sections/hero.jsx",
+    "/assets/jsx/sections/stack.jsx",
+    "/assets/jsx/sections/impact.jsx",
+    "/assets/jsx/sections/services.jsx",
+    "/assets/jsx/sections/projects.jsx",
+    "/assets/jsx/sections/docs.jsx",
+    "/assets/jsx/sections/youtube.jsx",
+    "/assets/jsx/sections/competitive.jsx",
+    "/assets/jsx/sections/process.jsx",
+    "/assets/jsx/sections/journey.jsx",
+    "/assets/jsx/sections/testimonials.jsx",
+    "/assets/jsx/sections/faq.jsx",
+    "/assets/jsx/sections/contact.jsx",
+    "/assets/jsx/nav.jsx",
+    "/assets/jsx/footer.jsx",
+    "/assets/jsx/loader.jsx",
+    "/assets/jsx/app.jsx"
+  ],
+  "project": [
+    "/assets/jsx/data.jsx",
+    "/assets/jsx/helpers.jsx",
+    "/assets/jsx/project_card.jsx",
+    "/assets/jsx/project_detail.jsx"
+  ],
+  "projects": [
+    "/assets/jsx/data.jsx",
+    "/assets/jsx/helpers.jsx",
+    "/assets/jsx/project_card.jsx",
+    "/assets/jsx/projects.jsx"
+  ],
+  "sign_in": [
+    "/assets/jsx/data.jsx",
+    "/assets/jsx/helpers.jsx",
+    "/assets/jsx/sign_in.jsx"
+  ],
+  "sign_up": [
+    "/assets/jsx/data.jsx",
+    "/assets/jsx/helpers.jsx",
+    "/assets/jsx/sign_up.jsx"
+  ]
+}
