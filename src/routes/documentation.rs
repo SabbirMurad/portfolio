@@ -42,6 +42,12 @@ pub fn router(cfg: &mut web::ServiceConfig) {
         // a browser navigates here directly, so it's a page/content route,
         // not an API endpoint, and stays out of /api.
         web::scope("/documentation")
+        // The bare singular path, which is not this site's index and never
+        // was — see Handler::Documentation::Get::index_redirect.
+        .route(
+            "",
+            web::get().to(Handler::Documentation::Get::index_redirect)
+        )
         // Bare /documentation/{id} redirects to the trailing-slash form; the
         // site's own links are relative and resolve one level too high without
         // it. Registered first so it wins over the catch-all below.

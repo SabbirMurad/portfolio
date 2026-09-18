@@ -21,6 +21,14 @@ pub async fn root_redirect(var: web::Path<String>) -> Result<HttpResponse, Error
     Ok(redirect(&format!("/documentation/{}/", var.into_inner())))
 }
 
+/// `/documentation` with nothing after it is the singular form of the index,
+/// which this site has never served — Search Console has been reporting it as
+/// a 404 since June, so something out there links to it. The list lives at
+/// /documentations.
+pub async fn index_redirect() -> Result<HttpResponse, Error> {
+    Ok(redirect("/documentations"))
+}
+
 pub async fn task(var: web::Path<(String, String)>) -> Result<HttpResponse, Error> {
     let (project, tail) = var.into_inner();
 
