@@ -128,30 +128,54 @@ async fn main() -> io::Result<()> {
             }
         })
         .wrap_fn(move |req, srv| {
-            /* 301 - Moved Permanently | URL Canonicalization */ 
-            srv.call(req).map(|res| {
-              let app_http = env::var("APP_HTTP")
-              .expect("APP_HTTP must be set on .env file");
-              if app_http.to_owned() == "allow" { return res }
-            
-              if let Ok(response) = &res {
-                let request = response.request();
+            /*
+              301 - Moved Permanently | URL Canonicalization
 
-                let uri = request.uri().to_string();
-                let sub_domain = "https://www.";
+              www.sabbirhassan.com and sabbirhassan.com are one site, and a
+              search engine that can reach both has to guess which is
+              canonical — splitting whatever authority the domain has earned
+              between two hosts. The rel=canonical tags point at the apex, but
+              a redirect is the instruction crawlers actually act on.
 
-                if uri.contains(sub_domain) {
-                    let new_location = uri.replace(sub_domain, "https://");
-                    return Ok(dev::ServiceResponse::new(
-                        request.clone(),
+              The host comes from the Host header, via connection_info so a
+              reverse proxy's X-Forwarded-Host is honoured. This used to read
+              request.uri() and look for the string "https://www." in it, which
+              never matched: a server-side URI is origin-form — "/about" — with
+              no scheme and no host in it at all, so the check silently passed
+              everything through and both hosts answered 200.
+
+              Redirecting before the handler runs, rather than after, and
+              straight to https rather than to the apex on whatever scheme
+              arrived: the HTTP->HTTPS middleware above is registered earlier
+              and so runs *later*, and sending http://www straight to
+              https://apex spends one hop where the two together would spend
+              two.
+            */
+            let app_http = env::var("APP_HTTP")
+                .expect("APP_HTTP must be set on .env file");
+
+            let host = req.connection_info().host().to_owned();
+
+            if app_http.to_owned() == "allow" || !host.starts_with("www.") {
+                return Either::Left(srv.call(req).map(|res| res));
+            }
+
+            /* The port, if any, is kept: only the label is dropped. */
+            let apex = host.trim_start_matches("www.").to_owned();
+            let path = req.uri().path_and_query()
+                .map(|p| p.as_str().to_owned())
+                .unwrap_or_else(|| "/".to_owned());
+            let url = format!("https://{}{}", apex, path);
+
+            Either::Right(
+                future::ready(
+                    Ok(req.into_response(
                         HttpResponse::MovedPermanently()
-                          .insert_header(("Location", new_location))
-                          .finish()
-                    ));
-                }
-              }
-              res
-            })
+                        .append_header((http::header::LOCATION, url))
+                        .finish()
+                    ))
+                )
+            )
         })
         .app_data(web::Data::new(Tera::new("pages/**/*").unwrap()))
         .wrap_fn(move |req, srv| { /* Custom Error Page Handler */
