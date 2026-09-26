@@ -27,6 +27,7 @@ pub fn get_policy() -> Cors {
             // .allowed_origin("https://example.com")
             .allowed_origin("https://sabbirhassan.com")
             .allowed_origin("https://www.sabbirhassan.com")
+            .allowed_origin("https://sabbirhassan.com:444")
             .allow_any_header()
             .allow_any_method()
             .max_age(3600)
