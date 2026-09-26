@@ -26,22 +26,20 @@
 
 <body class="custom-cursor">
   <!-- The splash is also the only markup a crawler gets before the JSX runs,
-       so it carries the portrait and the name rather than a bare word: an
-       <img> in the served HTML is what Google Images can index, and og:image
-       is not — that one is for social cards. React replaces this on mount
-       with the real page, which renders the same portrait at the same URL in
-       the About section, so nothing here claims anything the page does not
-       show. -->
+       so it carries the name and the role rather than a bare word. React
+       replaces it on mount with the real page, which says the same thing in
+       the hero, so nothing here claims anything the page does not show.
+
+       It used to carry the portrait too, back when Google rendered this page
+       blank and an <img> in the served HTML was the only one it could reach.
+       That is no longer true: the entrance animations now resolve without a
+       scroll, so the renderer sees the real portrait in the About section,
+       and the sitemap names that same file through the image extension. The
+       photo was the first thing a visitor saw, at a size and in a context the
+       design never intended, which is too high a price for a duplicate of
+       something Google already has two routes to. -->
   <div id="root">
     <div class="boot">
-      <img
-        class="boot-photo"
-        src="/assets/image/sabbir_hassan.webp"
-        width="1254"
-        height="1254"
-        alt="Sabbir Hassan — fullstack developer and designer"
-        fetchpriority="high"
-      />
       <h1 class="boot-name">Sabbir Hassan</h1>
       <p class="boot-role">Fullstack Developer &amp; Designer</p>
     </div>

@@ -78,15 +78,8 @@ body {
   font-size: clamp(1.5rem, 5vw, 2.5rem);
 }
 
-/* The splash now holds the portrait and the name — see the comment in
-   pages/home.html for why they are in the served markup at all. Sized small:
-   it is on screen for the moment before React mounts, not a hero. */
-#root .boot-photo {
-  width: clamp(88px, 12vw, 132px);
-  height: auto;
-  border-radius: 50%;
-  object-fit: cover;
-}
+/* The splash holds the name and the role — see the comment in
+   pages/home.html for why they are in the served markup at all. */
 #root .boot-name {
   margin: 0;
   font-size: inherit;
