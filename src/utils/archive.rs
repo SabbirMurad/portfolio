@@ -15,9 +15,10 @@
  *     zipping a folder carry it and callers want the contents at the root.
  */
 use std::fs;
-use std::io::{Cursor, Read};
+use std::io::{Cursor, Read, Write};
 use std::path::{Path, PathBuf};
-use zip::ZipArchive;
+use zip::write::FileOptions;
+use zip::{ZipArchive, ZipWriter};
 
 pub struct Limits {
     pub max_entries: usize,
@@ -117,4 +118,92 @@ fn common_root(archive: &ZipArchive<Cursor<&[u8]>>) -> Option<PathBuf> {
     }
 
     root.map(PathBuf::from)
+}
+
+/// The reverse of `unzip`: pack `dir`'s contents into a zip, entries at the
+/// archive root (no wrapping folder) with forward-slash paths regardless of
+/// host OS — the same shape `unzip` above expects back, and what a bundle
+/// uploader would get zipping the folder's contents directly.
+///
+/// Used by handler/shell.rs's download route: the bundle is handed out
+/// exactly as uploaded, for `ct shell run` to unpack and execute on whatever
+/// machine it's running on.
+pub fn zip_dir(dir: &Path) -> Result<Vec<u8>, String> {
+    let mut bytes = Vec::new();
+    {
+        let mut writer = ZipWriter::new(Cursor::new(&mut bytes));
+        add_dir(&mut writer, dir, dir)?;
+        writer.finish().map_err(|e| e.to_string())?;
+    }
+    Ok(bytes)
+}
+
+fn add_dir<W: std::io::Write + std::io::Seek>(
+    writer: &mut ZipWriter<W>,
+    root: &Path,
+    dir: &Path,
+) -> Result<(), String> {
+    let options: FileOptions = FileOptions::default().compression_method(zip::CompressionMethod::Deflated);
+
+    let entries = fs::read_dir(dir).map_err(|e| format!("{}: {}", dir.display(), e))?;
+    for entry in entries {
+        let entry = entry.map_err(|e| e.to_string())?;
+        let path = entry.path();
+        let rel = path
+            .strip_prefix(root)
+            .map_err(|e| e.to_string())?
+            .to_string_lossy()
+            .replace('\\', "/");
+
+        if path.is_dir() {
+            writer
+                .add_directory(format!("{}/", rel), options)
+                .map_err(|e| e.to_string())?;
+            add_dir(writer, root, &path)?;
+        } else {
+            writer.start_file(rel, options).map_err(|e| e.to_string())?;
+            writer
+                .write_all(&fs::read(&path).map_err(|e| e.to_string())?)
+                .map_err(|e| e.to_string())?;
+        }
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// zip_dir's whole job is producing something unzip can read straight
+    /// back — including the shape unzip expects (entries at the root, no
+    /// wrapping folder), since that's what a bundle download gets unpacked
+    /// with on the other end (assets/cli/ct.sh).
+    #[test]
+    fn zip_dir_round_trips_through_unzip() {
+        let src = std::env::temp_dir().join("zip_dir_round_trip_src");
+        let dest = std::env::temp_dir().join("zip_dir_round_trip_dest");
+        fs::remove_dir_all(&src).ok();
+        fs::remove_dir_all(&dest).ok();
+
+        fs::create_dir_all(src.join("steps")).unwrap();
+        fs::write(src.join("main.sh"), "#!/bin/bash\necho hi\n").unwrap();
+        fs::write(src.join("steps/01-a.sh"), "echo a\n").unwrap();
+
+        let bytes = zip_dir(&src).expect("zip_dir should succeed");
+
+        let limits = Limits { max_entries: 100, max_total_bytes: 1024 * 1024 };
+        unzip(&bytes, &dest, &limits).expect("the result should unzip cleanly");
+
+        assert_eq!(
+            fs::read_to_string(dest.join("main.sh")).unwrap(),
+            "#!/bin/bash\necho hi\n"
+        );
+        assert_eq!(
+            fs::read_to_string(dest.join("steps/01-a.sh")).unwrap(),
+            "echo a\n"
+        );
+
+        fs::remove_dir_all(&src).ok();
+        fs::remove_dir_all(&dest).ok();
+    }
 }

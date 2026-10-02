@@ -28,10 +28,11 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             "/{uuid}/public-run",
             web::patch().to(Handler::Shell::TogglePublic::task)
         )
-        // {name} is an uploaded bundle directory under SHELL_ROOT. These run
-        // root shell scripts on the host, so unlike the two routes above they
-        // take a CLI token only — no session cookie, and nothing carrying
-        // browser fetch metadata (src/middleware/auth.rs::require_cli).
+        // {name} is an uploaded bundle directory under SHELL_ROOT. These can
+        // retrieve a bundle that may contain install/setup logic for some
+        // other machine, so unlike the two routes above they take a CLI
+        // token only — no session cookie, and nothing carrying browser fetch
+        // metadata (src/middleware/auth.rs::require_cli).
         .route(
             "/{name}/targets",
             web::get().to(Handler::Shell::targets)
@@ -46,19 +47,12 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             "/{name}/describe/{target}",
             web::get().to(Handler::Shell::describe)
         )
+        // The bundle itself, zipped. `ct shell run` downloads this and runs
+        // main.sh locally — this server hands the bundle out, it doesn't run
+        // it (see the module doc comment in handler/shell.rs for why).
         .route(
-            "/{name}/run/{target}",
-            web::post().to(Handler::Shell::run)
-        )
-        // The more specific path has to come before /jobs/{id}, otherwise
-        // "{id}" swallows "some-id/logs".
-        .route(
-            "/{name}/jobs/{id}/logs",
-            web::get().to(Handler::Shell::job_logs)
-        )
-        .route(
-            "/{name}/jobs/{id}",
-            web::get().to(Handler::Shell::job)
+            "/{name}/download",
+            web::get().to(Handler::Shell::download)
         )
     );
 }

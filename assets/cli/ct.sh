@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
 # ct — terminal client for sabbirhassan.com.
 #
-# The shell execution endpoints refuse the browser (see src/middleware/auth.rs),
-# so this is how they're driven. `ct login` exchanges your account password
-# for a token kept in ~/.config/ct/credentials with 600 permissions; every
-# later call sends it as a bearer header.
+# `ct login` exchanges your account password for a token kept in
+# ~/.config/ct/credentials with 600 permissions; every later call sends it as
+# a bearer header.
+#
+# `ct shell run` downloads the named bundle (a zip of shell scripts the
+# server only ever stores and hands out, see handler/shell.rs) and runs its
+# main.sh right here, in this terminal, on this machine — not on
+# sabbirhassan.com. That's the point of a bundle like vps-setup: it
+# provisions whatever box you run `ct` on, which is never the server
+# distributing it. The download requires a valid token on every single run —
+# there is no local cache of the bundle between invocations — so `ct logout`
+# or a blocked account loses the ability to run it immediately, on a new
+# machine or one it already ran on.
 #
 # Worth being clear about: that token is a bearer credential. Anything holding
-# it can run these commands, so treat the file the way you'd treat an ssh key.
-# `ct logout` revokes it server-side, immediately.
+# it can download and run these bundles, so treat the file the way you'd
+# treat an ssh key. `ct logout` revokes it server-side, immediately.
 #
 # __API_BASE__ is substituted server-side from the host you installed from.
 set -euo pipefail
@@ -124,6 +133,59 @@ cmd_whoami() {
     api GET /api/cli/whoami
 }
 
+# Downloads <bundle> fresh (every call — nothing is cached locally) and runs
+# its main.sh <target> right here, in this terminal: stdin/stdout/stderr are
+# this shell's own, so main.sh's interactive prompts for anything not passed
+# as KEY=VALUE just work, the same as running it after copying the files over
+# by hand. Cleans up the extracted copy on exit either way.
+run_bundle() {
+    local bundle="$1" target="$2"; shift 2
+
+    # Not `local`: the EXIT trap below runs in the shell's global scope, not
+    # this function's, so a local tmpdir would already be unbound — and
+    # therefore an error under `set -u` — by the time cleanup runs.
+    tmpdir="$(mktemp -d)" || die "could not create a temporary directory"
+    trap 'rm -rf "$tmpdir"' EXIT
+
+    printf 'Downloading %s...\n' "$bundle" >&2
+    local zipfile="$tmpdir/bundle.zip" status
+    status="$(curl -sS -o "$zipfile" -w '%{http_code}' \
+        -H "Authorization: Bearer $CT_TOKEN" \
+        "$API_BASE/api/shell/$bundle/download")" \
+        || die "could not reach $API_BASE"
+
+    if [ "$status" -ge 400 ]; then
+        cat "$zipfile" >&2
+        exit 1
+    fi
+
+    if ! command -v unzip >/dev/null 2>&1; then
+        printf 'unzip not found — installing it...\n' >&2
+        apt-get update -qq && apt-get install -y -qq unzip
+    fi
+
+    local bundle_dir="$tmpdir/bundle"
+    mkdir -p "$bundle_dir"
+    unzip -q "$zipfile" -d "$bundle_dir" || die "could not unpack the downloaded bundle"
+    [ -f "$bundle_dir/main.sh" ] || die "downloaded bundle has no main.sh"
+
+    # Anything passed as KEY=VALUE is exported before main.sh runs, so its own
+    # prompt_if_unset (common.sh) sees it as already set and skips asking —
+    # whatever's left unset, main.sh prompts for right here, interactively.
+    local pair key value
+    for pair in "$@"; do
+        case "$pair" in
+            *=*) ;;
+            *) die "variables must be KEY=VALUE, got: $pair" ;;
+        esac
+        key="${pair%%=*}"
+        value="${pair#*=}"
+        export "$key=$value"
+    done
+
+    bash "$bundle_dir/main.sh" "$target"
+}
+
 cmd_shell() {
     local sub="${1:-}"; shift || true
     load_token
@@ -143,26 +205,7 @@ cmd_shell() {
         run)
             [ $# -ge 2 ] || die "usage: ct shell run <bundle> <target> [KEY=VALUE ...]"
             local bundle="$1" target="$2"; shift 2
-            local vars="" pair key value
-            for pair in "$@"; do
-                case "$pair" in
-                    *=*) ;;
-                    *) die "variables must be KEY=VALUE, got: $pair" ;;
-                esac
-                key="${pair%%=*}"
-                value="${pair#*=}"
-                [ -n "$vars" ] && vars="$vars,"
-                vars="$vars\"$(json_escape "$key")\":\"$(json_escape "$value")\""
-            done
-            api POST "/api/shell/$bundle/run/$target" "{\"vars\":{$vars}}"
-            ;;
-        job)
-            [ $# -ge 2 ] || die "usage: ct shell job <bundle> <job-id>"
-            api GET "/api/shell/$1/jobs/$2"
-            ;;
-        logs)
-            [ $# -ge 2 ] || die "usage: ct shell logs <bundle> <job-id>"
-            api GET "/api/shell/$1/jobs/$2/logs"
+            run_bundle "$bundle" "$target" "$@"
             ;;
         *)
             die "unknown subcommand: ${sub:-<none>} (try: ct help)"
@@ -185,15 +228,16 @@ ct — terminal client for sabbirhassan.com
   ct shell list                            installed script bundles
   ct shell targets <bundle>                its steps, in run order
   ct shell describe <bundle> <target>      variables that target needs
-  ct shell run <bundle> <target> [K=V ...] start it; prints a job id
-  ct shell job <bundle> <job-id>           status of a run
-  ct shell logs <bundle> <job-id>          its output
+  ct shell run <bundle> <target> [K=V ...] download it and run it, right here
 
   ct upgrade                               reinstall the latest client
   ct help                                  this
 
-The shell commands run scripts as root on the server's own host. `run` starts
-immediately, with no confirmation.
+`ct shell run` downloads the bundle fresh every time and runs it on THIS
+machine, in this terminal — not on sabbirhassan.com. It starts immediately,
+with no confirmation, typically as root, so know what a bundle's scripts do
+before running it. Anything not passed as KEY=VALUE is prompted for
+interactively, same as running the scripts by hand.
 USAGE
 }
 

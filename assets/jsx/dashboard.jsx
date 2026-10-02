@@ -2047,8 +2047,8 @@ function YoutubeTab() {
 const MAX_BUNDLE_BYTES = 6 * 1024 * 1024;
 
 // Mirrors is_valid_bundle in src/handler/shell.rs. The name is the directory
-// on disk *and* the URL segment (/api/shell/{name}/run/...), which is why it
-// is this restricted.
+// on disk *and* the URL segment (/api/shell/{name}/download), which is why
+// it is this restricted.
 const BUNDLE_NAME = /^[a-z0-9_-]+$/;
 
 function CreateShellBundle({ onCreated, onCancel }) {
@@ -2132,7 +2132,7 @@ function CreateShellBundle({ onCreated, onCancel }) {
           <h2 className="display-tight mt-2 text-xl font-bold">Upload shell scripts</h2>
           <p className="mt-2 max-w-md text-[13px] leading-[1.7] text-muted-2">
             A zip of a folder containing a main.sh and its steps. The name becomes the folder
-            on disk and the path the run API uses.
+            on disk and what `ct shell run` refers to it as.
           </p>
         </div>
         <button
@@ -2162,7 +2162,7 @@ function CreateShellBundle({ onCreated, onCancel }) {
             <p className="meta mt-2 text-vermilion">{errors.name}</p>
           ) : (
             <p className="meta mt-2 text-muted">
-              {"/api/shell/" + (slug || "<name>") + "/run/<target>"}
+              {"ct shell run " + (slug || "<name>") + " <target>"}
             </p>
           )}
         </div>
