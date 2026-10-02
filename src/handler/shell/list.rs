@@ -4,7 +4,7 @@ use mongodb::bson::doc;
 use actix_web::{Error, HttpRequest, HttpResponse};
 
 use crate::BuiltIns::mongo::MongoDB;
-use crate::Middleware::Auth::{require_access, require_cli, AccessRequirement};
+use crate::Middleware::Auth::{require_access_or_cli, AccessRequirement};
 use crate::Model::Account::AccountRole;
 use crate::Model::Shell::ShellBundle;
 use crate::utils::response::Response;
@@ -14,12 +14,10 @@ use crate::utils::response::Response;
 /// The one shell route that takes either credential: the dashboard lists them
 /// to render the Shell tab, and `ct shell list` needs the same read from a
 /// terminal. Reading names and descriptions executes nothing, so it does not
-/// warrant the stricter gate the run routes use — the session is tried first
-/// because a browser call carries fetch metadata that require_cli refuses.
+/// warrant the stricter gate the run routes use — see require_access_or_cli
+/// for why the session isn't just tried first and left at that.
 pub async fn task(req: HttpRequest) -> Result<HttpResponse, Error> {
-    if require_access(&req, AccessRequirement::Role(AccountRole::Administrator)).is_err() {
-        require_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
-    }
+    require_access_or_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
 
     let db = MongoDB.connect();
     let collection = db.collection::<ShellBundle>("shell_bundle");

@@ -24,7 +24,7 @@ use crate::Model::Account::AccountRole;
 use crate::Model::Shell::ShellBundle;
 use crate::utils::{archive, response::Response};
 
-use super::{is_valid_bundle, list_targets, shell_root};
+use super::{has_readme, is_valid_bundle, list_targets, shell_root};
 
 /// A bundle is a handful of scripts.
 const LIMITS: archive::Limits = archive::Limits {
@@ -121,6 +121,7 @@ pub async fn task(
         name: name.clone(),
         description,
         targets,
+        has_readme: has_readme(&target_dir),
         // Opt-in from the dashboard, never on upload.
         public_run: false,
         created_at: Utc::now().timestamp_millis(),

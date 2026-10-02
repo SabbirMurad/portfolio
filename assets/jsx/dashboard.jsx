@@ -2243,7 +2243,24 @@ function ShellCard({ bundle, onToggle, toggling }) {
         </span>
       </div>
 
-      <p className="mt-3 text-[15px] font-semibold text-ink">{bundle.name}</p>
+      <div className="mt-3 flex items-start justify-between gap-3">
+        <p className="text-[15px] font-semibold text-ink">{bundle.name}</p>
+        {bundle.has_readme && (
+          // Plain link, not a fetch: opening the route itself in a new tab
+          // is simpler than re-rendering its text/markdown body in here, and
+          // the route takes the dashboard's own session cookie either way.
+          // The .md on the URL is what lets a markdown-viewer extension
+          // recognize and render it, same as any other .md file would.
+          <a
+            href={"/api/shell/" + bundle.name + "/readme.md"}
+            target="_blank"
+            rel="noreferrer"
+            className="meta shrink-0 text-muted-2 transition-colors duration-300 hover:text-ink"
+          >
+            Read README
+          </a>
+        )}
+      </div>
       <p className="mt-1.5 line-clamp-2 text-[13px] leading-[1.6] text-muted-2">
         {bundle.description}
       </p>
@@ -2365,10 +2382,31 @@ function ShellTab() {
         <div>
           <p className="meta text-vermilion">Shell</p>
           <h1 className="display-tight mt-2 text-3xl font-bold">Script bundles</h1>
-          <p className="mt-2 max-w-lg text-[14px] leading-[1.7] text-muted-2">
+          <p className="mt-2 text-[14px] leading-[1.7] text-muted-2">
             Provisioning scripts this server can run on its own host. Uploading one makes its
             targets available under /api/shell.
           </p>
+          <div className="mt-2 text-[13px] leading-[1.7] text-muted">
+            <p>
+              Running one doesn&apos;t go through this page — on the machine you want it to run
+              on, once:
+            </p>
+            <code className="mt-1 block w-fit rounded-sm bg-bone-2 py-1 text-[12px] font-bold text-ink">
+              curl -fsSL {typeof window !== "undefined" ? window.location.origin : ""}/install.sh
+              | bash
+            </code>
+            <p className="mt-1">
+              then{" "}
+              <code className="rounded-sm bg-bone-2 px-1 py-0.5 text-[12px] font-bold text-ink">
+                ct login
+              </code>
+              .
+            </p>
+            <p className="mt-1">After that, for each bundle and target:</p>
+            <code className="mt-1 block w-fit rounded-sm bg-bone-2 py-1 text-[12px] font-bold text-ink">
+              ct shell run &lt;name&gt; &lt;target&gt;
+            </code>
+          </div>
         </div>
         {!showCreate && (
           <button

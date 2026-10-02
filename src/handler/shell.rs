@@ -27,7 +27,8 @@
  * and does not prove.
  *
  * Uploading and listing bundles (shell/create.rs, shell/list.rs) are ordinary
- * dashboard operations and stay on require_access.
+ * dashboard operations and stay off this stricter gate — list.rs and readme
+ * below both go through require_access_or_cli instead.
  *
  *   GET  /api/shell/{name}/targets            the step list, in run order
  *   GET  /api/shell/{name}/describe/{target}  variables a target needs,
@@ -40,6 +41,17 @@
  * main.sh reports anything it still needs as a "MISSING_VARS:a,b,c" line and
  * exits before touching the system, which is what surfaces as the
  * failed_missing_vars status below.
+ *
+ *   GET  /api/shell/{name}/readme.md           the bundle's own README, if it
+ *                                             has one — text/markdown, .md
+ *                                             on the URL so the dashboard's
+ *                                             link opens it as a file (and a
+ *                                             markdown-viewer extension picks
+ *                                             it up) rather than fetching it
+ *
+ * readme is the one exception to the CLI-only rule above: it reads a text
+ * file and runs nothing, so — like list.rs — it takes require_access_or_cli
+ * rather than require_cli.
  */
 use std::collections::HashMap;
 use std::fs;
@@ -56,7 +68,7 @@ use uuid::Uuid;
 use actix_web::{web, Error, HttpRequest, HttpResponse};
 
 use crate::BuiltIns::mongo::MongoDB;
-use crate::Middleware::Auth::{require_cli, AccessRequirement};
+use crate::Middleware::Auth::{require_access_or_cli, require_cli, AccessRequirement};
 use crate::Model::Shell::ShellBundle;
 use crate::Model::Account::AccountRole;
 use crate::utils::response::Response;
@@ -235,6 +247,35 @@ pub async fn job_logs(
         .body(body))
 }
 
+/// A bundle's own README, if it uploaded with one. text/markdown, and the
+/// route itself ends in .md — the dashboard links straight to this route
+/// (opens in a new tab) rather than fetching it, so there is no JSON wrapper
+/// to unwrap, and a markdown-viewer browser extension has both the content
+/// type and the file extension to recognize it by.
+pub async fn readme(req: HttpRequest, path: web::Path<String>) -> Result<HttpResponse, Error> {
+    let bundle = path.into_inner();
+    // Same gate as list.rs: this reads a text file and runs nothing, so it
+    // doesn't warrant require_cli's stricter, browser-refusing gate. A plain
+    // link click is a top-level navigation, not a fetch, so it carries the
+    // session's access_token cookie the same as any other page on this site.
+    require_access_or_cli(&req, AccessRequirement::Role(AccountRole::Administrator)).await?;
+
+    let dir = match bundle_dir(&bundle) {
+        Ok(dir) => dir,
+        Err(res) => return Ok(res),
+    };
+
+    match readme_path(&dir) {
+        Some(path) => {
+            let content = fs::read_to_string(&path).unwrap_or_default();
+            Ok(HttpResponse::Ok()
+                .content_type("text/markdown; charset=utf-8")
+                .body(content))
+        }
+        None => Ok(Response::not_found("This bundle has no README")),
+    }
+}
+
 /* ── internals ── */
 
 /// SHELL_ROOT, created if it isn't there yet, canonicalized so callers can
@@ -329,6 +370,24 @@ fn bundle_dir(name: &str) -> Result<PathBuf, HttpResponse> {
     }
 
     Ok(dir)
+}
+
+/// The bundle's README file, if it has one directly at its root — checked
+/// under a couple of common spellings since an uploader won't always use the
+/// canonical capitalization.
+fn readme_path(dir: &Path) -> Option<PathBuf> {
+    ["README.md", "README", "readme.md", "Readme.md"]
+        .iter()
+        .map(|name| dir.join(name))
+        .find(|path| path.is_file())
+}
+
+/// Whether a freshly-unpacked bundle has a README — read once at upload time
+/// (shell/create.rs) and cached on the ShellBundle document, the same way its
+/// targets are, so the dashboard doesn't hit the filesystem to decide whether
+/// to show the button.
+pub fn has_readme(dir: &Path) -> bool {
+    readme_path(dir).is_some()
 }
 
 /// A single path segment: no separators, no traversal, no leading dash that

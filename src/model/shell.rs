@@ -16,6 +16,11 @@ pub struct ShellBundle {
     /// on every page load.
     #[serde(default)]
     pub targets: Vec<String>,
+    /// Whether the bundle's root has a README(.md), checked at upload time so
+    /// the dashboard knows whether to show the "Read README" button without
+    /// hitting the filesystem on every render.
+    #[serde(default)]
+    pub has_readme: bool,
     /// Whether an ordinary signed-in User may run this bundle's targets, not
     /// just an Administrator.
     ///

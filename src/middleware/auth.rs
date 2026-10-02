@@ -207,6 +207,40 @@ pub async fn require_cli(
     })
 }
 
+/// For the handful of routes a dashboard session *or* a CLI token may call
+/// (bundle listing, reading a README): try the session first, and only reach
+/// for a CLI token when the request doesn't look like a browser's in the
+/// first place.
+///
+/// Doing it this way — rather than the equivalent-looking `if
+/// require_access(..).is_err() { require_cli(..).await? }` each of those
+/// routes used to write inline — matters for exactly one case: a browser
+/// whose access_token cookie has simply expired. That request *does* look
+/// like a browser, so without this it fell through to require_cli, which
+/// rejects anything carrying browser fetch metadata — and the dashboard's own
+/// Fetcher, built to retry once after a silent refresh on a 401, never got
+/// the 401 require_access would have sent; it got require_cli's "install the
+/// CLI" 403 instead, and the UI had nothing to recover from. Refusing to even
+/// try require_cli when the request looks like a browser restores that 401,
+/// at the cost of a CLI call that somehow carries Sec-Fetch-* headers also
+/// landing on require_access's error instead of require_cli's — a caller
+/// that unusual can read either message fine.
+pub async fn require_access_or_cli(
+    req: &HttpRequest,
+    requirement: AccessRequirement,
+) -> Result<User, Error> {
+    match require_access(req, requirement.clone()) {
+        Ok(user) => Ok(user),
+        Err(access_err) => {
+            if looks_like_a_browser(req) {
+                Err(access_err)
+            } else {
+                require_cli(req, requirement).await
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

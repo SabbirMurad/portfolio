@@ -36,6 +36,12 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             "/{name}/targets",
             web::get().to(Handler::Shell::targets)
         )
+        // Reads a text file and runs nothing, so — unlike the routes below —
+        // it takes the dashboard's session (see Handler::Shell::readme).
+        .route(
+            "/{name}/readme.md",
+            web::get().to(Handler::Shell::readme)
+        )
         .route(
             "/{name}/describe/{target}",
             web::get().to(Handler::Shell::describe)
