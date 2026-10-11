@@ -331,19 +331,11 @@ function Services() {
                     style={{ opacity: on ? 1 : 0.4 }}
                   >
                     <RevealLayer as="span" from="left" distance={20} className="block">
-                      <span className="flex items-baseline gap-4">
-                        <span
-                          className="meta shrink-0 transition-colors duration-500"
-                          style={{ color: on ? s.tone : "rgba(11,11,11,0.35)" }}
-                        >
-                          {s.num}
-                        </span>
-                        <span
-                          className="display text-display-sm block transition-colors duration-500"
-                          style={{ color: on ? s.tone : undefined }}
-                        >
-                          {s.title}
-                        </span>
+                      <span
+                        className="display text-display-sm block transition-colors duration-500"
+                        style={{ color: on ? s.tone : undefined }}
+                      >
+                        {s.title}
                       </span>
                     </RevealLayer>
                     <RevealLayer as="span" from="left" delay={0.13} distance={20} className="block">
