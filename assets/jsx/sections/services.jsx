@@ -215,6 +215,17 @@ function Services() {
   const { useState, useEffect, useRef } = React;
   const ref = useRef(null);
   const [active, setActive] = useState(0);
+  // Bumped every time `active` changes, and folded into the active scene's own
+  // key below — every scene stays mounted (see the comment on that further
+  // down), so its svc-* keyframe loops never stop, and a scene brought back
+  // into view would otherwise resume wherever that loop already was instead
+  // of starting fresh. Remounting just the incoming scene on each switch is
+  // what makes it look like the transition *causes* the animation to start,
+  // rather than a crossfade between two things already mid-motion.
+  const [cycle, setCycle] = useState(0);
+  useEffect(() => {
+    setCycle((c) => c + 1);
+  }, [active]);
 
   /* Scroll drives the section: the active service is the last row whose heading
      has reached the focal line. Nothing in the list opens or closes any more —
@@ -290,13 +301,14 @@ function Services() {
                       aria-hidden={!on}
                       style={{
                         opacity: on ? 1 : 0,
-                        transform: on ? "translateY(0) scale(1)" : "translateY(18px) scale(0.97)",
-                        transitionDelay: on ? "80ms" : "0ms",
+                        transform: on ? "translateY(0) scale(1)" : "translateY(26px) scale(0.96)",
+                        filter: on ? "blur(0px)" : "blur(6px)",
+                        transitionDelay: on ? "120ms" : "0ms",
                       }}
-                      className="absolute inset-0 flex flex-col items-center justify-center gap-8 transition-all duration-[550ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      className="absolute inset-0 flex flex-col items-center justify-center gap-8 transition-all duration-[650ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
                     >
                       <div className="flex w-full flex-1 items-center justify-center px-2">
-                        <ServiceScene icon={s.icon} tone={s.tone} />
+                        <ServiceScene key={on ? `on-${cycle}` : "off"} icon={s.icon} tone={s.tone} />
                       </div>
                       <div className="flex flex-wrap justify-center gap-2">
                         {s.tags.map((t) => (
