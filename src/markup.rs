@@ -1,6 +1,7 @@
 use actix_session::Session;
 use mongodb::bson::doc;
 use crate::Model::Account;
+use crate::Model::Resume::{ self as ResumeModel, ResumeVariant };
 use crate::BuiltIns::mongo::MongoDB;
 use actix_web::{error, web, Error, HttpResponse};
 use tera::{Context, Tera};
@@ -56,12 +57,49 @@ pub async fn project_detail(
     Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
 }
 
+/// /resume and /resume_hidden each render whichever of résumé A and B the
+/// dashboard's swap currently puts there (Résumé tab, stored by
+/// src/handler/resume/set_swap.rs). By default A is at /resume, B at
+/// /resume_hidden.
+///
+/// SEO follows the address, not the template: whatever is at /resume is
+/// indexable with /resume as its canonical; whatever is at /resume_hidden is
+/// a link to hand out, not a page to be found — noindex, and left out of the
+/// sitemap.
 pub async fn resume(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
+    let swapped = crate::Handler::Resume::is_swapped().await;
+
+    let mut context = Context::new();
+    context.insert("seo_path", "/resume");
+
+    render_resume(&template, ResumeModel::at_resume(swapped), &context)
+}
+
+pub async fn resume_hidden(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
+    let swapped = crate::Handler::Resume::is_swapped().await;
+
+    let mut context = Context::new();
+    context.insert("seo_path", "/resume_hidden");
+    context.insert("seo_robots", "noindex, nofollow");
+
+    render_resume(&template, ResumeModel::at_resume_hidden(swapped), &context)
+}
+
+fn render_resume(
+    template: &Tera,
+    variant: ResumeVariant,
+    context: &Context,
+) -> Result<HttpResponse, Error> {
     let res_data = template
-        .render("resume.html", &Context::new())
+        .render(variant.template(), context)
         .map_err(|e| error::ErrorInternalServerError(e))?;
 
-    Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
+    // The swap can happen at any moment from the dashboard, so neither a
+    // browser nor a proxy should hold on to whichever one it saw last.
+    Ok(HttpResponse::Ok()
+        .content_type("text/html")
+        .insert_header(("Cache-Control", "no-cache"))
+        .body(res_data))
 }
 
 /// `/hire` and `/contact` used to render templates of their own. Those pages

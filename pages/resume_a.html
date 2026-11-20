@@ -10,7 +10,9 @@
     {% set seo_title = "Résumé — Md. Sabbir Hassan, Fullstack Developer & Designer" %}
     {% set seo_description = "The CV of Md. Sabbir Hassan — fullstack developer and designer. Rust, C++, Flutter and Tauri, six years of client work, and the projects behind it. Readable in the browser or downloadable as a PDF." %}
     {% set seo_keywords = "Sabbir Hassan CV, Sabbir Hassan resume, fullstack developer resume, Rust developer CV, Flutter developer CV, Bangladesh developer, freelance developer" %}
-    {% set seo_path = "/resume" %}
+    {# seo_path and seo_robots are not set here: src/markup.rs passes them,
+       because this page moves. The dashboard's Résumé tab swaps A and B
+       between /resume (indexed) and /resume_hidden (noindex). #}
     {% set seo_og_title = "Résumé — Md. Sabbir Hassan" %}
     {% set seo_og_description = "Fullstack developer and designer. Rust, C++, Flutter, Tauri — the experience, the stack and the selected work, in one page." %}
     {% set seo_twitter_description = "The CV: Rust · C++ · Flutter · Tauri, the experience and the selected work in one page." %}
@@ -27,8 +29,10 @@
       own icon card; here the same information is set as dense lists so the
       experience — the part that gets read — starts on page one.
 
-      Served by Tera at /resume (src/routes/pages.rs -> Markup::resume), so
-      asset paths here are absolute, not relative to this file.
+      RÉSUMÉ A. Served by Tera at /resume by default, or at /resume_hidden
+      when the dashboard swaps it with B (src/markup.rs resume /
+      resume_hidden). Either way, asset
+      paths here are absolute, not relative to this file.
 
       TO SWAP THE PHOTO: replace the src on <img class="photo"> below. It points
       at the hero image as a placeholder.

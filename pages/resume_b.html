@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=810" />
+
+    <!-- The CV is the page a search for the name should land on, so it gets
+         the same head as the rest of the site rather than a bare <title>.
+         seo.html emits the title itself — do not add one here as well. -->
+    {% set seo_title = "Résumé — Md. Sabbir Hassan, Fullstack Developer & Designer" %}
+    {% set seo_description = "The CV of Md. Sabbir Hassan — fullstack developer and designer. Rust, C++, Flutter and Tauri, six years of client work, and the projects behind it. Readable in the browser or downloadable as a PDF." %}
+    {% set seo_keywords = "Sabbir Hassan CV, Sabbir Hassan resume, fullstack developer resume, Rust developer CV, Flutter developer CV, Bangladesh developer, app developer team lead, assistant manager" %}
+    {# seo_path and seo_robots are not set here: src/markup.rs passes them,
+       because this page moves. The dashboard's Résumé tab swaps A and B
+       between /resume (indexed) and /resume_hidden (noindex). #}
+    {% set seo_og_title = "Résumé — Md. Sabbir Hassan" %}
+    {% set seo_og_description = "Fullstack developer and designer. Rust, C++, Flutter, Tauri — the experience, the stack and the selected work, in one page." %}
+    {% set seo_twitter_description = "The CV: Rust · C++ · Flutter · Tauri, the experience and the selected work in one page." %}
+    {% set seo_image_alt = "Md. Sabbir Hassan — Résumé" %}
+    {% include "common/seo.html" %}
+
+    <!--
+      Print-first CV, in the portfolio's own design language (Archivo display +
+      Inter body, ink/bone/vermilion). Open in a browser and print to PDF:
+      Ctrl/Cmd+P -> Save as PDF, margins "Default". Colour survives with or
+      without the dialog's "background graphics" box.
+
+      Two pages by design. The old one ran to four because every skill got its
+      own icon card; here the same information is set as dense lists so the
+      experience — the part that gets read — starts on page one.
+
+      RÉSUMÉ B. Served by Tera at /resume_hidden by default, or at /resume
+      when the dashboard swaps it with A (src/markup.rs resume /
+      resume_hidden). Started as a copy of A; edit freely. Either way, asset
+      paths here are absolute, not relative to this file.
+
+      TO SWAP THE PHOTO: replace the src on <img class="photo"> below. It points
+      at the hero image as a placeholder.
+    -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --ink: #0b0b0b;
+        --ink-soft: #2b2b2b;
+        --muted: #6e6e6e;
+        --faint: #9a9a9a;
+        --line: #e2e0dd;
+        --bone: #f4f3f1;
+        --vermilion: #de4520;
+        --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+        --body: "Inter", system-ui, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { -webkit-font-smoothing: antialiased; }
+
+      body {
+        margin: 0;
+        background: #8a8a8a;
+        color: var(--ink);
+        font-family: var(--body);
+        font-size: 10pt;
+        line-height: 1.5;
+      }
+
+      /* A4 sheet. The old CV printed decorative grey blobs behind body text;
+         nothing here sits under type, so it stays legible on paper and in
+         greyscale. */
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        padding: 14mm 15mm;
+        margin: 8mm auto;
+        background: #fff;
+        box-shadow: 0 2mm 8mm rgba(0, 0, 0, 0.25);
+      }
+
+      /* ── header ── */
+      .head {
+        display: grid;
+        grid-template-columns: 26mm 1fr;
+        gap: 8mm;
+        align-items: center;
+        padding-bottom: 6mm;
+        border-bottom: 1.5px solid var(--ink);
+      }
+
+      .photo {
+        width: 26mm;
+        height: 26mm;
+        border-radius: 50%;
+        object-fit: cover;
+        background: var(--bone);
+        display: block;
+      }
+
+      h1 {
+        font-family: var(--display);
+        font-size: 22pt;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        margin: 0;
+      }
+      h1 span { font-weight: 600; }
+
+      .role {
+        font-size: 10.5pt;
+        font-weight: 600;
+        color: var(--vermilion);
+        margin: 1.5mm 0 0;
+        letter-spacing: 0.01em;
+      }
+
+      .contact {
+        margin: 3mm 0 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1mm 5mm;
+        font-size: 8.8pt;
+        color: var(--ink-soft);
+      }
+      .contact a { color: inherit; text-decoration: none; }
+      .contact li::before {
+        content: "";
+        display: inline-block;
+        width: 3px;
+        height: 3px;
+        border: 1.5px solid var(--vermilion);
+        border-radius: 50%;
+        background: var(--vermilion);
+        vertical-align: 2px;
+        margin-right: 2mm;
+      }
+
+      /* ── sections ── */
+      section { margin-top: 7mm; }
+
+      h2 {
+        font-family: var(--display);
+        font-size: 11pt;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        margin: 0 0 3.5mm;
+        padding-bottom: 1.5mm;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .summary { margin: 0; color: var(--ink-soft); max-width: 165mm; }
+
+      /* ── experience ── */
+      .role-block { margin-bottom: 5mm; break-inside: avoid; }
+      .role-block:last-child { margin-bottom: 0; }
+
+      .role-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 6mm;
+      }
+
+      .role-title {
+        font-family: var(--display);
+        font-size: 11pt;
+        font-weight: 700;
+        margin: 0;
+      }
+      .role-title em {
+        font-style: normal;
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      .dates {
+        font-size: 8.5pt;
+        font-weight: 500;
+        color: var(--muted);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .role-block ul {
+        margin: 1.5mm 0 0;
+        padding-left: 4.5mm;
+        color: var(--ink-soft);
+      }
+      .role-block li { margin-bottom: 0.8mm; }
+      .role-block li::marker { color: var(--vermilion); }
+      /* ── featured work ──
+         Same language as the site's own project cards (accent dot + name/kind,
+         a line of description, tag pills) so the entries with real data read
+         as more than a link — everything else stays a plain link below. One
+         per line, stacked. */
+      .work-features {
+        display: grid;
+        gap: 3mm;
+        margin-bottom: 3mm;
+      }
+      .work-feature {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        padding: 4mm 5mm;
+        break-inside: avoid;
+      }
+      .work-feature .row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 4mm;
+      }
+      .work-feature .name {
+        display: inline-flex;
+        align-items: center;
+        gap: 2mm;
+        font-family: var(--display);
+        font-size: 11pt;
+        font-weight: 700;
+      }
+      .work-feature .dot {
+        width: 2mm;
+        height: 2mm;
+        /* Fill *and* ring: the ring is what survives a print with background
+           graphics off, the fill closes the pixel-rounding seam the ring's
+           four arcs leave at the centre. */
+        border: 1mm solid currentColor;
+        background: currentColor;
+        border-radius: 50%;
+        color: var(--vermilion);
+        flex-shrink: 0;
+      }
+      .work-feature .kind {
+        font-weight: 500;
+        font-size: 8.5pt;
+        color: var(--muted);
+      }
+      .work-feature .visit {
+        flex-shrink: 0;
+        font-size: 8.5pt;
+        font-weight: 500;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .work-feature p {
+        margin: 2.5mm 0 0;
+        font-size: 9pt;
+        color: var(--ink-soft);
+        max-width: 155mm;
+      }
+      .work-feature .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5mm;
+        margin-top: 3mm;
+      }
+      .work-feature .tag {
+        font-size: 7.5pt;
+        color: var(--ink-soft);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 0.6mm 2.5mm;
+      }
+
+      /* ── work grid ── */
+      .work-label {
+        font-family: var(--display);
+        font-size: 8.5pt;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        /* Set apart from the featured cards above and the next section below —
+           the run of plain links needs air on both sides to read as its own
+           thing rather than a tail on the last card. */
+        margin: 5mm 0 2.5mm;
+      }
+      .work {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2.5mm 8mm;
+      }
+      .work div { break-inside: avoid; }
+      .work a { color: inherit; text-decoration: none; display: block; }
+      .work b { font-weight: 600; }
+      .work span {
+        display: block;
+        font-size: 8.5pt;
+        color: var(--muted);
+        word-break: break-all;
+      }
+
+      /* ── skills ──
+         Four grouped blocks, two up. An inline dot-separated run reads as a
+         wall; here each tool gets its own line with the years right-aligned in
+         tabular figures, so the numbers form a column the eye can run down
+         instead of hunting for them mid-sentence.
+
+         Ordered strongest-first within each group, and the lead tool carries
+         a vermilion rule — the CV should answer "what is he actually best at"
+         before it answers "what has he touched". */
+      .skills {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5mm 10mm;
+      }
+
+      .skill-group { break-inside: avoid; }
+
+      .skill-group h3 {
+        font-family: var(--display);
+        font-size: 8.5pt;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin: 0 0 2mm;
+        padding-bottom: 1mm;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .skill {
+        display: flex;
+        align-items: baseline;
+        gap: 3mm;
+        /* 0.5mm rather than 0.7: with five rows in every group the extra
+           leading pushed the skills block past the foot of page one. */
+        padding: 0.5mm 0;
+      }
+
+      .skill .name {
+        font-size: 9.5pt;
+        color: var(--ink-soft);
+        white-space: nowrap;
+      }
+
+      /* The one thing in each group worth reading if you read nothing else. */
+      .skill.lead .name {
+        font-weight: 600;
+        color: var(--ink);
+        border-bottom: 1.5px solid var(--vermilion);
+        padding-bottom: 0.3mm;
+      }
+
+      /* Dotted leader: keeps the eye on the right row across the gap without
+         drawing a heavy rule. */
+      .skill .fill {
+        flex: 1;
+        border-bottom: 1px dotted #d5d2ce;
+        transform: translateY(-1mm);
+      }
+
+      .skill .yrs {
+        font-size: 8.5pt;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      .note {
+        margin: 2mm 0 7mm;
+        font-size: 8.8pt;
+        color: var(--muted);
+        border-left: 2px solid var(--line);
+        padding-left: 3mm;
+      }
+      .note a { color: var(--vermilion); font-weight: 500; }
+
+      /* ── speciality ──
+         Capability claims, not history, so they are set as one tight list with
+         the same vermilion markers as the experience bullets. The lead phrase
+         is bold so the page can be skimmed on the openers alone. */
+      .speciality {
+        margin: 0;
+        padding-left: 4.5mm;
+        color: var(--ink-soft);
+      }
+      .speciality li { margin-bottom: 1.2mm; break-inside: avoid; }
+      .speciality li:last-child { margin-bottom: 0; }
+      .speciality li::marker { color: var(--vermilion); }
+      .speciality b { font-weight: 600; color: var(--ink); }
+
+      /* ── two-up ── */
+      .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+      .cols h3, .stack h3 {
+        font-family: var(--display);
+        font-size: 9.5pt;
+        font-weight: 700;
+        margin: 0 0 1.5mm;
+      }
+      .cols ul { margin: 0; padding-left: 4.5mm; color: var(--ink-soft); }
+      .cols li::marker { color: var(--vermilion); }
+
+      .edu { margin-bottom: 3.5mm; break-inside: avoid; }
+      .edu:last-child { margin-bottom: 0; }
+      .edu b { font-weight: 600; }
+      .edu span { display: block; font-size: 8.8pt; color: var(--muted); }
+
+      .foot {
+        margin-top: 8mm;
+        padding-top: 3mm;
+        border-top: 1px solid var(--line);
+        font-size: 8.5pt;
+        color: var(--faint);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* ── download button ──
+         Triggers the browser's native print dialog rather than generating a
+         PDF client-side: the @page/@media print rules above already produce
+         the exact two-sheet layout, so "print to PDF" *is* the export path —
+         a second renderer would only risk drifting from what's on screen. */
+      .download-btn {
+        position: fixed;
+        right: 8mm;
+        bottom: 8mm;
+        z-index: 10;
+        display: inline-flex;
+        align-items: center;
+        gap: 2.5mm;
+        border: none;
+        border-radius: 999px;
+        padding: 3.5mm 6mm;
+        background: var(--vermilion);
+        color: #fff;
+        font-family: var(--body);
+        font-size: 10.5pt;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        box-shadow: 0 3mm 8mm rgba(0, 0, 0, 0.28);
+        transition: background 0.15s ease, transform 0.15s ease;
+      }
+      .download-btn:hover { background: #c93b19; transform: translateY(-1px); }
+      .download-btn svg { width: 3.6mm; height: 3.6mm; flex-shrink: 0; }
+
+      /* A phone scales this whole 810px-wide document down to its screen, so
+         the button lands at roughly half the size it has here and reads as a
+         chip. Touch pointers get it back to a normal tap target — the query is
+         on the pointer rather than a width, because the layout viewport is 810
+         on every phone and cannot be told apart from a small desktop window. */
+      @media (hover: none) and (pointer: coarse) {
+        .download-btn {
+          right: 14mm;
+          bottom: 14mm;
+          gap: 4.5mm;
+          padding: 8mm 13mm;
+          font-size: 25pt;
+          box-shadow: 0 5mm 14mm rgba(0, 0, 0, 0.3);
+        }
+        .download-btn svg { width: 8.5mm; height: 8.5mm; stroke-width: 2.6; }
+      }
+
+      @media print {
+        /* Print the accents whether or not the dialog's "Background graphics"
+           box is ticked — everything coloured here is part of the document,
+           not decoration. */
+        html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        body { background: #fff; }
+        .page {
+          margin: 0;
+          box-shadow: none;
+          width: auto;
+          min-height: 0;
+          padding: 0;
+        }
+        .page + .page { break-before: page; }
+        @page { size: A4; margin: 14mm 15mm; }
+        a { color: inherit; }
+        .download-btn { display: none; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <button
+      type="button"
+      class="download-btn"
+      onclick="window.print()"
+      aria-label="Download this CV as a PDF"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v12" />
+        <path d="M7 10l5 5 5-5" />
+        <path d="M5 21h14" />
+      </svg>
+      Download PDF
+    </button>
+
+    <!-- ══════════════════ PAGE 1 ══════════════════ -->
+    <div class="page">
+      <header class="head">
+        <!-- SWAP THIS: your own headshot. Square crops best; it is masked to a
+             circle. Placeholder is the site's hero image. -->
+        <img class="photo" src="/assets/image/hero_image.webp" alt="Md. Sabbir Hassan" />
+
+        <div>
+          <h1>Md. Sabbir <span>Hassan</span></h1>
+          <p class="role">Fullstack Developer &amp; Designer</p>
+          <ul class="contact">
+            <li><a href="mailto:sbbir0087@gmail.com">sbbir0087@gmail.com</a></li>
+            <li><a href="tel:+8801705738128">+880 1705 738128</a></li>
+            <li><a href="https://sabbirhassan.com">sabbirhassan.com</a></li>
+            <li><a href="https://github.com/sabbirmurad">github.com/sabbirmurad</a></li>
+            <li>
+              <a href="https://www.linkedin.com/in/sabbir-hassan-aa302824a/"
+                >linkedin.com/in/sabbir-hassan</a
+              >
+            </li>
+            <li>Bogura, Bangladesh</li>
+          </ul>
+        </div>
+      </header>
+
+      <section>
+        <h2>Profile</h2>
+        <p class="summary">
+          Self-taught developer and designer, building since 2019. I work across the stack —
+          systems-level Rust and C++ on the backend, Flutter and Tauri on the client, and the
+          interface design in between. From building products at a startup to managing
+          three teams at JoinVentureAI.
+        </p>
+      </section>
+      <section>
+        <h2>Experience</h2>
+
+        <div class="role-block">
+          <div class="role-head">
+            <p class="role-title">Assistant Manager <em>— JoinVentureAI</em></p>
+            <span class="dates">Jan 2026 — Sep 2026</span>
+          </div>
+          <ul>
+            <li>
+              Promoted after eight months from leading one team to managing three — 36 people in
+              all.
+            </li>
+            <li>
+              Owned delivery across all three teams: planning the work, setting priorities and
+              keeping releases on time.
+            </li>
+          </ul>
+        </div>
+
+        <div class="role-block">
+          <div class="role-head">
+            <p class="role-title">App Developer &amp; Team Lead <em>— JoinVentureAI</em></p>
+            <span class="dates">May 2025 — Dec 2025</span>
+          </div>
+          <ul>
+            <li>
+              Led a team of 14 while staying hands-on in the code, building and shipping the
+              company’s apps.
+            </li>
+            <li>
+              Set the team’s technical direction — architecture, code review and the release
+              process.
+            </li>
+          </ul>
+        </div>
+
+        <div class="role-block">
+          <div class="role-head">
+            <p class="role-title">Fullstack Developer &amp; Project Manager <em>— Bitlaab</em></p>
+            <span class="dates">2021 — Apr 2025</span>
+          </div>
+          <ul>
+            <li>
+              Built and shipped client products end to end — backend, client applications and
+              interface design — while managing delivery as project manager on most of them.
+            </li>
+            <li>
+              Shipped 30+ features across Rust, Node.js, Flutter and vanilla web, on MongoDB and
+              SQLite.
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section>
+        <h2>Technical Skills</h2>
+        <div class="skills">
+          <div class="skill-group">
+            <h3>Backend &amp; Systems</h3>
+            <div class="skill lead">
+              <span class="name">Rust</span><span class="fill"></span
+              ><span class="yrs">4 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">C++</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Zig</span><span class="fill"></span
+              ><span class="yrs">2.5 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Node.js</span><span class="fill"></span
+              ><span class="yrs">1.5 yrs</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <h3>Client</h3>
+            <div class="skill lead">
+              <span class="name">Flutter / Dart</span><span class="fill"></span
+              ><span class="yrs">4 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Kotlin</span><span class="fill"></span
+              ><span class="yrs">1 yr</span>
+            </div>
+            <div class="skill">
+              <span class="name">Swift</span><span class="fill"></span
+              ><span class="yrs">1 yr</span>
+            </div>
+            <div class="skill">
+              <span class="name">Vanilla JS, HTML, CSS</span><span class="fill"></span
+              ><span class="yrs">6 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Tauri</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <h3>Data</h3>
+            <div class="skill lead">
+              <span class="name">MongoDB</span><span class="fill"></span
+              ><span class="yrs">4 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">SQLite</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Redis</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">MySQL</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">ScyllaDB</span><span class="fill"></span
+              ><span class="yrs">learning</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <h3>Design</h3>
+            <div class="skill lead">
+              <span class="name">Figma</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Adobe XD</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Photoshop</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Illustrator</span><span class="fill"></span
+              ><span class="yrs">1.5 yrs</span>
+            </div>
+          </div>
+        </div>
+        <p class="note">
+          Rust is where I do my best work; on the client I prefer vanilla web components and
+          Flutter to heavier frameworks.
+        </p>
+      </section>
+    </div>
+
+    <!-- ══════════════════ PAGE 2 ══════════════════ -->
+    <div class="page">
+      <section style="margin-top: 0">
+        <h2>Speciality</h2>
+        <ul class="speciality">
+          <li>
+            <b>Real-time computer vision on device</b> — MediaPipe’s pose and hand landmarkers run
+            against the live camera feed, the 21-point skeleton tracked and the gesture read frame
+            by frame, with the overlay composited back onto the preview. Fireball is built on that
+            pipeline.
+          </li>
+          <li>
+            <b>Data models that scale</b> — schema, index and sharding design with the caching
+            layer planned alongside it, structured to serve on the order of a million users
+            without the read path degrading.
+          </li>
+          <li>
+            <b>Systems-level Rust on the server</b> — services on Actix Web, with WebSocket and
+            WebRTC transport where the product has to be live rather than merely fast.
+          </li>
+          <li>
+            <b>Delivery, not only code</b> — project management on most of what I built in-house,
+            then leading a team of 14 and managing three teams at JoinVentureAI.
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h2>Selected Work</h2>
+
+        <!-- Featured, in the same language as the project cards on the site:
+             accent dot, name/kind, a line of description, tag pills. The rest
+             stay plain links below — these four are the ones worth a second
+             look. Sourced from sabbirhassan.com's own project feed. -->
+        <div class="work-features">
+          <a class="work-feature" href="https://github.com/SabbirMurad/fireball">
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="color: #ff6a1f"></span>Fireball
+                <span class="kind">/ camera hand tracking</span></span
+              >
+              <span class="visit">GitHub ↗</span>
+            </div>
+            <p>
+              MediaPipe’s 21-point hand skeleton drawn over the live camera feed. Close your fist
+              and open it and a fireball lights in that palm — flick the hand and the fire flies
+              off along the hand’s own path.
+            </p>
+            <div class="tags">
+              <span class="tag">flutter</span>
+              <span class="tag">kotlin</span>
+              <span class="tag">mediapipe</span>
+              <span class="tag">camerax</span>
+            </div>
+          </a>
+
+          <a
+            class="work-feature"
+            href="https://play.google.com/store/apps/details?id=com.sabbir.hasp&hl=en"
+          >
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="color: #bb80fa"></span>Hasp
+                <span class="kind">/ dating app</span></span
+              >
+              <span class="visit">Google Play ↗</span>
+            </div>
+            <p>
+              Swipe to discover people, match on mutual likes, then chat with photos, voice notes
+              and video calls — verified selfie profiles, smart filters, travel mode, boosts and a
+              built-in safety centre.
+            </p>
+            <div class="tags">
+              <span class="tag">flutter</span>
+              <span class="tag">dart</span>
+              <span class="tag">firebase</span>
+              <span class="tag">webrtc</span>
+              <span class="tag">websocket</span>
+            </div>
+          </a>
+
+          <a class="work-feature" href="https://github.com/SabbirMurad/scaffold">
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="color: #868aff"></span>Scaffold
+                <span class="kind">/ design → code</span></span
+              >
+              <span class="visit">GitHub ↗</span>
+            </div>
+            <p>
+              A browser-based design tool for building interfaces on an infinite canvas — frames,
+              auto-layout, layers and real-time collaboration, with AI assist and one-click code
+              export, backed by a Rust server.
+            </p>
+            <div class="tags">
+              <span class="tag">rust</span>
+              <span class="tag">actix web</span>
+              <span class="tag">javascript</span>
+              <span class="tag">canvas</span>
+              <span class="tag">websocket</span>
+            </div>
+          </a>
+
+          <a
+            class="work-feature"
+            href="https://chromewebstore.google.com/detail/bento-new-tab/mgnhpoioecgjficdbkghpnplklmohhpl"
+          >
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="color: #1abc9c"></span>Bento
+                <span class="kind">/ custom chrome theme</span></span
+              >
+              <span class="visit">Chrome Web Store ↗</span>
+            </div>
+            <p>
+              A Chrome new tab page you arrange yourself. Clock, bookmarks, shortcuts, search and
+              Google links are pieces you move, restyle, reorder or switch off.
+            </p>
+            <div class="tags">
+              <span class="tag">javascript</span>
+              <span class="tag">manifest v3</span>
+              <span class="tag">chrome api</span>
+              <span class="tag">zero-dep</span>
+            </div>
+          </a>
+
+          <a class="work-feature" href="https://simfrii.com">
+            <div class="row">
+              <span class="name"
+                ><span class="dot" style="color: #e97400"></span>Simfrii
+                <span class="kind">/ global esim marketplace</span></span
+              >
+              <span class="visit">simfrii.com ↗</span>
+            </div>
+            <p>
+              Buy and install eSIM data for 200+ countries in seconds. Compare live plans across
+              five providers side by side, then manage eSIMs, top up and get support — six
+              languages, no roaming, no physical SIM.
+            </p>
+            <div class="tags">
+              <span class="tag">rust</span>
+              <span class="tag">flutter</span>
+              <span class="tag">react</span>
+              <span class="tag">vite</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <!-- ══════════════════ PAGE 3 ══════════════════ -->
+    <div class="page">
+      <section style="margin-top: 0">
+        <!-- Anchored so the links work in the exported PDF, but labelled
+             short: the Chrome Web Store and Play Store URLs are long enough to
+             wrap across the column and wreck the grid. -->
+        <p class="work-label" style="margin-top: 0">Previous partners you may know</p>
+        <div class="work">
+          <div>
+            <a href="https://healthmasterbd.com"
+              ><b>Health Master BD</b><span>healthmasterbd.com</span></a
+            >
+          </div>
+          <div>
+            <a href="https://heartsmedistudy.com"
+              ><b>Hearts Medi Study</b><span>heartsmedistudy.com</span></a
+            >
+          </div>
+          <div>
+            <a href="https://akmdcbanani.com"
+              ><b>AKMDC Banani</b><span>akmdcbanani.com</span></a
+            >
+          </div>
+        </div>
+        <p class="note">
+          Further client work is covered by confidentiality or is available in
+          <a href="https://sabbirhassan.com/projects">my portfolio</a>.
+        </p>
+      </section>
+      <section>
+        <h2>Education</h2>
+        <div class="edu">
+          <b>B.Sc. in Computer Science &amp; Engineering</b>
+          <span>Pundra University of Science and Technology, Bogura — in progress</span>
+        </div>
+        <div class="edu">
+          <b>Higher Secondary Certificate</b>
+          <span>Government Shah Sultan College, Bogura — 2019, GPA 4.75</span>
+        </div>
+        <div class="edu">
+          <b>Secondary School Certificate</b>
+          <span>Cantonment Board High School, Jahangirabad, Bogura — 2017, GPA 5.00</span>
+        </div>
+      </section>
+      <section>
+        <h2>Languages</h2>
+        <div class="cols">
+          <div>
+            <h3>Spoken</h3>
+            <ul>
+              <li>Bangla — native</li>
+              <li>English — fluent</li>
+              <li>Hindi — fluent</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Written</h3>
+            <ul>
+              <li>Bangla — fluent</li>
+              <li>English — fluent</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <div class="foot">
+        <span>Md. Sabbir Hassan — CV</span>
+        <span>sabbirhassan.com</span>
+      </div>
+    </div>
+  </body>
+</html>

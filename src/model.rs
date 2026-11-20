@@ -21,6 +21,9 @@ pub use project_details as ProjectDetails;
 pub mod shell;
 pub use shell as Shell;
 
+pub mod resume;
+pub use resume as Resume;
+
 pub mod cli_token;
 pub use cli_token as CliToken;
 

@@ -32,6 +32,10 @@ pub fn router(cfg: &mut web::ServiceConfig) {
             web::get().to(Markup::resume)
         )
         .route(
+            "/resume_hidden",
+            web::get().to(Markup::resume_hidden)
+        )
+        .route(
             "/hire",
             web::get().to(Markup::hire)
         )

@@ -22,6 +22,7 @@ const NAV_ITEMS = [
   { key: "writing", label: "Writing" },
   { key: "projects", label: "Projects" },
   { key: "youtube", label: "YouTube" },
+  { key: "resume", label: "Résumé" },
   { key: "shell", label: "Shell" },
 ];
 
@@ -114,8 +115,8 @@ function OverviewTab({ fullName, onSelect }) {
         Welcome back, {fullName}
       </h1>
       <p className="mt-3 max-w-lg text-[14px] leading-[1.7] text-muted-2">
-        Documentation, Projects and the home page's YouTube picks are live. Writing is still
-        coming.
+        Documentation, Projects, the home page's YouTube picks and the résumé swap are
+        live. Writing is still coming.
       </p>
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -2038,6 +2039,148 @@ function YoutubeTab() {
   );
 }
 
+/* ── Résumé tab ──────────────────────────────────────────────────────── */
+
+// Mirrors Model::Resume (src/model/resume.rs): two templates, two addresses,
+// and one swap flag deciding which template sits at which address.
+const RESUMES = {
+  A: { label: "Résumé A", template: "pages/resume_a.html" },
+  B: { label: "Résumé B", template: "pages/resume_b.html" },
+};
+
+const RESUME_ROUTES = [
+  { path: "/resume", note: "Public — indexed and in the sitemap" },
+  { path: "/resume_hidden", note: "Unlisted — noindex, only for people you send it to" },
+];
+
+function resumeAt(path, swapped) {
+  const atResume = swapped ? "B" : "A";
+  if (path === "/resume") return atResume;
+  return atResume === "A" ? "B" : "A";
+}
+
+function ResumeTab() {
+  const { useState, useEffect } = React;
+  const [loadState, setLoadState] = useState("loading"); // loading | ready | error
+  const [loadError, setLoadError] = useState(null);
+  const [swapped, setSwapped] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState(null);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      const result = await Fetcher.get({ endpoint: "/resume/swap", showError: false });
+      if (!alive) return;
+      if (!result.ok) {
+        setLoadState("error");
+        setLoadError(result.error || "Failed to load");
+        return;
+      }
+      setSwapped(!!(result.data && result.data.swapped));
+      setLoadState("ready");
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const onSwap = async () => {
+    if (saving) return;
+    setSaving(true);
+    setFormError(null);
+
+    // Sends the state to end up in, not "toggle" — see set_swap.rs.
+    const next = !swapped;
+    const result = await Fetcher.post({
+      endpoint: "/resume/swap",
+      body: { swapped: next },
+      showError: false,
+    });
+
+    setSaving(false);
+    if (!result.ok) {
+      setFormError(result.error || "Failed to swap");
+      return;
+    }
+    setSwapped(result.data ? !!result.data.swapped : next);
+  };
+
+  return (
+    <Enter distance={18}>
+      <p className="meta text-vermilion">Résumé</p>
+      <h1 className="display-tight mt-2 text-2xl font-bold sm:text-3xl">Which résumé is where</h1>
+      <p className="mt-2 max-w-lg text-[14px] leading-[1.7] text-muted-2">
+        Two résumés, two addresses. Swap them to trade places: the one at /resume moves to
+        /resume_hidden and the other way round. Live on the next page load.
+      </p>
+
+      {loadState === "loading" && <p className="meta mt-8 text-muted-2">Loading…</p>}
+
+      {loadState === "error" && <p className="meta mt-8 text-vermilion">{loadError}</p>}
+
+      {loadState === "ready" && (
+        <div className="mt-8 max-w-2xl">
+          <div className="divide-y divide-line rounded-md border border-line bg-paper">
+            {RESUME_ROUTES.map((route) => {
+              const r = RESUMES[resumeAt(route.path, swapped)];
+              return (
+                <div
+                  key={route.path}
+                  className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div>
+                    <p className="meta text-ink">{route.path}</p>
+                    <p className="mt-1 text-[13px] leading-[1.6] text-muted-2">{route.note}</p>
+                  </div>
+                  <div className="flex items-center gap-5">
+                    <span className="text-right">
+                      <span className="display-tight block text-lg font-bold text-ink">
+                        {r.label}
+                      </span>
+                      <span className="meta block text-muted">{r.template}</span>
+                    </span>
+                    <a
+                      href={route.path}
+                      target="_blank"
+                      rel="noopener"
+                      className="meta shrink-0 text-muted-2 transition-colors duration-300 hover:text-ink"
+                    >
+                      View ↗
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {formError && (
+            <p
+              role="alert"
+              className="meta mt-5 rounded-sm border border-vermilion/30 bg-vermilion/5 px-4 py-3 text-vermilion"
+            >
+              {formError}
+            </p>
+          )}
+
+          <button
+            type="button"
+            onClick={onSwap}
+            disabled={saving}
+            className={
+              "group mt-6 flex items-center justify-center gap-3 rounded-sm bg-ink px-6 py-3.5 text-white transition-colors duration-400 " +
+              (saving ? "cursor-default opacity-60" : "hover:bg-vermilion")
+            }
+          >
+            <span className="meta">{saving ? "Swapping…" : "Swap A and B"}</span>
+            <span aria-hidden="true">⇅</span>
+          </button>
+        </div>
+      )}
+    </Enter>
+  );
+}
+
 /* ── Shell ───────────────────────────────────────────────────────────── */
 
 /* ── Shell tab ───────────────────────────────────────────────────────── */
@@ -2496,6 +2639,7 @@ function Dashboard() {
         )}
         {tab === "projects" && <ProjectsTab />}
         {tab === "youtube" && <YoutubeTab />}
+        {tab === "resume" && <ResumeTab />}
         {tab === "shell" && <ShellTab />}
       </main>
     </div>
