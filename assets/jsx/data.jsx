@@ -14,7 +14,10 @@ const profile = {
   email: "sbbir0087@gmail.com",
   phone: "+880 1705 738128",
   location: "Dhaka, Bangladesh",
-  hours: "Daily: 10 AM — 6 PM",
+  hours: "Daily: 10 AM — 6 PM (UTC+6)",
+  // Same wording as the line under the name on the résumé.
+  availability: "Open to full-time remote roles",
+  timezone: "UTC+6",
   year: "2026",
 };
 
@@ -289,6 +292,6 @@ const faqs = [
   },
   {
     q: "What's your availability?",
-    a: "I'm currently taking on new projects. Timelines depend on scope — reach out with what you have in mind and I'll come back with a realistic start date.",
+    a: "I'm open to full-time remote roles, working from Dhaka (UTC+6). I also still take on freelance projects — reach out with what you have in mind and I'll come back with a realistic start date.",
   },
 ];

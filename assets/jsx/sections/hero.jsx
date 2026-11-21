@@ -395,7 +395,7 @@ function Hero() {
               <span className="flex flex-col">
                 <span className="meta flex items-center gap-2 text-white/45 transition-colors duration-400 group-hover:text-white/75">
                   <span aria-hidden className="block h-1.5 w-1.5 rounded-full bg-vermilion transition-colors duration-400 group-hover:bg-white" />
-                  Available for work
+                  {profile.availability}
                 </span>
                 <span className="whitespace-nowrap text-[17px] font-semibold leading-tight">
                   Let&apos;s talk

@@ -131,6 +131,12 @@ function Contact() {
               </p>
 
               <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <p className="meta text-white/50">Availability</p>
+                  <p className="mt-1 text-[14px]">
+                    {profile.availability} ({profile.timezone}), and to freelance projects
+                  </p>
+                </div>
                 <div>
                   <p className="meta text-white/50">Email</p>
                   <a
