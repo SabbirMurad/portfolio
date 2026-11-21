@@ -119,6 +119,14 @@
         margin: 1.5mm 0 0;
         letter-spacing: 0.01em;
       }
+      /* Availability rides on the title line rather than a line of its own,
+         which would push page one's last lines onto page two. */
+      .role .avail {
+        font-size: 9.5pt;
+        font-weight: 500;
+        color: var(--ink-soft);
+        letter-spacing: 0;
+      }
 
       .contact {
         margin: 3mm 0 0;
@@ -515,7 +523,7 @@
 
         <div>
           <h1>Md. Sabbir <span>Hassan</span></h1>
-          <p class="role">Fullstack Developer &amp; Designer</p>
+          <p class="role">Fullstack Developer &amp; Designer <span class="avail">— open to full-time remote roles (UTC+6)</span></p>
           <ul class="contact">
             <li><a href="mailto:sbbir0087@gmail.com">sbbir0087@gmail.com</a></li>
             <li><a href="tel:+8801705738128">+880 1705 738128</a></li>
@@ -526,7 +534,7 @@
                 >linkedin.com/in/sabbir-hassan-aa302824a</a
               >
             </li>
-            <li>Bogura, Bangladesh</li>
+            <li>Dhaka, Bangladesh</li>
           </ul>
         </div>
       </header>
@@ -584,11 +592,14 @@
           </div>
           <ul>
             <li>
-              Built and shipped client products end to end — backend, client applications and
-              interface design — while managing delivery as project manager on most of them.
+              Shipped 5+ client products end to end — backend, client applications and interface
+              design.
             </li>
             <li>
-              Shipped 30+ features across Rust, Node.js, Flutter and vanilla web, on MongoDB and
+              Project-managed most of them, running teams of 5–8 people from scope to release.
+            </li>
+            <li>
+              Delivered 30+ features across Rust, Node.js, Flutter and vanilla web, on MongoDB and
               SQLite.
             </li>
           </ul>

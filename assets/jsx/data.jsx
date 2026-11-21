@@ -13,7 +13,7 @@ const profile = {
     "I build high-performance software and pixel-perfect interfaces that are fast, beautiful and purposeful",
   email: "sbbir0087@gmail.com",
   phone: "+880 1705 738128",
-  location: "Bogura, Bangladesh",
+  location: "Dhaka, Bangladesh",
   hours: "Daily: 10 AM — 6 PM",
   year: "2026",
 };
