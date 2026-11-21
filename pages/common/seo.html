@@ -34,11 +34,15 @@
 {% set _og_title = seo_og_title | default(value=_title) %}
 {% set _og_desc = seo_og_description | default(value="Sabbir Hassan is a fullstack developer and designer specializing in Rust, Flutter, C++ and modern web. Crafting fast, beautiful, purposeful software.") %}
 {% set _tw_desc = seo_twitter_description | default(value="Fullstack developer and designer. Rust · Flutter · C++ · UI/UX. Building fast, beautiful, purposeful software.") %}
-{% set _image_path = seo_image_path | default(value="/assets/image/sabbir_hassan.webp") %}
+{# The share card: 1200x630 PNG, the size a large summary card shows uncropped
+   and a format every scraper reads (its source is tools/og_card.html). The
+   portrait stays the Person's image in the JSON-LD below. #}
+{% set _image_path = seo_image_path | default(value="/assets/image/og_card.png") %}
 {% set _image = site_url ~ _image_path %}
-{% set _image_type = seo_image_type | default(value="image/webp") %}
-{% set _image_w = seo_image_width | default(value="1254") %}
-{% set _image_h = seo_image_height | default(value="1254") %}
+{% set _image_type = seo_image_type | default(value="image/png") %}
+{% set _image_w = seo_image_width | default(value="1200") %}
+{% set _image_h = seo_image_height | default(value="630") %}
+{% set _portrait = site_url ~ "/assets/image/sabbir_hassan.webp" %}
 {% set _image_alt = seo_image_alt | default(value="Sabbir Hassan — Fullstack Developer & Designer") %}
     <!-- ── PRIMARY SEO ── -->
     <title>{{ _title }}</title>
@@ -70,8 +74,8 @@
     <meta name="twitter:description" content="{{ _tw_desc }}" />
     <meta name="twitter:image" content="{{ _image | safe }}" />
     <meta name="twitter:image:alt" content="{{ _image_alt }}" />
-    <meta name="twitter:creator" content="@sabbirhassan" />
-    <meta name="twitter:site" content="@sabbirhassan" />
+    {# No twitter:site / twitter:creator: they named @sabbirhassan, which is
+       not an account linked from anywhere on the site. #}
 
     <!-- ── SCHEMA.ORG JSON-LD ── -->
     <script type="application/ld+json">
@@ -79,17 +83,22 @@
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Sabbir Hassan",
-        "alternateName": "Sabbir Ahmed Hassan",
+        "alternateName": "Md. Sabbir Hassan",
         "url": "{{ site_url | safe }}/",
-        "image": "{{ _image | safe }}",
+        "image": "{{ _portrait | safe }}",
         "jobTitle": "Fullstack Developer & Designer",
         "description": "Sabbir Hassan is a fullstack developer and designer specializing in Rust backends, Flutter mobile apps, C++ competitive programming, and UI/UX design.",
         "email": "sbbir0087@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Bogura",
+          "addressCountry": "BD"
+        },
         "knowsAbout": ["Rust", "C++", "Flutter", "Dart", "JavaScript", "UI/UX Design", "Figma", "Adobe XD", "MySQL", "MongoDB", "ScyllaDB", "SQLite", "Redis"],
         "sameAs": [
           "https://github.com/sabbirmurad",
           "https://www.linkedin.com/in/sabbir-hassan-aa302824a/",
-          "https://www.fiverr.com/sabbirhassan",
+          "https://www.fiverr.com/compile_time",
           "https://www.upwork.com/freelancers/sabbirhassan",
           "https://www.youtube.com/@itscompiletime",
           "https://www.facebook.com/sabbir.murad.503"

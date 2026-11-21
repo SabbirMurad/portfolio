@@ -1,0 +1,34 @@
+<!--
+  Source of assets/image/og_card.png, the 1200x630 link-preview image every
+  page declares as og:image (pages/common/seo.html). To regenerate:
+
+    chrome --headless=new --hide-scrollbars --force-device-scale-factor=1 \
+      --window-size=1200,630 --virtual-time-budget=5000 \
+      --screenshot=assets/image/og_card.png file:///<abs path>/tools/og_card.html
+-->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+  body{background:#0b0b0b;color:#fff;font-family:Inter,sans-serif;position:relative}
+  .glow{position:absolute;inset:0;background:radial-gradient(70% 90% at 100% 0%,rgba(222,69,32,.42) 0%,transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(222,69,32,.16) 0%,transparent 70%)}
+  .wrap{position:absolute;inset:0;padding:78px 84px;display:flex;flex-direction:column}
+  .kicker{font-weight:600;font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:#de4520;display:flex;align-items:center;gap:14px}
+  .kicker:before{content:"";width:12px;height:12px;border-radius:50%;background:#de4520}
+  h1{font-family:Archivo,sans-serif;font-weight:800;font-size:112px;line-height:.95;letter-spacing:-.035em;margin:34px 0 0}
+  h1 span{font-weight:700;color:#d8d6d2}
+  .role{font-size:34px;font-weight:500;color:#e9e7e3;margin-top:26px}
+  .stack{margin-top:auto;display:flex;gap:12px;flex-wrap:wrap}
+  .stack span{font-size:22px;font-weight:600;border:1.5px solid rgba(255,255,255,.22);border-radius:999px;padding:9px 20px;color:#f4f3f1}
+  .url{position:absolute;right:84px;bottom:84px;font-family:Archivo,sans-serif;font-weight:700;font-size:28px;color:#fff}
+</style></head>
+<body><div class="glow"></div>
+<div class="wrap">
+  <div class="kicker">Portfolio &amp; CV</div>
+  <h1>Sabbir <span>Hassan</span></h1>
+  <div class="role">Fullstack Developer &amp; Designer</div>
+  <div class="stack"><span>Rust</span><span>Actix Web</span><span>Flutter</span><span>Tauri</span><span>UI/UX</span></div>
+</div>
+<div class="url">sabbirhassan.com</div>
+</body></html>

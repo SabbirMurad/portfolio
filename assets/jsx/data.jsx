@@ -12,8 +12,8 @@ const profile = {
   tagline:
     "I build high-performance software and pixel-perfect interfaces that are fast, beautiful and purposeful",
   email: "sbbir0087@gmail.com",
-  phone: "+880 1XXX-XXXXXX",
-  location: "Dhaka, Bangladesh",
+  phone: "+880 1705 738128",
+  location: "Bogura, Bangladesh",
   hours: "Daily: 10 AM — 6 PM",
   year: "2026",
 };
@@ -22,7 +22,7 @@ const socials = [
   { label: "GitHub", href: "https://github.com/sabbirmurad" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/sabbir-hassan-aa302824a/" },
   { label: "YouTube", href: "https://www.youtube.com/@itscompiletime" },
-  { label: "Fiverr", href: "https://www.fiverr.com/sabbirhassan" },
+  { label: "Fiverr", href: "https://www.fiverr.com/compile_time" },
   { label: "Upwork", href: "https://www.upwork.com/freelancers/sabbirhassan" },
   { label: "Discord", href: "https://discord.gg/Ym2EHCx5" },
   { label: "Facebook", href: "https://www.facebook.com/sabbir.murad.503" },
@@ -40,7 +40,9 @@ const stats = [
   { value: 20, suffix: "+", label: "Projects Shipped" },
   { value: 5, suffix: "+", label: "Years Experience" },
   { value: 5, suffix: "", label: "Languages" },
-  { value: 100, suffix: "%", label: "Client Satisfaction" },
+  // Checkable: leetcode.com/u/sabbir0087 (the Competitive section shows the
+  // live count). A floor, so it stays true as the number grows.
+  { value: 100, suffix: "+", label: "LeetCode Problems Solved" },
 ];
 
 const stack = [
@@ -132,10 +134,10 @@ const services = [
    from GET /api/documentation/feed, managed in the dashboard, see
    assets/jsx/doc_card.jsx. */
 
-/* The YouTube section renders this until /api/youtube/feed answers (and instead
-   of it, if the feed is unavailable). Counts are left as em dashes rather than
-   invented, and `video_id: null` marks an entry the player can't embed — those
-   cards link out to the channel instead. */
+/* Channel defaults the YouTube section merges the live /api/youtube/feed
+   channel over. There are no placeholder videos: the section only renders
+   once the feed returns real ones (see the `when` checks in app.jsx), so it
+   never shows titles that don't exist on the channel. */
 const youtube = {
   channel: {
     name: "Compile Time",
@@ -148,44 +150,6 @@ const youtube = {
     since: "—",
     avatar_url: "",
   },
-  videos: [
-    {
-      video_id: null,
-      label: "Rust",
-      title: "Building a REST API in Rust with Actix-Web from scratch",
-      thumbnail: "",
-      views: "",
-      duration: "",
-      published_at: "",
-    },
-    {
-      video_id: null,
-      label: "Flutter",
-      title: "Riverpod — state management that actually makes sense",
-      thumbnail: "",
-      views: "",
-      duration: "",
-      published_at: "",
-    },
-    {
-      video_id: null,
-      label: "Vanilla JS",
-      title: "Custom JS components with zero dependencies, the right way",
-      thumbnail: "",
-      views: "",
-      duration: "",
-      published_at: "",
-    },
-    {
-      video_id: null,
-      label: "C++",
-      title: "Competitive programming patterns worth memorising",
-      thumbnail: "",
-      views: "",
-      duration: "",
-      published_at: "",
-    },
-  ],
 };
 
 /* Competitive programming. The solved counts are filled in at runtime from our
@@ -246,61 +210,59 @@ const process = [
   },
 ];
 
+/* Same roles, titles and dates as the public résumé (pages/resume_a.html) —
+   a recruiter who opens both should read one story. Change them together. */
 const journey = [
   {
-    period: "2023 — Present",
-    kind: "Full-time",
-    role: "Fullstack Developer",
+    period: "May 2025 — Present",
+    kind: "Freelance",
+    role: "Fullstack Developer & Designer",
     org: "Freelance / Self-employed",
-    body: "Building web apps, mobile apps and backend systems for clients across multiple industries. Rust, Flutter, custom JS.",
+    body: "Client projects taken end to end — scoping the work, designing the interface, building both ends, then shipping and maintaining it. Rust services on Actix Web behind Flutter and vanilla web clients.",
   },
   {
-    period: "2022 — 2023",
-    kind: "Contract",
-    role: "UI/UX Designer",
-    org: "Various Clients",
-    body: "Designed interfaces for SaaS products and mobile apps in Figma and Adobe XD. Focused on design systems and component libraries.",
+    period: "2021 — Apr 2025",
+    kind: "In-house",
+    role: "Fullstack Developer & Project Manager",
+    org: "Bitlaab",
+    body: "Built and shipped client products end to end — backend, client applications and interface design — while managing delivery as project manager on most of them. 30+ features across Rust, Node.js, Flutter and vanilla web, on MongoDB and SQLite.",
   },
   {
-    period: "2021 — 2022",
-    kind: "Part-time",
-    role: "Technical Writer & Mentor",
-    org: "Open Source Community",
-    body: "Wrote developer documentation with MkDocs and mentored junior developers in competitive programming and system design.",
-  },
-  {
-    period: "2020 — 2024",
+    period: "In progress",
     kind: "Degree",
-    role: "B.Sc. in Computer Science",
-    org: "University",
-    body: "Focused on algorithms, data structures, and systems programming. Active in competitive programming clubs and hackathons.",
+    role: "B.Sc. in Computer Science & Engineering",
+    org: "Pundra University of Science and Technology, Bogura",
+    body: "Studying alongside the work. Self-taught before it: building since 2019.",
   },
 ];
+
+/* Real reviews from the Fiverr gig, quoted word for word and attributed the
+   way Fiverr shows them (buyer username and country) — every one is public on
+   the gig page, so a reader can check them. Only reviews that don't name the
+   seller's Fiverr display name are used, since quotes are never edited. */
+const testimonialsSource = {
+  label: "Fiverr",
+  href: "https://www.fiverr.com/compile_time/develop-flutter-ios-android-mobile-app-react-web-and-rust-backend-solutions",
+};
 
 const testimonials = [
   {
     quote:
-      "Sabbir rebuilt our backend in Rust and cut our p99 latency by more than half. He explains trade-offs clearly and ships on the date he gives you.",
-    name: "Product Lead",
-    title: "SaaS Startup",
+      "Fantastic experience working with this freelancer! Their coding expertise is top-notch, delivering clean, high-quality results. They responded quickly to all inquiries and consistently went above and beyond to ensure everything exceeded expectations. Highly recommended!",
+    name: "deborahjeu509",
+    title: "Fiverr · United States",
   },
   {
     quote:
-      "The Flutter app he delivered felt native on both platforms from day one. Attention to animation detail is genuinely rare in a developer.",
-    name: "Founder",
-    title: "Fintech",
+      "Wasn’t sure if the feature I wanted was even possible in a mobile app, but he made it happen, really experienced in his field, would recommend trusting him with a work no matter how complicated it is",
+    name: "maximilian_gold",
+    title: "Fiverr · Switzerland",
   },
   {
     quote:
-      "He designed the system and then built it — no handoff gap, no lost intent. The design system he left us is still what we work from.",
-    name: "Design Manager",
-    title: "Agency",
-  },
-  {
-    quote:
-      "Excellent communication, fast delivery, and outstanding attention to detail. Highly recommended for anything performance-critical.",
-    name: "CTO",
-    title: "E-commerce",
+      "He went above and beyond and exceeded my expectations. Added features that even I myself had not thought about and finished the work within the time frame.",
+    name: "thomas_jak1",
+    title: "Fiverr · Lithuania",
   },
 ];
 

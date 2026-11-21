@@ -1,0 +1,48 @@
+{# ── Server-rendered fallback ──────────────────────────────────────────────────
+   Include inside #root, after the .boot splash. The site is client-rendered, so
+   without this a client that doesn't run JavaScript (link scrapers, recruiter
+   tools, AI screeners) got the name and nothing else.
+
+   For a normal visit it is never seen: the fixed .boot splash covers it until
+   React mounts and replaces everything inside #root. With JavaScript off the
+   <noscript> rule hides the splash, so the page reads as a plain document.
+
+   It says only what the rendered page says. The profile lines mirror
+   assets/jsx/data.jsx (profile, socials, stack) — change them together.
+   `static_projects` comes from src/markup.rs (static_projects). #}
+<noscript><style>#root .boot { display: none; }</style></noscript>
+<div class="static-page">
+  <header>
+    {% if static_heading %}<p class="static-kicker">{{ static_heading }}</p>{% endif %}
+    <p class="static-name">Sabbir Hassan</p>
+    <p class="static-role">Fullstack Developer &amp; Designer · Bogura, Bangladesh</p>
+    <p>I build high-performance software and pixel-perfect interfaces that are fast, beautiful and purposeful.</p>
+    <p>Rust (Actix Web) backends, Flutter and Tauri clients, C++, and the interface design in between. MongoDB, SQLite, Redis, MySQL. Figma and Adobe XD.</p>
+  </header>
+
+  {% if static_projects | length > 0 %}
+  <section>
+    <h2>Projects</h2>
+    <ul>
+      {% for p in static_projects %}
+      <li>
+        <h3>{% if p.detail %}<a href="{{ p.detail }}">{{ p.title }}</a>{% elif p.link %}<a href="{{ p.link }}">{{ p.title }}</a>{% else %}{{ p.title }}{% endif %}{% if p.subtitle %} — {{ p.subtitle }}{% endif %}</h3>
+        <p>{{ p.description }}</p>
+        {% if p.tags | length > 0 %}<p class="static-tags">{{ p.tags | join(sep=" · ") }}</p>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section>
+    <h2>Contact</h2>
+    <ul class="static-links">
+      <li><a href="mailto:sbbir0087@gmail.com">sbbir0087@gmail.com</a></li>
+      <li><a href="/resume">Résumé</a></li>
+      <li><a href="/projects">All projects</a></li>
+      <li><a href="https://github.com/sabbirmurad">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/sabbir-hassan-aa302824a/">LinkedIn</a></li>
+    </ul>
+  </section>
+</div>

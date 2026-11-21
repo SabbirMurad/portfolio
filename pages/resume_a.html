@@ -8,7 +8,7 @@
          the same head as the rest of the site rather than a bare <title>.
          seo.html emits the title itself — do not add one here as well. -->
     {% set seo_title = "Résumé — Md. Sabbir Hassan, Fullstack Developer & Designer" %}
-    {% set seo_description = "The CV of Md. Sabbir Hassan — fullstack developer and designer. Rust, C++, Flutter and Tauri, six years of client work, and the projects behind it. Readable in the browser or downloadable as a PDF." %}
+    {% set seo_description = "The CV of Md. Sabbir Hassan — fullstack developer and designer. Rust, C++, Flutter and Tauri, five years of client work, and the projects behind it. Readable in the browser or downloadable as a PDF." %}
     {% set seo_keywords = "Sabbir Hassan CV, Sabbir Hassan resume, fullstack developer resume, Rust developer CV, Flutter developer CV, Bangladesh developer, freelance developer" %}
     {# seo_path and seo_robots are not set here: src/markup.rs passes them,
        because this page moves. The dashboard's Résumé tab swaps A and B
@@ -126,8 +126,11 @@
         list-style: none;
         display: flex;
         flex-wrap: wrap;
-        gap: 1mm 5mm;
-        font-size: 8.8pt;
+        /* 4mm / 8.5pt: the full LinkedIn URL (the only form that works when
+           typed from a printed copy) has to share the second line with GitHub
+           and the location, or the header grows a line and page one spills. */
+        gap: 1mm 4mm;
+        font-size: 8.5pt;
         color: var(--ink-soft);
       }
       .contact a { color: inherit; text-decoration: none; }
@@ -304,7 +307,7 @@
       }
 
       /* ── skills ──
-         Four grouped blocks, two up. An inline dot-separated run reads as a
+         Five grouped blocks, three up. An inline dot-separated run reads as a
          wall; here each tool gets its own line with the years right-aligned in
          tabular figures, so the numbers form a column the eye can run down
          instead of hunting for them mid-sentence.
@@ -312,10 +315,13 @@
          Ordered strongest-first within each group, and the lead tool carries
          a vermilion rule — the CV should answer "what is he actually best at"
          before it answers "what has he touched". */
+      /* Three columns, not two: a fifth group (Cloud & DevOps) in a 2-up grid
+         opens a third row and pushes page one's skills onto page two. Three up,
+         the two rows stay as tall as their longest group (five tools). */
       .skills {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 5mm 10mm;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5mm 8mm;
       }
 
       .skill-group { break-inside: avoid; }
@@ -518,7 +524,7 @@
             <li><a href="https://github.com/sabbirmurad">github.com/sabbirmurad</a></li>
             <li>
               <a href="https://www.linkedin.com/in/sabbir-hassan-aa302824a/"
-                >linkedin.com/in/sabbir-hassan</a
+                >linkedin.com/in/sabbir-hassan-aa302824a</a
               >
             </li>
             <li>Bogura, Bangladesh</li>
@@ -594,6 +600,30 @@
             <div class="skill">
               <span class="name">Node.js</span><span class="fill"></span
               ><span class="yrs">1.5 yrs</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <h3>Cloud &amp; DevOps</h3>
+            <div class="skill lead">
+              <span class="name">Linux</span><span class="fill"></span
+              ><span class="yrs">4 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Nginx</span><span class="fill"></span
+              ><span class="yrs">4 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">CI/CD</span><span class="fill"></span
+              ><span class="yrs">3 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">Docker</span><span class="fill"></span
+              ><span class="yrs">2 yrs</span>
+            </div>
+            <div class="skill">
+              <span class="name">AWS</span><span class="fill"></span
+              ><span class="yrs">2 yrs</span>
             </div>
           </div>
 

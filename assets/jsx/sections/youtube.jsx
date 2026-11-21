@@ -126,32 +126,18 @@ function _YtCard(props) {
   );
 }
 
-function Youtube() {
-  const [feed, setFeed] = React.useState(youtube);
+/* `data` is the /api/youtube/feed response, fetched by App, which only
+   mounts this section once it holds at least one real video. */
+function Youtube({ data }) {
+  const feed = React.useMemo(
+    () => ({ channel: { ...youtube.channel, ...data.channel }, videos: data.videos }),
+    [data],
+  );
   const [featured, setFeatured] = React.useState(0);
   const [playing, setPlaying] = React.useState(null);
 
-  React.useEffect(() => {
-    let alive = true;
-    fetch("/api/youtube/feed")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => {
-        if (!alive || !d || !d.channel) return;
-        setFeed({
-          channel: { ...youtube.channel, ...d.channel },
-          videos: d.videos && d.videos.length ? d.videos : youtube.videos,
-        });
-        setFeatured(0);
-        setPlaying(null);
-      })
-      .catch(() => {});
-    return () => {
-      alive = false;
-    };
-  }, []);
-
   const ch = feed.channel;
-  const main = feed.videos[featured] || youtube.videos[0];
+  const main = feed.videos[featured] || feed.videos[0];
   const rest = feed.videos
     .map((v, i) => ({ v, i }))
     .filter((x) => x.i !== featured)

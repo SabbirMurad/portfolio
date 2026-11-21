@@ -1,4 +1,4 @@
-/* global React, Parallax, Reveal, SplitHeading, testimonials */
+/* global React, Parallax, Reveal, SplitHeading, testimonials, testimonialsSource */
 function _TStars() {
   return (
     <div className="flex gap-1 text-vermilion" aria-label="5 out of 5">
@@ -58,7 +58,10 @@ function _TCard(props) {
 }
 
 function Testimonials() {
-  const row = [...testimonials, ...testimonials];
+  // The marquee scrolls by half its width and loops, so each half has to be
+  // wider than the screen; with only a few reviews that takes two copies.
+  const half = [...testimonials, ...testimonials];
+  const row = [...half, ...half];
   return (
     <section id="testimonials" className="overflow-hidden bg-bone py-24 sm:py-32 lg:py-40">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
@@ -72,9 +75,16 @@ function Testimonials() {
           </div>
           <Reveal from="right" delay={0.1}>
             <p className="max-w-sm text-[14px] leading-[1.75] text-muted-2">
-              Clear communication, honest estimates, and working builds at every milestone — the
-              things people actually remember afterwards.
+              Word for word from buyers on {testimonialsSource.label}, where every review is public.
             </p>
+            <a
+              href={testimonialsSource.href}
+              target="_blank"
+              rel="noopener"
+              className="meta mt-4 inline-flex items-center gap-2 text-ink transition-colors duration-300 hover:text-vermilion"
+            >
+              Read every review on {testimonialsSource.label} <span aria-hidden>↗</span>
+            </a>
           </Reveal>
         </div>
       </div>

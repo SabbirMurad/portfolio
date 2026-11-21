@@ -67,6 +67,34 @@ body {
   overflow-x: hidden;
 }
 
+/* Server-rendered fallback (pages/common/static_page.html). Hidden under the
+   fixed .boot splash until React replaces it; read directly by clients that
+   don't run JavaScript, so it only needs to be a plain, legible document. */
+#root .static-page {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+  line-height: 1.6;
+}
+#root .static-page h2 {
+  margin: 2.5rem 0 0.75rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+#root .static-page h3 { margin: 1.25rem 0 0.25rem; font-size: 1rem; }
+#root .static-page ul { margin: 0; padding: 0; list-style: none; }
+#root .static-page a { color: var(--color-vermilion); }
+#root .static-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+}
+#root .static-kicker,
+#root .static-role,
+#root .static-tags { color: var(--color-muted-2); }
+#root .static-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+
 /* Boot placeholder shown until React mounts. */
 #root .boot {
   position: fixed;

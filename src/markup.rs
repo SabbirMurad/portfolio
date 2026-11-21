@@ -1,17 +1,86 @@
 use actix_session::Session;
 use mongodb::bson::doc;
 use crate::Model::Account;
+use crate::Model::Project::Project;
+use crate::utils::slug::project_slug;
+use futures_util::TryStreamExt;
+use serde::Serialize;
 use crate::Model::Resume::{ self as ResumeModel, ResumeVariant };
 use crate::BuiltIns::mongo::MongoDB;
 use actix_web::{error, web, Error, HttpResponse};
 use tera::{Context, Tera};
 
 pub async fn home(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
+    // The home page lists the featured projects, like its grid does; all of
+    // them if none are flagged.
+    let all = static_projects().await;
+    let featured: Vec<StaticProject> = all.iter().filter(|p| p.featured).cloned().collect();
+
+    let mut context = Context::new();
+    context.insert("static_projects", if featured.is_empty() { &all } else { &featured });
+
     let res_data = template
-        .render("home.html", &Context::new())
+        .render("home.html", &context)
         .map_err(|e| error::ErrorInternalServerError(e))?;
 
     Ok(HttpResponse::Ok().content_type("text/html").body(res_data))
+}
+
+/// A project as the server-rendered fallback lists it (pages/common/
+/// static_page.html). The pages are client-rendered, so without this anything
+/// that doesn't run JavaScript (link scrapers, recruiter tools, AI screeners)
+/// saw a name and nothing else.
+#[derive(Serialize, Clone)]
+struct StaticProject {
+    title: String,
+    subtitle: String,
+    description: String,
+    tags: Vec<String>,
+    link: Option<String>,
+    // Absolute path of the detail page, when there is one.
+    detail: Option<String>,
+    featured: bool,
+}
+
+/// Same query and order as the public feed (src/handler/project/feed.rs).
+/// A failure renders the page without the list rather than failing it.
+async fn static_projects() -> Vec<StaticProject> {
+    let db = MongoDB.connect();
+    let cursor = db
+        .collection::<Project>("project")
+        .find(doc! { "deleted_at": null })
+        .sort(doc! { "created_at": -1 })
+        .await;
+
+    let projects: Vec<Project> = match cursor {
+        Ok(c) => match c.try_collect().await {
+            Ok(v) => v,
+            Err(error) => {
+                log::error!("{:?}", error);
+                return vec![];
+            }
+        },
+        Err(error) => {
+            log::error!("{:?}", error);
+            return vec![];
+        }
+    };
+
+    projects
+        .into_iter()
+        .map(|p| StaticProject {
+            detail: p
+                .details_id
+                .as_ref()
+                .map(|_| format!("/projects/{}", project_slug(&p.slug, &p.title))),
+            title: p.title,
+            subtitle: p.subtitle,
+            description: p.description,
+            tags: p.tags,
+            link: p.link.filter(|l| !l.trim().is_empty()),
+            featured: p.featured,
+        })
+        .collect()
 }
 
 pub async fn about(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
@@ -31,8 +100,11 @@ pub async fn documentations(template: web::Data<Tera>) -> Result<HttpResponse, E
 }
 
 pub async fn projects(template: web::Data<Tera>) -> Result<HttpResponse, Error> {
+    let mut context = Context::new();
+    context.insert("static_projects", &static_projects().await);
+
     let res_data = template
-        .render("projects.html", &Context::new())
+        .render("projects.html", &context)
         .map_err(|e| error::ErrorInternalServerError(e))?;
 
     Ok(HttpResponse::Ok().content_type("text/html").body(res_data))

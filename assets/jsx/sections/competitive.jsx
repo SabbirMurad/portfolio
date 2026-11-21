@@ -3,31 +3,20 @@
  * Competitive programming — solved counts, a difficulty split, the platforms and
  * the techniques the practice actually trains.
  *
- * Counts come from the LeetCode stats endpoint named in `competitive` (the same
- * one the previous site called). Nothing is invented while that is in flight or
- * unavailable: figures render as em dashes and the difficulty bar stays a flat
- * track, then fills once real numbers land.
+ * Counts come from the LeetCode stats endpoint named in `competitive`. App
+ * fetches it and only mounts this section once real numbers have arrived, so
+ * there is no empty state to show; a count that is still missing renders as an
+ * em dash.
  */
-function Competitive() {
-  const [solved, setSolved] = React.useState(competitive.solved);
-
-  React.useEffect(() => {
-    let alive = true;
-    fetch(competitive.endpoint)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => {
-        if (!alive || !d) return;
-        setSolved({
-          easy: d.easySolved != null ? d.easySolved : null,
-          medium: d.mediumSolved != null ? d.mediumSolved : null,
-          hard: d.hardSolved != null ? d.hardSolved : null,
-        });
-      })
-      .catch(() => {});
-    return () => {
-      alive = false;
-    };
-  }, []);
+function Competitive({ data }) {
+  // `data` is the /api/leetcode/stats response, fetched by App, which only
+  // mounts this section once at least one count is a real number.
+  const pick = (n) => (typeof n === "number" ? n : null);
+  const solved = {
+    easy: pick(data.easySolved),
+    medium: pick(data.mediumSolved),
+    hard: pick(data.hardSolved),
+  };
 
   const counted = competitive.difficulties
     .map((d) => solved[d.key])

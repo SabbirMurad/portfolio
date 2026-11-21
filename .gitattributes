@@ -1,0 +1,4 @@
+# Compiled output of tools/build_assets.mjs: keep it out of diffs and out of
+# GitHub's language statistics, which otherwise label this Rust server as a
+# JavaScript project.
+assets/build/** linguist-generated=true

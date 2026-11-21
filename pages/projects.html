@@ -32,7 +32,11 @@
   </head>
 
   <body class="custom-cursor">
-    <div id="root"><div class="boot">Sabbir Hassan</div></div>
+    <div id="root">
+      <div class="boot">Sabbir Hassan</div>
+      {% set static_heading = "Projects" %}
+      {% include "common/static_page.html" %}
+    </div>
 
     <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
