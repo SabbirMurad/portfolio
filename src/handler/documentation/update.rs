@@ -75,14 +75,19 @@ pub async fn task(
         .find_one(doc! { "uuid": &path.uuid, "deleted_at": null })
         .await;
 
-    match existing {
-        Ok(Some(_)) => {}
+    let current = match existing {
+        Ok(Some(d)) => d,
         Ok(None) => return Ok(Response::not_found("Documentation not found")),
         Err(error) => {
             log::error!("{:?}", error);
             return Ok(Response::internal_server_error(&error.to_string()));
         }
-    }
+    };
+
+    // The URL stays put through a rename. An entry from before slugs were
+    // stored answers to its name slugified; that is pinned now, before the
+    // name changes.
+    let slug = crate::utils::slug::doc_slug(&current.slug, &current.name);
 
     // Create enforces unique names; an edit has to as well, without the entry
     // colliding with itself.
@@ -114,7 +119,7 @@ pub async fn task(
         let incoming = Path::new(DOCS_ROOT).join(format!("{}.incoming", &path.uuid));
         let _ = fs::remove_dir_all(&incoming);
 
-        if let Err(error) = mkdocs::unpack(&form_data.file, &incoming, &path.uuid) {
+        if let Err(error) = mkdocs::unpack(&form_data.file, &incoming, &slug) {
             log::error!("{}", error);
             let _ = fs::remove_dir_all(&incoming);
             return Ok(Response::bad_request(&error));
@@ -131,6 +136,7 @@ pub async fn task(
                 "name": &name,
                 "description": &description,
                 "tags": &form_data.tags,
+                "slug": &slug,
                 "updated_at": now,
             }},
         )

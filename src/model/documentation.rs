@@ -12,6 +12,13 @@ pub struct Documentation {
     #[serde(default)]
     pub featured: bool,
     pub view_count: i64,
+    // URL segment: /documentation/<slug>/. Settled from the name when the
+    // entry is created and kept through renames, so a shared or indexed link
+    // keeps working. Optional because entries made before slugs existed have
+    // none stored; readers fall back to slugifying the name, see
+    // utils::slug::doc_slug.
+    #[serde(default)]
+    pub slug: Option<String>,
     pub created_at: i64,
     pub created_by: String,
     pub deleted_at: Option<i64>,

@@ -1,5 +1,5 @@
 /*
- * Unpacking a `mkdocs build` output zip so it serves from /documentation/{uuid}/
+ * Unpacking a `mkdocs build` output zip so it serves from /documentation/{slug}/
  * and behaves the way `mkdocs serve` does.
  *
  * MkDocs already emits *relative* links between pages and assets ("../ntp/",
@@ -16,10 +16,10 @@
  *   2. `site_url` in mkdocs.yml bakes an absolute base into <link rel=canonical>
  *      and sitemap.xml, and — because a 404 can be served from any depth —
  *      into every href/src in 404.html. Those all point at whatever the author's
- *      site_url said, so the base is swapped for /documentation/{uuid}/.
+ *      site_url said, so the base is swapped for /documentation/{slug}/.
  *
  *   3. A project with no docs/index.md produces no index.html at the site root,
- *      so /documentation/{uuid}/ would 404 (it does under `mkdocs serve` too).
+ *      so /documentation/{slug}/ would 404 (it does under `mkdocs serve` too).
  *      One is generated, pointing at the first page in the nav.
  *
  *   4. The favicon is repointed at the site's own /assets/favicon set, so a doc
@@ -46,8 +46,9 @@ const FAVICON_LINKS: &str = concat!(
 );
 
 /// Unpack `zip_bytes` into `target_dir` (which must not already exist) and make
-/// the result servable at `/documentation/{uuid}/`.
-pub fn unpack(zip_bytes: &[u8], target_dir: &Path, uuid: &str) -> Result<(), String> {
+/// the result servable at `/documentation/{mount}/` — `mount` is the entry's
+/// slug. The files themselves live under the uuid; only the URLs use the slug.
+pub fn unpack(zip_bytes: &[u8], target_dir: &Path, mount: &str) -> Result<(), String> {
     archive::unzip(
         zip_bytes,
         target_dir,
@@ -60,7 +61,7 @@ pub fn unpack(zip_bytes: &[u8], target_dir: &Path, uuid: &str) -> Result<(), Str
     )?;
 
     let files = walk(target_dir)?;
-    rebase(target_dir, &files, uuid)?;
+    rebase(target_dir, &files, mount)?;
     retarget_favicon(&files)?;
     ensure_index(target_dir, &files)?;
 
@@ -94,8 +95,8 @@ fn walk(dir: &Path) -> Result<Vec<PathBuf>, String> {
 /// `{site_url}{page dir}/`, so stripping the page's directory leaves the base.
 /// Replacing the *path* portion covers both the absolute URLs (canonical,
 /// sitemap) and the root-absolute href/src in 404.html in one pass.
-fn rebase(root: &Path, files: &[PathBuf], uuid: &str) -> Result<(), String> {
-    let new_path = format!("/documentation/{}/", uuid);
+fn rebase(root: &Path, files: &[PathBuf], mount: &str) -> Result<(), String> {
+    let new_path = format!("/documentation/{}/", mount);
 
     let (origin, old_path) = match find_base(root, files) {
         Some(b) => b,
@@ -259,7 +260,7 @@ fn retarget_favicon(files: &[PathBuf]) -> Result<(), String> {
 }
 
 /// Give the site root an index.html when the build has none, so
-/// /documentation/{uuid}/ lands somewhere instead of 404ing.
+/// /documentation/{slug}/ lands somewhere instead of 404ing.
 fn ensure_index(root: &Path, files: &[PathBuf]) -> Result<(), String> {
     let index = root.join("index.html");
     if index.is_file() {

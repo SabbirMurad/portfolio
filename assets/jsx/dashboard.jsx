@@ -600,7 +600,9 @@ function DocCard({ doc, onToggle, toggling, onEdit, onDelete, deleting }) {
     month: "short",
     day: "numeric",
   });
-  const href = "/documentation/" + doc.uuid + "/";
+  // The public address. Entries from before slugs answer to their name
+  // slugified (src/utils/slug.rs); the old uuid form redirects either way.
+  const href = "/documentation/" + (doc.slug || doc.uuid) + "/";
 
   return (
     <div className="flex h-full flex-col rounded-md border border-line bg-paper p-5">
@@ -898,23 +900,29 @@ function DocumentationTab() {
 // upload itself, so they can't drift from MAX_FILE_BYTES / AllowedImageType in
 // src/handler/image/upload.rs the way a second copy here would.
 
-function CreateProject({ onCreated, onCancel }) {
+/* One form for both jobs. With `project` it edits that card (PUT
+   /project/<uuid>, every field sent whole) and starts filled in; without it,
+   it creates one. */
+function ProjectForm({ project, onCreated, onSaved, onCancel }) {
   const { useState, useEffect } = React;
+  const editing = !!project;
   const [form, setForm] = useState({
-    title: "",
-    subtitle: "",
-    description: "",
-    tags: "",
-    link: "",
-    accent: "",
-    year: "",
+    title: project ? project.title || "" : "",
+    subtitle: project ? project.subtitle || "" : "",
+    description: project ? project.description || "" : "",
+    tags: project ? (project.tags || []).join(", ") : "",
+    link: project ? project.link || "" : "",
+    accent: project ? project.accent || "" : "",
+    year: project ? project.year || "" : "",
   });
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState(null);
   const [status, setStatus] = useState("idle"); // idle | pending
 
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [imageId, setImageId] = useState(null);
+  // When editing, the card's current thumbnail stands until a new one has
+  // finished uploading.
+  const [imageId, setImageId] = useState(project ? project.image_id : null);
   const [imageState, setImageState] = useState("idle"); // idle | uploading | done | error
   const [imageError, setImageError] = useState(null);
   const [progress, setProgress] = useState(0); // 0..1, or -1 when unknown
@@ -935,7 +943,7 @@ function CreateProject({ onCreated, onCancel }) {
     if (!file) return;
 
     setImageError(null);
-    setImageId(null);
+    setImageId(project ? project.image_id : null);
     setProgress(0);
     setErrors((s) => ({ ...s, image: undefined }));
 
@@ -1017,28 +1025,42 @@ function CreateProject({ onCreated, onCancel }) {
       .map((t) => t.trim())
       .filter(Boolean);
 
-    const result = await Fetcher.post({
-      endpoint: "/project",
-      body: {
-        title: form.title.trim(),
-        subtitle: form.subtitle.trim(),
-        description: form.description.trim(),
-        tags,
-        image_id: imageId,
-        link: form.link.trim(),
-        accent: form.accent.trim(),
-        year: form.year.trim(),
-      },
-      showError: false,
-    });
+    const body = {
+      title: form.title.trim(),
+      subtitle: form.subtitle.trim(),
+      description: form.description.trim(),
+      tags,
+      image_id: imageId,
+      link: form.link.trim(),
+      accent: form.accent.trim(),
+      year: form.year.trim(),
+    };
+
+    const result = editing
+      ? await Fetcher.put({ endpoint: "/project/" + project.uuid, body, showError: false })
+      : await Fetcher.post({ endpoint: "/project", body, showError: false });
 
     if (!result.ok) {
       setStatus("idle");
-      setFormError(result.error || "Failed to create (" + result.status + ")");
+      setFormError(
+        result.error || "Failed to " + (editing ? "save" : "create") + " (" + result.status + ")",
+      );
       return;
     }
 
     setStatus("idle");
+
+    if (editing) {
+      onSaved({
+        ...project,
+        ...body,
+        link: body.link || null,
+        accent: body.accent || null,
+        year: body.year || null,
+      });
+      return;
+    }
+
     onCreated({
       uuid: result.data.uuid,
       title: result.data.title,
@@ -1061,8 +1083,10 @@ function CreateProject({ onCreated, onCancel }) {
     <div className="rounded-md border border-line bg-paper p-6 sm:p-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="meta text-vermilion">New entry</p>
-          <h2 className="display-tight mt-2 text-xl font-bold">Create a project</h2>
+          <p className="meta text-vermilion">{editing ? "Edit entry" : "New entry"}</p>
+          <h2 className="display-tight mt-2 text-xl font-bold">
+            {editing ? "Edit " + project.title : "Create a project"}
+          </h2>
         </div>
         <button
           type="button"
@@ -1080,8 +1104,12 @@ function CreateProject({ onCreated, onCancel }) {
           </label>
           <div className="flex items-center gap-4">
             <div className="flex h-20 w-32 shrink-0 items-center justify-center overflow-hidden rounded-sm border border-line bg-bone">
-              {previewUrl ? (
-                <img src={previewUrl} alt="" className="h-full w-full object-cover" />
+              {previewUrl || (editing && project.image_id) ? (
+                <img
+                  src={previewUrl || "/image/webp/" + project.image_id}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <span className="meta text-muted">No image</span>
               )}
@@ -1268,7 +1296,15 @@ function CreateProject({ onCreated, onCancel }) {
             (pending || uploading ? "cursor-default opacity-60" : "hover:bg-vermilion")
           }
         >
-          <span className="meta">{pending ? "Creating…" : "Create project"}</span>
+          <span className="meta">
+            {editing
+              ? pending
+                ? "Saving…"
+                : "Save changes"
+              : pending
+                ? "Creating…"
+                : "Create project"}
+          </span>
           <span className="transition-transform duration-400 group-hover:translate-x-1">→</span>
         </button>
       </form>
@@ -1276,7 +1312,7 @@ function CreateProject({ onCreated, onCancel }) {
   );
 }
 
-function ProjectCard({ project, onToggle, toggling, onEditDetails }) {
+function ProjectCard({ project, onToggle, toggling, onEdit, onEditDetails }) {
   const date = new Date(project.created_at).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -1332,7 +1368,19 @@ function ProjectCard({ project, onToggle, toggling, onEditDetails }) {
         )}
 
         <div className="mt-auto pt-6">
+          {/* The card itself: thumbnail, title, text, tags, link, year, accent. */}
           <div className="flex items-center justify-between gap-3 border-t border-line pt-4">
+            <span className="meta text-muted-2">Card</span>
+            <button
+              type="button"
+              onClick={() => onEdit(project)}
+              className="meta rounded-sm border border-line px-3 py-2 text-muted-2 transition-colors duration-300 hover:border-ink hover:text-ink"
+            >
+              Edit
+            </button>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between gap-3 border-t border-line pt-4">
             <span className="meta text-muted-2">Shown on home</span>
             <Switch
               on={!!project.featured}
@@ -1704,6 +1752,7 @@ function ProjectsTab() {
   const [showCreate, setShowCreate] = useState(false);
   const [togglingUuid, setTogglingUuid] = useState(null);
   const [editingDetails, setEditingDetails] = useState(null);
+  const [editingCard, setEditingCard] = useState(null);
 
   useEffect(() => {
     let alive = true;
@@ -1737,6 +1786,20 @@ function ProjectsTab() {
   const onCreated = (project) => {
     setProjects((prev) => [project, ...prev]);
     setShowCreate(false);
+  };
+
+  const onCardSaved = (project) => {
+    setProjects((prev) => prev.map((p) => (p.uuid === project.uuid ? project : p)));
+    setEditingCard(null);
+  };
+
+  // One form open at a time. The form opens above the grid, so the page is
+  // scrolled up to it: the card that opened it can be far down the list.
+  const openCardEditor = (project) => {
+    setShowCreate(false);
+    setEditingDetails(null);
+    setEditingCard(project);
+    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
   };
 
   /* The editor answers with the details_id and the slug it settled on (or
@@ -1787,7 +1850,10 @@ function ProjectsTab() {
         {!showCreate && (
           <button
             type="button"
-            onClick={() => setShowCreate(true)}
+            onClick={() => {
+              setEditingCard(null);
+              setShowCreate(true);
+            }}
             className="group flex items-center gap-2 rounded-sm bg-ink px-5 py-3 text-white transition-colors duration-300 hover:bg-vermilion"
           >
             <span className="meta">New project</span>
@@ -1798,7 +1864,18 @@ function ProjectsTab() {
 
       {showCreate && (
         <div className="mt-6">
-          <CreateProject onCreated={onCreated} onCancel={() => setShowCreate(false)} />
+          <ProjectForm onCreated={onCreated} onCancel={() => setShowCreate(false)} />
+        </div>
+      )}
+
+      {editingCard && (
+        <div className="mt-6">
+          <ProjectForm
+            key={editingCard.uuid}
+            project={editingCard}
+            onSaved={onCardSaved}
+            onCancel={() => setEditingCard(null)}
+          />
         </div>
       )}
 
@@ -1848,6 +1925,7 @@ function ProjectsTab() {
               project={project}
               toggling={togglingUuid === project.uuid}
               onToggle={onToggle}
+              onEdit={openCardEditor}
               onEditDetails={setEditingDetails}
             />
           ))}

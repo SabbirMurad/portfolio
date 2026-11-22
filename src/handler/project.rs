@@ -21,3 +21,6 @@ pub use details_upsert as DetailsUpsert;
 
 pub mod details_delete;
 pub use details_delete as DetailsDelete;
+
+pub mod update;
+pub use update as Update;

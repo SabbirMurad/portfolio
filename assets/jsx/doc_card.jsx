@@ -25,7 +25,7 @@ function _toDocCard(d) {
     title: d.name,
     blurb: d.description,
     tags: d.tags || [],
-    href: "/documentation/" + d.uuid + "/",
+    href: "/documentation/" + (d.slug || d.uuid) + "/",
     featured: !!d.featured,
   };
 }

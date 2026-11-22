@@ -30,7 +30,7 @@ pub struct RequestBody {
 }
 
 // "" and "   " both mean "not given" coming from a form field.
-fn optional(value: &Option<String>) -> Option<String> {
+pub(super) fn optional(value: &Option<String>) -> Option<String> {
     value
         .as_ref()
         .map(|v| v.trim().to_string())
@@ -41,14 +41,14 @@ fn optional(value: &Option<String>) -> Option<String> {
 // plain http(s) or same-site URL is rejected before it can become a
 // `javascript:` anchor on the public page. Protocol-relative ("//evil.com")
 // is out too — it reads as same-site but isn't.
-fn valid_link(link: &str) -> bool {
+pub(super) fn valid_link(link: &str) -> bool {
     link.starts_with("http://")
         || link.starts_with("https://")
         || (link.starts_with('/') && !link.starts_with("//"))
 }
 
 // Goes into a `style` attribute; #rgb/#rrggbb only, nothing else.
-fn valid_accent(accent: &str) -> bool {
+pub(super) fn valid_accent(accent: &str) -> bool {
     match accent.strip_prefix('#') {
         Some(body) => {
             (body.len() == 3 || body.len() == 6) && body.chars().all(|c| c.is_ascii_hexdigit())

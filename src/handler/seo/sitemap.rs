@@ -48,6 +48,19 @@ const URLS: [(&str, &str, &str, &str, &[&str]); 5] = [
 const SITE: &str = "https://sabbirhassan.com";
 
 pub async fn handler() -> impl Responder {
+    // Each documentation site's front page, by slug. No lastmod: entries carry
+    // no reliable edit date (see the note on URLS), and none beats a wrong one.
+    let doc_paths: Vec<String> = match crate::handler::documentation::live_docs().await {
+        Ok(docs) => docs
+            .iter()
+            .map(|d| format!("/documentation/{}/", crate::utils::slug::doc_slug(&d.slug, &d.name)))
+            .collect(),
+        Err(error) => {
+            log::error!("sitemap: {}", error);
+            Vec::new()
+        }
+    };
+
     let has_images = URLS.iter().any(|(_, _, _, _, images)| !images.is_empty());
 
     let mut xml = String::from("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -82,6 +95,17 @@ pub async fn handler() -> impl Responder {
         }
 
         xml.push_str("  </url>\n");
+    }
+
+    for path in doc_paths {
+        xml.push_str(&format!(
+            "  <url>
+    <loc>{SITE}{path}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+"
+        ));
     }
 
     xml.push_str("</urlset>");

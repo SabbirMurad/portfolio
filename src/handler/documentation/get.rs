@@ -15,8 +15,9 @@ use std::path::{Component, Path, PathBuf};
 use std::fs;
 use actix_web::{http::header, web, Error, HttpResponse};
 
-/// Redirect for `/documentation/{id}` -> `/documentation/{id}/`. Without the
-/// slash, every relative link on the page it serves resolves one level too high.
+/// Redirect for `/documentation/{slug}` -> `/documentation/{slug}/`. Without
+/// the slash, every relative link on the page it serves resolves one level too
+/// high.
 pub async fn root_redirect(var: web::Path<String>) -> Result<HttpResponse, Error> {
     Ok(redirect(&format!("/documentation/{}/", var.into_inner())))
 }
@@ -29,10 +30,24 @@ pub async fn index_redirect() -> Result<HttpResponse, Error> {
     Ok(redirect("/documentations"))
 }
 
+/// Sites are addressed by slug (/documentation/vps-setup/...) and stored on
+/// disk under their uuid, so the slug is looked up first.
 pub async fn task(var: web::Path<(String, String)>) -> Result<HttpResponse, Error> {
-    let (project, tail) = var.into_inner();
+    let (slug, tail) = var.into_inner();
 
-    let site_root = Path::new(DOCS_ROOT).join(&project);
+    let docs = match super::live_docs().await {
+        Ok(d) => d,
+        Err(error) => {
+            log::error!("{}", error);
+            return Ok(HttpResponse::InternalServerError().finish());
+        }
+    };
+    let uuid = match super::resolve(&docs, &slug) {
+        Some(uuid) => uuid,
+        None => return Ok(HttpResponse::NotFound().finish()),
+    };
+
+    let site_root = Path::new(DOCS_ROOT).join(&uuid);
     // canonicalize resolves symlinks and `..` for real; comparing the result
     // against the site root is what actually contains the request, rather than
     // trusting the string that came in off the wire.
@@ -59,7 +74,7 @@ pub async fn task(var: web::Path<(String, String)>) -> Result<HttpResponse, Erro
         // "" (the site root) always ends in a slash — the route only matches
         // /documentation/{id}/... — so only deeper directories can need this.
         if !tail.is_empty() && !tail.ends_with('/') {
-            return Ok(redirect(&format!("/documentation/{}/{}/", project, tail)));
+            return Ok(redirect(&format!("/documentation/{}/{}/", slug, tail)));
         }
 
         let index = target.join("index.html");

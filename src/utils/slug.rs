@@ -44,6 +44,12 @@ pub fn project_slug(stored: &Option<String>, title: &str) -> String {
         .unwrap_or_else(|| slugify(title))
 }
 
+/// The slug a documentation entry answers to — same rule as projects: the
+/// stored one, or what its name would have produced.
+pub fn doc_slug(stored: &Option<String>, name: &str) -> String {
+    project_slug(stored, name)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

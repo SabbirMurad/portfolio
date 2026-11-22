@@ -49,6 +49,18 @@ pub async fn task(
         return Ok(Response::bad_request("Zip file is required"));
     }
 
+    // The URL the entry will answer to, settled now and kept through renames.
+    let existing_docs = match super::live_docs().await {
+        Ok(d) => d,
+        Err(error) => {
+            log::error!("{}", error);
+            return Ok(Response::internal_server_error(&error));
+        }
+    };
+
+    let doc_id = Uuid::now_v7().to_string();
+    let slug = super::unique_slug(&existing_docs, &doc_name, &doc_id);
+
     /* DATABASE ACID SESSION INIT */
     let (db, mut session) = MongoDB.connect_acid().await;
     if let Err(error) = session.start_transaction().await {
@@ -57,7 +69,6 @@ pub async fn task(
     }
 
     //Checking if the document name already exist
-    let doc_id = Uuid::now_v7().to_string();
     let now = Utc::now().timestamp_millis();
 
     let collection = db.collection::
@@ -86,6 +97,7 @@ pub async fn task(
         tags: form_data.tags.clone(),
         featured: false,
         view_count: 0,
+        slug: Some(slug.clone()),
         created_at: now,
         created_by: "admin".to_string(),
         deleted_at: None,
@@ -99,14 +111,14 @@ pub async fn task(
         return Ok(Response::internal_server_error(&error.to_string()));
     }
 
-    // Unpacked under the uuid, not the name: the name is user-editable and can
-    // contain anything, while /documentation/{uuid}/ is a stable URL. See
+    // Stored under the uuid and served at /documentation/{slug}/: the name can
+    // be edited, the slug is settled here and kept, so the URL is stable. See
     // utils/mkdocs.rs for what "unpack" does beyond extracting — stripping the
     // `site/` wrapper, rebasing the URLs mkdocs baked in from site_url, and
     // giving the root an index.html when the build has none.
     let target_dir = Path::new(DOCS_ROOT).join(&doc_id);
 
-    if let Err(error) = mkdocs::unpack(&form_data.file, &target_dir, &doc_id) {
+    if let Err(error) = mkdocs::unpack(&form_data.file, &target_dir, &slug) {
         log::error!("{}", error);
         // Nothing should be left half-unpacked under a uuid the database is
         // about to forget about.

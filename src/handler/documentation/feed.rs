@@ -17,6 +17,8 @@ use actix_web::{Error, HttpResponse};
 #[derive(Serialize)]
 struct PublicDocumentation {
     uuid: String,
+    // What the card links to: /documentation/<slug>/.
+    slug: String,
     name: String,
     description: String,
     tags: Vec<String>,
@@ -52,6 +54,7 @@ pub async fn task() -> Result<HttpResponse, Error> {
     let feed: Vec<PublicDocumentation> = docs
         .into_iter()
         .map(|d| PublicDocumentation {
+            slug: crate::utils::slug::doc_slug(&d.slug, &d.name),
             uuid: d.uuid,
             name: d.name,
             description: d.description,

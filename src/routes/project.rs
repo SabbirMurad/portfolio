@@ -17,6 +17,9 @@ pub fn router(cfg: &mut web::ServiceConfig) {
         // Public too: what /projects/<slug> loads. Literal-first ordering
         // again — "/detail/{slug}" cannot collide with "/{uuid}/...".
         .route("/detail/{slug}", web::get().to(Handler::Project::Detail::task))
+        // Edit a card after it exists. Every field the create form sets,
+        // sent whole. Registered after the literal paths above.
+        .route("/{uuid}", web::put().to(Handler::Project::Update::task))
         .route(
             "/{uuid}/featured",
             web::patch().to(Handler::Project::ToggleFeatured::task)
