@@ -22,7 +22,7 @@
     },
     {
         "title": "Scaffold",
-        "subtitle": "browser design tool",
+        "subtitle": "desktop design tool",
         "tags": [
             "rust",
             "actix web",
@@ -30,7 +30,7 @@
             "canvas",
             "websocket"
         ],
-        "description": "A browser-based design tool for building interfaces on an infinite canvas — frames, auto-layout, layers and real-time collaboration, with AI assist and one-click code export, all backed by a Rust server.",
+        "description": "A desktop design tool for building interfaces on an infinite canvas — frames, auto-layout, layers and real-time collaboration, with AI assist and one-click code export, all backed by a Rust server.",
         "link": "https://github.com/SabbirMurad/scaffold"
     },
     {
